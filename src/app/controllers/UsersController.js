@@ -39,22 +39,18 @@ class UsersController {
 
     async create(req, res) {
         try {
-            const { email, password, name, age, role } = req.body;
+            const { email, password, name, provider, role, avatar } = req.body;
             const response = await pool.query(
-                'INSERT INTO users (email, password, name, age, role) VALUES ($1, $2, $3, $4, $5)',
-                [email, password, name, age, role],
+                'INSERT INTO users (email, password, name, provider, role, avatar) VALUES ($1, $2, $3, $4, $5, $6)',
+                [email, password, name, provider, role, avatar],
             );
+
+            const getUser = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
 
             return res.status(200).json({
                 message: 'User created successfully',
                 body: {
-                    user: {
-                        email,
-                        password,
-                        name,
-                        age,
-                        role,
-                    },
+                    user: getUser.rows[0],
                 },
             });
         } catch (err) {

@@ -1,17 +1,9 @@
 const router = require('express').Router();
 const passport = require('passport');
 
-router.get('/login/success', (req, res) => {
-    if (req.user) {
-        res.status(200).json({
-            error: false,
-            message: 'Successfully Logged In',
-            user: req.user,
-        });
-    } else {
-        res.status(403).json({ error: true, message: 'Not Authorized' });
-    }
-});
+const authController = require('../app/controllers/AuthController');
+
+router.get('/login/success', authController.create_or_update);
 
 router.get('/login/failed', (req, res) => {
     res.status(401).json({
@@ -30,9 +22,13 @@ router.get(
     }),
 );
 
-router.get('/logout', (req, res) => {
-    req.logout();
-    res.redirect('http://localhost:3001');
+router.get('/logout', (req, res, next) => {
+    req.logout(function (err) {
+        if (err) {
+            return next(err);
+        }
+        res.redirect('http://localhost:3001');
+    });
 });
 
 router.get('/test', (req, res) => res.send('Hello World'));
