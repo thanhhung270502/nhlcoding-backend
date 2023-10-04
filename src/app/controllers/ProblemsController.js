@@ -2,7 +2,7 @@ const fs = require('fs');
 const { PythonShell } = require('python-shell');
 const process = require('process');
 const pool = require('../../config/db');
-const { getTestcaseByProblemID } = require('../helper/testcase');
+const { getTestcaseByProblemID, isNumber, isArray, supportSubmitCode } = require('../helper/testcase');
 
 class ProblemsController {
     async show(req, res, next) {
@@ -78,32 +78,34 @@ class ProblemsController {
         var testcases = [];
         console.log(responseTestCase);
 
+        var numParams;
+
         responseTestCase.forEach((testcase) => {
             var inputs = testcase.input.split(' ');
-            for (var i = 0; i < inputs.length; i++) {
-                inputs[i] = parseInt(inputs[i]);
-            }
+            numParams = inputs.length;
+            // for (var i = 0; i < inputs.length; i++) {
+            //     inputs[i] = JSON.parse(inputs[i]);
+            // }
             testcases.push(inputs);
         });
 
         const { code } = req.body;
 
-        fs.writeFileSync('test.py', code);
-
-        // console.log(testcases);
-
         let finalResult = [];
         for (var i = 0; i < testcases.length; i++) {
+            console.log('---------------------------------');
+            console.log(testcases[i]);
+            var newCode2 = supportSubmitCode(code, numParams, testcases[i]);
+            fs.writeFileSync('test.py', newCode2);
+            console.log(testcases[i]);
             let options = {
                 mode: 'text',
                 pythonOptions: ['-u'],
-                args: testcases[i],
+                // args: testcases[i],
             };
             let result;
             // const startTime = new Date();
             const startTime = process.hrtime();
-
-            let expected = 3;
 
             await PythonShell.run('test.py', options).then((messages) => {
                 // Runtime - Memory
@@ -116,21 +118,20 @@ class ProblemsController {
 
                 // results is an array consisting of messages collected during execution
                 result = {
-                    result: parseInt(responseTestCase[i].output) === parseInt(messages[0]),
+                    result: '',
                     output: messages[0],
                     runtime: executionTime,
                     memory: usedMemory,
                 };
-                // console.log(result);
+                console.log('results: %j', messages);
+                console.log(result);
                 finalResult.push(result);
-                console.log(finalResult.length);
-                // console.log('results: %j', messages[0]);
             });
         }
 
         return res.status(200).json({
             message: 'Successfully',
-            body: finalResult,
+            body: 'finalResult',
         });
     }
 }
