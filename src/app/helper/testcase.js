@@ -112,9 +112,14 @@ const supportPython = (nameFunc, numParams, input) => {
     }
     return addParams + '\t' + 'print(' + nameFunc + '(' + params + ')' + ')';
 };
-const supportCpp = (nameFunc, input, code) => {
+const supportCpp = (infoFunc, input, code) => {
     var stdin = '';
-    var stdout = '\tcout << ' + nameFunc + '(';
+    var stdout = '';
+    if (infoFunc.type.includes('vector')) {
+        stdout = '\tcout << convertToString(' + infoFunc.name + '(';
+    } else {
+        stdout = '\tcout << ' + infoFunc.name + '(';
+    }
 
     var variable = '';
     var type = '';
@@ -149,7 +154,11 @@ const supportCpp = (nameFunc, input, code) => {
         stdin += '\t' + type + ' ' + variables[i] + ' = ' + newInput + ';\n';
         // stdout
         if (i === variables.length - 1) {
-            stdout += variables[i] + ');\n';
+            if (infoFunc.type.includes('vector')) {
+                stdout += variables[i] + '));\n';
+            } else {
+                stdout += variables[i] + ');\n';
+            }
         } else {
             stdout += variables[i] + ', ';
         }
@@ -160,15 +169,16 @@ const supportCpp = (nameFunc, input, code) => {
 
 const supportConvertCode = async (code, numParams, input, language) => {
     var resLanguage = await getLanguageByID(language);
-    var nameFunc = getNameFunc(code);
+    var infoFunc = getInfoFunc(code);
     var template = resLanguage.template;
     template = template.replace('TODO', code);
     template = template.replaceAll('\\n', '\n');
+    template = template.replaceAll('\\t', '\t');
 
     if (language === 'cpp') {
-        template = template.replace('PROCESSING', supportCpp(nameFunc, input, code));
+        template = template.replace('PROCESSING', supportCpp(infoFunc, input, code));
     } else if (language === 'python') {
-        template += supportPython(nameFunc, numParams, input);
+        template += supportPython(infoFunc.name, numParams, input);
     }
 
     return template;

@@ -6,6 +6,7 @@ int add(int a, int b) {
     return a + b;
 }
 
+// string convertToString(vector<int> arr) {\tstring result = "[";\n\tfor (int i = 0; i < arr.size(); i++) {\n\t\tif (i == arr.size() - 1) {\n\t\t\tstring s = to_string(arr[i]) + "]"; \n\t\t\tresult = result + s;\n\t\t}\n\t\telse {\n\t\t\tstring s = to_string(arr[i]) + ", ";\n\t\t\tresult = result + s;\n\t\t}\n\t}\n\treturn result;\n}\n
 string convertToString(vector<int> arr) {
     string result = "[";
     for (int i = 0; i < arr.size(); i++) {

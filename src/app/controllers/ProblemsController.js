@@ -111,6 +111,7 @@ class ProblemsController {
 
                 try {
                     const stdout = await executeCommand(`g++ ${scriptPath} -o ${buildPath} && ./${buildPath}`);
+                    console.log(stdout);
                     const result = {
                         result:
                             String(JSON.parse(responseTestCase[index].output)) === String(JSON.parse(stdout.stdout)),
@@ -118,6 +119,21 @@ class ProblemsController {
                         runtime: stdout.runtime,
                         memory: stdout.memory,
                     };
+                    fs.unlink(scriptPath, (unlinkError) => {
+                        if (unlinkError) {
+                            console.error(`Error deleting ${scriptPath}: ${unlinkError.message}`);
+                            return;
+                        }
+                        console.log(`Deleted ${scriptPath}`);
+
+                        fs.unlink(buildPath, (unlinkBuildError) => {
+                            if (unlinkBuildError) {
+                                console.error(`Error deleting ${buildPath}: ${unlinkBuildError.message}`);
+                                return;
+                            }
+                            console.log(`Deleted ${buildPath}`);
+                        });
+                    });
                     finalResult.push(result);
                     console.log(`Output: ${stdout}`);
 
