@@ -59,6 +59,31 @@ const getNameFunc = (str) => {
     return nameFunc;
 };
 
+const getInfoFunc = (str) => {
+    var nameFunc = '';
+    var typeFunc = '';
+    var check = false;
+    for (let i = 0; i < str.length; i++) {
+        if (check === false) {
+            if (str[i] === ' ') check = true;
+            else {
+                typeFunc += str[i];
+            }
+        }
+        if (check === true) {
+            if (str[i] === '(') {
+                break;
+            } else {
+                nameFunc += str[i];
+            }
+        }
+    }
+    return {
+        name: nameFunc,
+        type: typeFunc,
+    };
+};
+
 const getLanguageByID = async (name) => {
     try {
         const query = 'SELECT * FROM language WHERE name = $1';
@@ -117,15 +142,19 @@ const supportCpp = (nameFunc, input, code) => {
         }
     }
     for (var i = 0; i < variables.length; i++) {
+        newInput = input[i].replaceAll('[', '{');
+        newInput = newInput.replaceAll(']', '}');
+        type = types[i].replace('&', '');
         // stdin
-        stdin += '\t' + types[i] + ' ' + variables[i] + ' = ' + input[i] + ';\n';
+        stdin += '\t' + type + ' ' + variables[i] + ' = ' + newInput + ';\n';
         // stdout
         if (i === variables.length - 1) {
-            stdout += variables[i] + ');';
+            stdout += variables[i] + ');\n';
         } else {
             stdout += variables[i] + ', ';
         }
     }
+    stdout += '\treturn 0;';
     return stdin + stdout;
 };
 
