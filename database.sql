@@ -27,6 +27,20 @@ CREATE TABLE public.testcases (
 insert into public.testcases (id, problem_id, "input", "output") values (1, 1, '1 2', '3');
 insert into public.testcases (id, problem_id, "input", "output") values (2, 1, '3 4', '7');
 insert into public.testcases (id, problem_id, "input", "output") values (3, 1, '4 6', '10');
-insert into public.testcases (id, problem_id, "input", "output") values (4, 2, '[2,7,11,15] 9', '[0,1]');
-insert into public.testcases (id, problem_id, "input", "output") values (5, 2, '[3,2,4] 6', '[1,2]');
-insert into public.testcases (id, problem_id, "input", "output") values (6, 2, '[3,3] 6', '[0,1]');
+insert into public.testcases (id, problem_id, "input", "output") values (4, 2, '[2,7,11,15] 9', '[0, 1]');
+insert into public.testcases (id, problem_id, "input", "output") values (5, 2, '[3,2,4] 6', '[1, 2]');
+insert into public.testcases (id, problem_id, "input", "output") values (6, 2, '[3,3] 6', '[0, 1]');
+insert into public.testcases (id, problem_id, "input", "output") values (7, 3, '"1" "2"', '"3"');
+insert into public.testcases (id, problem_id, "input", "output") values (8, 3, '"3" "4"', '"7"');
+insert into public.testcases (id, problem_id, "input", "output") values (9, 3, '"4" "6"', '"10"');
+insert into public.testcases (id, problem_id, "input", "output") values (10, 4, '"a" "b"', '"ab"');
+insert into public.testcases (id, problem_id, "input", "output") values (11, 4, '"c" "d"', '"7"');
+insert into public.testcases (id, problem_id, "input", "output") values (12, 4, '"e" "f"', '"10"');
+
+CREATE TABLE public."language" (
+	id int NOT NULL,
+	"name" varchar NULL,
+	"template" varchar NULL,
+	CONSTRAINT language_pk PRIMARY KEY (id)
+);
+
