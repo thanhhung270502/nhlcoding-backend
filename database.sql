@@ -44,3 +44,19 @@ CREATE TABLE public."language" (
 	CONSTRAINT language_pk PRIMARY KEY (id)
 );
 
+insert into public."language" (id, "name", "template") values (1, 'python', 'import sys \nTODO \nif __name__ == "__main__": \n');
+insert into public."language" (id, "name", "template") values (2, 'cpp', '#include <iostream>\n#include <vector>\nusing namespace std;\nTODO\nstring convertToString(vector<int> arr) {\n\tstring result = "[";\n\tfor (int i = 0; i < arr.size(); i++) {\n\t\tif (i == arr.size() - 1) {\n\t\t\tstring s = to_string(arr[i]) + "]"; \n\t\t\tresult = result + s;\n\t\t}\n\t\telse {\n\t\t\tstring s = to_string(arr[i]) + ", ";\n\t\t\tresult = result + s;\n\t\t}\n\t}\n\treturn result;\n}\n\nint main() {\nPROCESSING\n}');
+
+CREATE TABLE public.problem_languages (
+	id int NOT NULL,
+	problem_id int NULL,
+	language_id int NULL,
+	initialcode varchar NULL,
+	CONSTRAINT problem_languages_pk PRIMARY KEY (id),
+	CONSTRAINT problem_languages_fk FOREIGN KEY (language_id) REFERENCES public."language"(id)
+);
+
+insert into public.problem_languages (id, problem_id, language_id, initialcode) values (1, 1, 1, 'def add(a, b):\n\t');
+insert into public.problem_languages (id, problem_id, language_id, initialcode) values (2, 1, 2, 'int add(int a, int b) {\n\t\n}');
+insert into public.problem_languages (id, problem_id, language_id, initialcode) values (3, 1, 1, 'def twoSum(nums, target):\n\t');
+insert into public.problem_languages (id, problem_id, language_id, initialcode) values (4, 1, 2, 'vector<int> twoSum(vector<int>& nums, int target) {\n\t\n}');
