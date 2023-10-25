@@ -46,34 +46,8 @@ class ProblemsController {
         });
 
         let finalResult = [];
-        const processTestcase = async (i, maxLength, code, numParams, testcases, language) => {
-            if (i > maxLength) return;
-            const newCode = await supportConvertCode(code, numParams, testcases[i], language);
-            fs.writeFileSync(`test${i}.cpp`, newCode);
-            const scriptPath = `./test${i}.cpp`;
-            const buildPath = `output${i}`;
-            // let result;
-
-            await exec(`g++ ${scriptPath} -o ${buildPath} && ./${buildPath}`, (error, stdout, stderr) => {
-                if (error) {
-                    console.error(`Error: ${error.message}`);
-                    return;
-                }
-                if (stderr) {
-                    console.error(`Error: ${stderr}`);
-                    return;
-                }
-                // result = {
-                //     output: stdout,
-                // };
-                // finalResult.push(result);
-                console.log(`Output: ${stdout}`);
-            });
-            processTestcase(i + 1, maxLength, code, numParams, testcases, language);
-        };
 
         if (language === 'cpp') {
-            // await processTestcase(0, 2, code, numParams, testcases, language);
             const executeCommand = async (command) => {
                 return new Promise((resolve, reject) => {
                     var startTimeC = process.hrtime();
@@ -99,7 +73,8 @@ class ProblemsController {
                 });
             };
             const processTestcase = async (index, maxLength, code, numParams, testcases, language) => {
-                if (index > maxLength) {
+                console.log(index, maxLength);
+                if (index >= maxLength) {
                     // Kết thúc khi đã xử lý hết các testcase
                     return;
                 }
@@ -144,7 +119,7 @@ class ProblemsController {
                 }
             };
             console.log(testcases);
-            await processTestcase(0, 2, code, numParams, testcases, language);
+            await processTestcase(0, testcases.length, code, numParams, testcases, language);
         } else if (language === 'python') {
             for (var i = 0; i < testcases.length; i++) {
                 const newCode = await supportConvertCode(code, numParams, testcases[i], language);
