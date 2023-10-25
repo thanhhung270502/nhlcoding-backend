@@ -56,3 +56,36 @@ How to exit from database
 ```bash
 \q
 ```
+
+## Add virtual data
+
+Open new terminal
+
+```bash
+docker compose exec app bash
+npm run seeds
+```
+
+## Reset database
+
+Step 1: Delete folder tmp
+
+Step 2: Run command line:
+
+```bash
+docker compose down
+docker compose up --build
+```
+
+Step 3: Open new terminal but not close current terminal. Run command line
+
+```bash
+docker compose exec app bash
+npm run migrate
+```
+
+If you want have data, please run command line:
+
+```bash
+npm run seeds
+```
