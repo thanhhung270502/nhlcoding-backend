@@ -16,7 +16,7 @@ class UsersController {
     async show(req, res, next) {
         try {
             const id = parseInt(req.params.slug);
-            const response = await pool.query('SELECT * FROM users WHERE user_id = $1', [id]);
+            const response = await pool.query('SELECT * FROM users WHERE id = $1', [id]);
             if (response.rows.length > 0) {
                 return res.status(200).json({
                     message: 'Found user successfully',
