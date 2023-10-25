@@ -21,7 +21,7 @@ npm run migrate
 
 ## Access to database on Docker
 
-Check Docker Container
+### Check Docker Container
 
 ```bash
 docker ps
@@ -31,7 +31,7 @@ docker ps
   <img src="./public/assets/images/dockerps.png" width="800" />
 </p>
 
-Get containerID from IMAGE: postgres
+### Get containerID from IMAGE: postgres
 
 ```bash
 docker exec -it <CONTAINER ID> bash
@@ -41,7 +41,7 @@ docker exec -it <CONTAINER ID> bash
   <img src="./public/assets/images/dockerexec.png" width="800" />
 </p>
 
-Connect to database with user nhlcoding
+### Connect to database with user nhlcoding
 
 ```bash
 psql -U nhlcoding
@@ -51,7 +51,13 @@ psql -U nhlcoding
   <img src="./public/assets/images/psql.png" width="800" />
 </p>
 
-How to exit from database
+Here you can write sql statement
+
+<p align="center">
+  <img src="./public/assets/images/sql.png" width="800" />
+</p>
+
+### How to exit from database
 
 ```bash
 \q
