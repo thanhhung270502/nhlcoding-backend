@@ -83,6 +83,74 @@ const insertProblemLanguages = async () => {
     }
 };
 
+const insertProblems = async () => {
+    try {
+        await pool.query(
+            `insert into public.problems (id, title, description, solution, likes, dislikes, level) 
+                    values (1, 'Problem 1', 'Description 1', 'Sample solution', 0, 0, 'easy')`,
+        );
+        await pool.query(
+            `insert into public.problems (id, title, description, solution, likes, dislikes, level) 
+                    values (2, 'Problem 2', 'Description 2', 'Sample solution', 0, 0, 'easy')`,
+        );
+        await pool.query(
+            `insert into public.problems (id, title, description, solution, likes, dislikes, level) 
+                    values (3, 'Problem 3', 'Description 3', 'Sample solution', 0, 0, 'easy')`,
+        );
+        await pool.query(
+            `insert into public.problems (id, title, description, solution, likes, dislikes, level) 
+                    values (4, 'Problem 4', 'Description 4', 'Sample solution', 0, 0, 'easy')`,
+        );
+        await pool.query(
+            `insert into public.problems (id, title, description, solution, likes, dislikes, level) 
+                    values (5, 'Problem 5', 'Description 5', 'Sample solution', 0, 0, 'easy')`,
+        );
+        await pool.query(
+            `insert into public.problems (id, title, description, solution, likes, dislikes, level) 
+                    values (6, 'Problem 6', 'Description 6', 'Sample solution', 0, 0, 'easy')`,
+        );
+    } catch (err) {
+        console.log(err);
+        process.exit(1);
+    }
+};
+
+const insertSumbission = async () => {
+    try {
+        await pool.query(
+            `insert into public.submissions (id, problem_id, status, language_id, code) 
+                    values (1, 2, 'fail', 1, 'submission code ')`,
+        );
+        await pool.query(
+            `insert into public.submissions (id, problem_id, language_id, code) 
+                    values (2, 2, 1, 'submission code ')`,
+        );
+        await pool.query(
+            `insert into public.submissions (id, problem_id, language_id, code) 
+                    values (3, 5, 2, 'submission code ')`,
+        );
+        await pool.query(
+            `insert into public.submissions (id, problem_id, status, language_id, code) 
+                    values (4, 1, 'success', 1, 'submission code ')`,
+        );
+        await pool.query(
+            `insert into public.submissions (id, problem_id, language_id, code) 
+                    values (5, 3, 2, 'submission code ')`,
+        );
+        await pool.query(
+            `insert into public.submissions (id, problem_id, language_id, code) 
+                    values (6, 2, 1, 'submission code ')`,
+        );
+    } catch (err) {
+        console.log(err);
+        process.exit(1);
+    }
+};
+
+
+
+
+
 // const insertLanguages = async () => {
 //     try {
 //     } catch (err) {
@@ -100,6 +168,8 @@ const insertProblemLanguages = async () => {
         await insertTestCases();
         await insertLanguages();
         await insertProblemLanguages();
+        await insertProblems();
+        await insertSumbission();
     } catch (err) {
         console.log(err);
         process.exit(1);
