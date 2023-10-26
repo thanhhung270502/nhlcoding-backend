@@ -11,6 +11,7 @@ const {
     supportConvertCode,
     supportCpp,
 } = require('../helper/testcase');
+const { count } = require('console');
 
 class ProblemsController {
     async show(req, res, next) {
@@ -217,6 +218,47 @@ class ProblemsController {
             message: 'Successfully',
             body: finalResult,
         });
+    }
+
+    async getAllProblems(req, res, next) {
+        const limit = parseInt(req.params.limit);
+        const offset = parseInt(req.params.offset);
+
+        try {        
+            const count_query = `SELECT COUNT(*) FROM problems`;
+            const count_response = await pool.query(count_query)
+            if (offset > count_response.rows[0].count) 
+                throw "Offset is too big!"
+
+            const query = ` SELECT p.id, p.title, p.likes, p.dislikes, p.level, s.status 
+                            FROM problems p left join submissions s on p.id = s.problem_id 
+                            LIMIT $1 OFFSET $2`;
+            const response = await pool.query(query, [limit, offset]);
+
+            if (response.rows.length > 0) {
+                return res.status(200).json({
+                    message: 'Found problems',
+                    code: 200,
+                    body: response.rows.map(problem => {
+                        return {
+                            id: problem.id,
+                            title: problem.title,
+                            likes: problem.likes,
+                            dislikes: problem.dislikes,
+                            level: problem.level,
+                            status: 
+                                problem.status === null      ?   "Todo"      : 
+                                problem.status === "fail"    ?   "Attempted" :
+                                                                 "Solved"
+                        }
+                    }),
+                });
+            }
+            
+        } catch (err) {
+            console.log(err);
+            return res.status(500).json('Internal Server Error');
+        }
     }
 }
 module.exports = new ProblemsController();
