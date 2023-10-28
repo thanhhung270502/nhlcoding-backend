@@ -223,20 +223,23 @@ class ProblemsController {
     async getAllProblems(req, res, next) {
         const limit = parseInt(req.params.limit);
         const offset = parseInt(req.params.offset);
+        const userId = parseInt(req.params.user_id);
 
         try {        
             const count_query = `SELECT COUNT(*) FROM problems`;
             const count_response = await pool.query(count_query)
-            if (offset > count_response.rows[0].count) 
+            if (offset > count_response.rows[0].count)  
                 throw "Offset is too big!"
 
             const query = ` with pr as 
-                                (select p.id, p.title, p.likes, p.dislikes, l."name" from problems p join levels l on p.level_id = l.id)
+                                (select p.id, p.title, p.likes, p.dislikes, l."name" from problems p join levels l on p.level_id = l.id),
+                                up as
+                                (select * from user_problems u where u.user_id = $3)
                             SELECT pr.id, pr.title, pr.likes, pr.dislikes, pr.name, up.status  
-                            from pr left join user_problems up on pr.id = up.problem_id
+                            from pr left join up on pr.id = up.problem_id
                             ORDER BY pr.id
                             LIMIT $1 OFFSET $2`;
-            const response = await pool.query(query, [limit, offset]);
+            const response = await pool.query(query, [limit, offset, userId]);
 
             if (response.rows.length > 0) {
                 return res.status(200).json({
