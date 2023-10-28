@@ -106,7 +106,6 @@ const createTableProblems = async () => {
         CREATE TABLE public.problems (
             id 				SERIAL					NOT NULL,
             level_id        int                 NOT NULL,
-
             title			text				NOT NULL,
             description		text				NOT NULL,
             solution		text				,
@@ -157,7 +156,7 @@ const createTableSubmissions = async () => {
             status              text                NOT NULL            DEFAULT 'fail',
             code                text                NOT NULL,
             CONSTRAINT submission_pk PRIMARY KEY (id),
-            CONSTRAINT user_problems_fk FOREIGN KEY (user_problems_id) REFERENCES public.user_problems(id)
+            CONSTRAINT user_problems_fk FOREIGN KEY (user_problems_id) REFERENCES public.user_problems(id),
             CONSTRAINT submission_languages_fk FOREIGN KEY (language_id) REFERENCES public."language"(id)
         )`;
         await pool.query(query);

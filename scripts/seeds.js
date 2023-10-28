@@ -149,7 +149,6 @@ const insertUserSubmission = async () => {
                                     insert into public.submissions (user_problems_id ,  language_id,    runtime,    memory,     status,     code) 
                                                             values (2,                  1,              10,         10,         'fail',     'Submit code 2');
             `,
-
         );
     } catch (err) {
         console.log(err);
