@@ -230,8 +230,11 @@ class ProblemsController {
             if (offset > count_response.rows[0].count) 
                 throw "Offset is too big!"
 
-            const query = ` SELECT p.id, p.title, p.likes, p.dislikes, p.level, s.status 
-                            FROM problems p left join submissions s on p.id = s.problem_id 
+            const query = ` with pr as 
+                                (select p.id, p.title, p.likes, p.dislikes, l."name" from problems p join levels l on p.level_id = l.id)
+                            SELECT pr.id, pr.title, pr.likes, pr.dislikes, pr.name, up.status  
+                            from pr left join user_problems up on pr.id = up.problem_id
+                            ORDER BY pr.id
                             LIMIT $1 OFFSET $2`;
             const response = await pool.query(query, [limit, offset]);
 
@@ -245,11 +248,9 @@ class ProblemsController {
                             title: problem.title,
                             likes: problem.likes,
                             dislikes: problem.dislikes,
-                            level: problem.level,
+                            level: problem.name,
                             status: 
-                                problem.status === null      ?   "Todo"      : 
-                                problem.status === "fail"    ?   "Attempted" :
-                                                                 "Solved"
+                                problem.status === null ? "Todo" : problem.status
                         }
                     }),
                 });
