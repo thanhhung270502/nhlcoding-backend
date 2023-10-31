@@ -2,6 +2,7 @@ const fs = require('fs');
 const { PythonShell } = require('python-shell');
 const process = require('process');
 const pool = require('../../config/db');
+const axios = require('axios');
 const { exec } = require('child_process');
 const {
     getTestcaseByProblemID,
@@ -217,6 +218,100 @@ class ProblemsController {
             message: 'Successfully',
             body: finalResult,
         });
+    }
+
+    async runCodeWithJobe(req, res) {
+        const payload = req.body;
+        const { language_id, sourcecode } = payload.run_spec;
+        const header = {
+            'Content-Type': 'application/json; charset=utf-8',
+        };
+
+        var testcases = [];
+        var numParams;
+
+        const responseTestCase = await getTestcaseByProblemID(req.params.problem_id);
+
+        responseTestCase.forEach((testcase) => {
+            var inputs = testcase.input.split(' ');
+            numParams = inputs.length;
+            testcases.push(inputs);
+        });
+
+        let finalResult = [];
+        for (var i = 0; i < testcases.length; i++) {
+            console.log('---------------------------------');
+            var finalCode = await supportConvertCode(sourcecode, numParams, testcases[i], language_id);
+            console.log(finalCode);
+
+            const result = {
+                runtime: 0,
+                memory: 0,
+            };
+
+            axios.post('localhost/jobe/index.php/restapi/runs', payload, { header })
+                .then(response => {
+                    const { run_id, outcome, cmpinfo, stdout, stderr } = response.data;
+                    result = {
+                        result: String(JSON.parse(responseTestCase[i].output)) === String(JSON.parse(stdout)),
+                        output: stdout,
+                        error: stderr,
+                        ...result,
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+
+            finalResult.push(result);
+        }
+        console.log(finalResult);
+        return res.status(200).json({
+            message: 'Successfully',
+            body: finalResult,
+        });
+    }
+
+    async testJobe(req, res, next) {
+        try {
+            // example payload for cpp
+            // { "run_spec": 
+            //     { "language_id": "cpp", 
+            //     "sourcefilename": "hello.cpp", 
+            //     "sourcecode": "#include <iostream>\n\nint main() {\n    std::cout << \"Hello, World!\" << std::endl;\n    return 0;\n}" 
+            //     } 
+            // }
+
+            const { language_id, sourcecode } = req.body.run_spec;
+
+            if ((language_id != "cpp" && language_id != "python3") || !sourcecode) {
+                return res.status(200).json({
+                    code: 200,
+                    message: 'Cannot run code with jobe',
+                    // body: JSON.parse(stdout),
+                });
+            }
+
+            const payload = JSON.stringify(req.body);
+            const headers = {
+                "Content-type": "application/json; charset-utf-8",
+            }
+
+            console.log(`${process.env.LOCAL_JOBE_API}/runs`);
+
+            const body = await axios.post(`${process.env.LOCAL_JOBE_API}/runs`, req.body, { headers })
+                .then(res => res.data)
+                .catch(err => console.log(err.message));
+
+            return res.status(200).json({
+                code: 200,
+                message: 'Run code with jobe successfully',
+                body: body,
+            });
+        }
+        catch (err) {
+            console.log(err);
+        }
     }
 }
 module.exports = new ProblemsController();

@@ -2,7 +2,7 @@ const pool = require('../src/config/db');
 
 const createTableUsers = async () => {
     try {
-        await pool.query('drop table if exists users');
+        await pool.query('drop table if exists users cascade');
 
         const query = `
         CREATE TABLE users (
@@ -24,7 +24,7 @@ const createTableUsers = async () => {
 
 const createTableTestCases = async () => {
     try {
-        await pool.query('drop table if exists testcases');
+        await pool.query('drop table if exists testcases cascade');
 
         const query = `
         CREATE TABLE testcases (
@@ -45,7 +45,7 @@ const createTableTestCases = async () => {
 
 const createTableLanguages = async () => {
     try {
-        await pool.query('drop table if exists "language"');
+        await pool.query('drop table if exists "language" cascade');
 
         const query = `
         CREATE TABLE "language" (
@@ -63,7 +63,7 @@ const createTableLanguages = async () => {
 
 const createTableProblemLanguages = async () => {
     try {
-        await pool.query('drop table if exists problem_langugages');
+        await pool.query('drop table if exists problem_languages cascade');
 
         const query = `
         CREATE TABLE problem_languages (
@@ -106,10 +106,10 @@ const createTableProblemLanguages = async () => {
     try {
         console.log('Waiting...');
         console.log('If program does not show anything, program run sucessfully');
-        await createTableUsers();
-        await createTableLanguages();
         await createTableProblemLanguages();
         await createTableTestCases();
+        await createTableUsers();
+        await createTableLanguages();
     } catch (err) {
         console.log(err);
         process.exit(1);
