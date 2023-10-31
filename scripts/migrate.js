@@ -303,20 +303,20 @@ const createTableTestcaseSumissions = async () => {
     try {
         console.log('Waiting...');
         console.log('If program does not show anything, program run sucessfully');
-        await createTableUsers();
-        await createTableLanguages();
         await createTableProblemLanguages();
         await createTableLevels();
         await createTableTestCases();
         await createTableProblems();
         await createUserProblems();
         await createTableSubmissions();
-        
+
         // Insert Functions and Triggers
         await createInsertUserProblemsFunction();
         await createInsertUserProblemsTrigger();
         await createUpdateUserProblemsFunction();
         await createInsertSubmissionTrigger();
+        await createTableUsers();
+        await createTableLanguages();
     } catch (err) {
         console.log(err);
         process.exit(1);
