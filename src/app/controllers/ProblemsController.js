@@ -266,52 +266,57 @@ class ProblemsController {
         }
     }
 
-    async runCodeWithJobe(req, res) {
-        const payload = req.body;
-        const { language_id, sourcecode } = payload.run_spec;
-        const header = {
+    async runCodeWithJobe(req, res, next) {
+        const { problem_id, language } = req.params;
+        const { code } = req.body;
+        const headers = {
             'Content-Type': 'application/json; charset=utf-8',
         };
 
-        var testcases = [];
-        var numParams;
+        const responseTestCase = await getTestcaseByProblemID(problem_id);
+        // console.log("Response test cases", responseTestCase);
+        var finalResult = [];
 
-        const responseTestCase = await getTestcaseByProblemID(req.params.problem_id);
+        for (var i = 0; i < responseTestCase.length; i++) {
+            const testcase = responseTestCase[i];
+            console.log("run test case", responseTestCase.indexOf(testcase));
+            const inputs = testcase.input.split(' ');
+            const numParams = inputs.length;
+            const newCode = await supportConvertCode(code, numParams, inputs, language);
+            // console.log(newCode);
 
-        responseTestCase.forEach((testcase) => {
-            var inputs = testcase.input.split(' ');
-            numParams = inputs.length;
-            testcases.push(inputs);
-        });
+            const payload = JSON.stringify({
+                run_spec: {
+                    language_id: language === "python" ? "python3" : "cpp",
+                    sourcecode: newCode,
+                }
+            })
 
-        let finalResult = [];
-        for (var i = 0; i < testcases.length; i++) {
-            console.log('---------------------------------');
-            var finalCode = await supportConvertCode(sourcecode, numParams, testcases[i], language_id);
-            console.log(finalCode);
+            const { run_id, outcome, cmpinfo, stdout, stderr } = await axios.post(`${process.env.LOCAL_JOBE_API}/runs`, payload, { headers })
+                .then(res => res.data)
+                .catch(err => console.log(err));
 
-            const result = {
+            const success = parseInt(outcome) === 15 && !stderr && String(JSON.parse(testcase.output)) === String(JSON.parse(stdout));
+
+            const result_obj = {
+                testcase: i,
+                success: success,
+                output: stdout,
+                error: stderr,
                 runtime: 0,
                 memory: 0,
+                run_id: run_id,
+                cmpinfo: cmpinfo,
             };
 
-            axios.post('localhost/jobe/index.php/restapi/runs', payload, { header })
-                .then(response => {
-                    const { run_id, outcome, cmpinfo, stdout, stderr } = response.data;
-                    result = {
-                        result: String(JSON.parse(responseTestCase[i].output)) === String(JSON.parse(stdout)),
-                        output: stdout,
-                        error: stderr,
-                        ...result,
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
+            finalResult.push(result_obj);
 
-            finalResult.push(result);
-        }
-        console.log(finalResult);
+            // if test case fails, terminate
+            if (!success && i >= 3) {
+                break;
+            }
+        };
+
         return res.status(200).json({
             message: 'Successfully',
             body: finalResult,
@@ -324,7 +329,8 @@ class ProblemsController {
             // { "run_spec": 
             //     { "language_id": "cpp", 
             //     "sourcefilename": "hello.cpp", 
-            //     "sourcecode": "#include <iostream>\n\nint main() {\n    std::cout << \"Hello, World!\" << std::endl;\n    return 0;\n}" 
+            //     "sourcecode": "#include <iostream>\n\nint main() {\n    std::cout << \"Hello, World!\" << std::endl;\n    return 0;\n}",
+            //     "input": "1 2",
             //     } 
             // }
 
