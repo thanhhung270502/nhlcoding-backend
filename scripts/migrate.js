@@ -6,13 +6,13 @@ const createTableUsers = async () => {
 
         const query = `
         CREATE TABLE users (
-            id SERIAL NOT NULL,
-            email varchar NOT NULL,
-            "password" varchar NOT NULL,
-            name varchar null,
-            avatar varchar null,
-            provider varchar NULL,
-            "role" int NULL,
+            id              SERIAL      NOT NULL,
+            email           varchar     NOT NULL,
+            "password"      varchar     NOT NULL,
+            name            varchar     NULL,
+            avatar          varchar     NULL,
+            provider        varchar     NULL,
+            "role"          int         NULL,
             CONSTRAINT users_pk PRIMARY KEY (id)
         )`;
         await pool.query(query);
@@ -28,12 +28,12 @@ const createTableTestCases = async () => {
 
         const query = `
         CREATE TABLE testcases (
-            id SERIAL NOT NULL,
-            problem_id int NULL,
-            "input" varchar NULL,
-            "output" varchar NULL,
-            memory decimal NULL,
-            runtime decimal NULL,
+            id              SERIAL      NOT NULL,
+            problem_id      int         NULL,
+            "input"         varchar     NULL,
+            "output"        varchar     NULL,
+            memory          decimal     NULL,
+            runtime         decimal     NULL,
             CONSTRAINT testcases_pk PRIMARY KEY (id)
         )`;
         await pool.query(query);
@@ -45,14 +45,14 @@ const createTableTestCases = async () => {
 
 const createTableLanguages = async () => {
     try {
-        await pool.query('drop table if exists "language" cascade');
+        await pool.query('drop table if exists "languages" cascade');
 
         const query = `
-        CREATE TABLE "language" (
+        CREATE TABLE "languages" (
             id SERIAL NOT NULL,
             "name" varchar NULL,
             "template" varchar NULL,
-            CONSTRAINT language_pk PRIMARY KEY (id)
+            CONSTRAINT languages_pk PRIMARY KEY (id)
         )`;
         await pool.query(query);
     } catch (err) {
@@ -67,12 +67,12 @@ const createTableProblemLanguages = async () => {
 
         const query = `
         CREATE TABLE problem_languages (
-            id SERIAL NOT NULL,
-            problem_id int NULL,
-            language_id int NULL,
-            initialcode varchar NULL,
+            id              SERIAL      NOT NULL,
+            problem_id      int         NULL,
+            language_id     int         NULL,
+            initialcode     varchar     NULL,
             CONSTRAINT problem_languages_pk PRIMARY KEY (id),
-            CONSTRAINT problem_languages_fk FOREIGN KEY (language_id) REFERENCES public."language"(id)
+            CONSTRAINT problem_languages_fk FOREIGN KEY (language_id) REFERENCES public."languages"(id)
         )`;
         await pool.query(query);
     } catch (err) {
@@ -96,7 +96,7 @@ const createTableLevels = async () => {
         console.log(err);
         process.exit(1);
     }
-}
+};
 
 const createTableProblems = async () => {
     try {
@@ -119,7 +119,7 @@ const createTableProblems = async () => {
         console.log(err);
         process.exit(1);
     }
-}
+};
 
 const createUserProblems = async () => {
     try {
@@ -140,7 +140,7 @@ const createUserProblems = async () => {
         console.log(err);
         process.exit(1);
     }
-}
+};
 
 const createTableSubmissions = async () => {
     try {
@@ -157,14 +157,14 @@ const createTableSubmissions = async () => {
             code                text                NOT NULL,
             CONSTRAINT submission_pk PRIMARY KEY (id),
             CONSTRAINT user_problems_fk FOREIGN KEY (user_problems_id) REFERENCES public.user_problems(id),
-            CONSTRAINT submission_languages_fk FOREIGN KEY (language_id) REFERENCES public."language"(id)
+            CONSTRAINT submission_languages_fk FOREIGN KEY (language_id) REFERENCES public."languages"(id)
         )`;
         await pool.query(query);
     } catch (err) {
         console.log(err);
         process.exit(1);
     }
-}
+};
 
 const createInsertUserProblemsFunction = async () => {
     try {
@@ -191,7 +191,7 @@ const createInsertUserProblemsFunction = async () => {
         console.log(err);
         process.exit(1);
     }
-}
+};
 
 const createUpdateUserProblemsFunction = async () => {
     try {
@@ -224,7 +224,7 @@ const createUpdateUserProblemsFunction = async () => {
         console.log(err);
         process.exit(1);
     }
-}
+};
 
 const createInsertSubmissionTrigger = async () => {
     try {
@@ -240,7 +240,7 @@ const createInsertSubmissionTrigger = async () => {
         console.log(err);
         process.exit(1);
     }
-}
+};
 
 const createInsertUserProblemsTrigger = async () => {
     try {
@@ -256,7 +256,7 @@ const createInsertUserProblemsTrigger = async () => {
         console.log(err);
         process.exit(1);
     }
-}
+};
 
 const createTableTestcaseSumissions = async () => {
     try {
@@ -267,16 +267,16 @@ const createTableTestcaseSumissions = async () => {
             id 				    SERIAL					NOT NULL,
             testcase_id         int                 NOT NULL,
             submission_id       int                 NOT NULL,
-            CONSTRAINT testcase_submissions_pk PRIMARY KEY (id)
+            CONSTRAINT testcase_submissions_pk PRIMARY KEY (id),
             CONSTRAINT testcase_fk FOREIGN KEY (testcase_id) REFERENCES public.testcases (id),
-            CONSTRAINT submission_fk FOREIGN KEY (submission_id) REERENCES public.submissions (id)
+            CONSTRAINT submission_fk FOREIGN KEY (submission_id) REFERENCES public.submissions (id)
         )`;
         await pool.query(query);
     } catch (err) {
         console.log(err);
         process.exit(1);
     }
-}
+};
 
 // const create = async () => {
 //     try {
@@ -303,20 +303,21 @@ const createTableTestcaseSumissions = async () => {
     try {
         console.log('Waiting...');
         console.log('If program does not show anything, program run sucessfully');
-        await createTableProblemLanguages();
+        await createTableUsers();
         await createTableLevels();
-        await createTableTestCases();
         await createTableProblems();
+        await createTableLanguages();
+        await createTableProblemLanguages();
+        await createTableTestCases();
         await createUserProblems();
         await createTableSubmissions();
+        await createTableTestcaseSumissions();
 
         // Insert Functions and Triggers
         await createInsertUserProblemsFunction();
         await createInsertUserProblemsTrigger();
         await createUpdateUserProblemsFunction();
         await createInsertSubmissionTrigger();
-        await createTableUsers();
-        await createTableLanguages();
     } catch (err) {
         console.log(err);
         process.exit(1);

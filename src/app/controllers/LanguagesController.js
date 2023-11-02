@@ -1,6 +1,15 @@
 const pool = require('../../config/db');
 
 class LanguagesController {
+    async index(req, res, next) {
+        try {
+            const response = await pool.query('SELECT * FROM languages');
+            return res.status(200).json(response.rows);
+        } catch (err) {
+            console.log(err);
+            return res.status(500).json('Internal Server Error');
+        }
+    }
     async show(req, res, next) {
         const { language_id } = req.params;
         console.log(language_id);

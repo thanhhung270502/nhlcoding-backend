@@ -15,6 +15,16 @@ const {
 const { count } = require('console');
 
 class ProblemsController {
+    async index(req, res, next) {
+        try {
+            const response = await pool.query('SELECT * FROM problems');
+            return res.status(200).json(response.rows);
+        } catch (err) {
+            console.log(err);
+            return res.status(500).json('Internal Server Error');
+        }
+    }
+
     async show(req, res, next) {
         const problem_id = parseInt(req.params.problem_id);
         try {
@@ -228,9 +238,8 @@ class ProblemsController {
 
         try {
             const count_query = `SELECT COUNT(*) FROM problems`;
-            const count_response = await pool.query(count_query)
-            if (offset > count_response.rows[0].count)
-                throw "Offset is too big!"
+            const count_response = await pool.query(count_query);
+            if (offset > count_response.rows[0].count) throw 'Offset is too big!';
 
             const query = ` with pr as 
                                 (select p.id, p.title, p.likes, p.dislikes, l."name" from problems p join levels l on p.level_id = l.id),
@@ -246,20 +255,45 @@ class ProblemsController {
                 return res.status(200).json({
                     message: 'Found problems',
                     code: 200,
-                    body: response.rows.map(problem => {
+                    body: response.rows.map((problem) => {
                         return {
                             id: problem.id,
                             title: problem.title,
                             likes: problem.likes,
                             dislikes: problem.dislikes,
                             level: problem.name,
-                            status:
-                                problem.status === null ? "Todo" : problem.status
-                        }
+                            status: problem.status === null ? 'Todo' : problem.status,
+                        };
                     }),
                 });
             }
+        } catch (err) {
+            console.log(err);
+            return res.status(500).json('Internal Server Error');
+        }
+    }
 
+    async create(req, res, next) {
+        try {
+            const { code, desc, reason, selectedOption, solutions, testcases, title, validate } = req.body;
+            await pool.query(
+                'INSERT INTO problems (title, description, solution, likes, dislikes, level) VALUES ($1, $2, $3, $4, $5, $6)',
+                [title, desc, solutions, 0, 0, 'easy'],
+            );
+
+            const currentProblem = await pool.query(
+                'SELECT * FROM problems WHERE title = $1 AND description = $2 AND solution = $3',
+                [title, desc, solutions],
+            );
+            console.log('a');
+            console.log(currentProblem);
+
+            for (let i = 0; i < testcases.length; i++) {
+                await pool.query(
+                    'INSERT INTO testcases (problem_id, "input", "output", memory, runtime) VALUES ($1, $2, $3, $4, $5)',
+                    [currentProblem.rows[0].id, testcases[i].input, testcases[i].output, 0, 0],
+                );
+            }
         } catch (err) {
             console.log(err);
             return res.status(500).json('Internal Server Error');
@@ -279,7 +313,7 @@ class ProblemsController {
 
         for (var i = 0; i < responseTestCase.length; i++) {
             const testcase = responseTestCase[i];
-            console.log("run test case", responseTestCase.indexOf(testcase));
+            console.log('run test case', responseTestCase.indexOf(testcase));
             const inputs = testcase.input.split(' ');
             const numParams = inputs.length;
             const newCode = await supportConvertCode(code, numParams, inputs, language);
@@ -287,16 +321,20 @@ class ProblemsController {
 
             const payload = JSON.stringify({
                 run_spec: {
-                    language_id: language === "python" ? "python3" : "cpp",
+                    language_id: language === 'python' ? 'python3' : 'cpp',
                     sourcecode: newCode,
-                }
-            })
+                },
+            });
 
-            const { run_id, outcome, cmpinfo, stdout, stderr } = await axios.post(`${process.env.LOCAL_JOBE_API}/runs`, payload, { headers })
-                .then(res => res.data)
-                .catch(err => console.log(err));
+            const { run_id, outcome, cmpinfo, stdout, stderr } = await axios
+                .post(`${process.env.LOCAL_JOBE_API}/runs`, payload, { headers })
+                .then((res) => res.data)
+                .catch((err) => console.log(err));
 
-            const success = parseInt(outcome) === 15 && !stderr && String(JSON.parse(testcase.output)) === String(JSON.parse(stdout));
+            const success =
+                parseInt(outcome) === 15 &&
+                !stderr &&
+                String(JSON.parse(testcase.output)) === String(JSON.parse(stdout));
 
             const result_obj = {
                 testcase: i,
@@ -315,7 +353,7 @@ class ProblemsController {
             if (!success && i >= 3) {
                 break;
             }
-        };
+        }
 
         return res.status(200).json({
             message: 'Successfully',
@@ -326,17 +364,17 @@ class ProblemsController {
     async testJobe(req, res, next) {
         try {
             // example payload for cpp
-            // { "run_spec": 
-            //     { "language_id": "cpp", 
-            //     "sourcefilename": "hello.cpp", 
+            // { "run_spec":
+            //     { "language_id": "cpp",
+            //     "sourcefilename": "hello.cpp",
             //     "sourcecode": "#include <iostream>\n\nint main() {\n    std::cout << \"Hello, World!\" << std::endl;\n    return 0;\n}",
             //     "input": "1 2",
-            //     } 
+            //     }
             // }
 
             const { language_id, sourcecode } = req.body.run_spec;
 
-            if ((language_id != "cpp" && language_id != "python3") || !sourcecode) {
+            if ((language_id != 'cpp' && language_id != 'python3') || !sourcecode) {
                 return res.status(200).json({
                     code: 200,
                     message: 'Cannot run code with jobe',
@@ -346,22 +384,22 @@ class ProblemsController {
 
             const payload = JSON.stringify(req.body);
             const headers = {
-                "Content-type": "application/json; charset-utf-8",
-            }
+                'Content-type': 'application/json; charset-utf-8',
+            };
 
             console.log(`${process.env.LOCAL_JOBE_API}/runs`);
 
-            const body = await axios.post(`${process.env.LOCAL_JOBE_API}/runs`, req.body, { headers })
-                .then(res => res.data)
-                .catch(err => console.log(err.message));
+            const body = await axios
+                .post(`${process.env.LOCAL_JOBE_API}/runs`, req.body, { headers })
+                .then((res) => res.data)
+                .catch((err) => console.log(err.message));
 
             return res.status(200).json({
                 code: 200,
                 message: 'Run code with jobe successfully',
                 body: body,
             });
-        }
-        catch (err) {
+        } catch (err) {
             console.log(err);
         }
     }

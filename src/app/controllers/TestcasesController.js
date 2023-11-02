@@ -1,6 +1,16 @@
 const pool = require('../../config/db');
 
 class TestcasesController {
+    async index(req, res, next) {
+        try {
+            const response = await pool.query('SELECT * FROM testcases');
+            return res.status(200).json(response.rows);
+        } catch (err) {
+            console.log(err);
+            return res.status(500).json('Internal Server Error');
+        }
+    }
+
     async show(req, res, next) {
         const problem_id = parseInt(req.params.problem_id);
         try {

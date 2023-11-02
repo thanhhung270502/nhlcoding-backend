@@ -25,24 +25,12 @@ const insertTestCases = async () => {
         await pool.query(
             `insert into public.testcases (problem_id, "input", "output") values (2, '[3,3] 6', '[0, 1]')`,
         );
-        await pool.query(
-            `insert into public.testcases (problem_id, "input", "output") values (3, '"1" "2"', '"3"')`,
-        );
-        await pool.query(
-            `insert into public.testcases (problem_id, "input", "output") values (3, '"3" "4"', '"7"')`,
-        );
-        await pool.query(
-            `insert into public.testcases (problem_id, "input", "output") values (3, '"4" "6"', '"10"')`,
-        );
-        await pool.query(
-            `insert into public.testcases (problem_id, "input", "output") values (4, '"a" "b"', '"ab"')`,
-        );
-        await pool.query(
-            `insert into public.testcases (problem_id, "input", "output") values (4, '"c" "d"', '"7"')`,
-        );
-        await pool.query(
-            `insert into public.testcases (problem_id, "input", "output") values (4, '"e" "f"', '"10"')`,
-        );
+        await pool.query(`insert into public.testcases (problem_id, "input", "output") values (3, '"1" "2"', '"3"')`);
+        await pool.query(`insert into public.testcases (problem_id, "input", "output") values (3, '"3" "4"', '"7"')`);
+        await pool.query(`insert into public.testcases (problem_id, "input", "output") values (3, '"4" "6"', '"10"')`);
+        await pool.query(`insert into public.testcases (problem_id, "input", "output") values (4, '"a" "b"', '"ab"')`);
+        await pool.query(`insert into public.testcases (problem_id, "input", "output") values (4, '"c" "d"', '"7"')`);
+        await pool.query(`insert into public.testcases (problem_id, "input", "output") values (4, '"e" "f"', '"10"')`);
     } catch (err) {
         console.log(err);
         process.exit(1);
@@ -52,10 +40,10 @@ const insertTestCases = async () => {
 const insertLanguages = async () => {
     try {
         await pool.query(
-            `insert into public."language" ("name", "template") values ('python', 'import sys \nTODO \nif __name__ == "__main__": \n')`,
+            `insert into public."languages" ("name", "template") values ('python', 'import sys \nTODO \nif __name__ == "__main__": \n')`,
         );
         await pool.query(
-            `insert into public."language" ("name", "template") values ('cpp', '#include <iostream>\n#include <vector>\nusing namespace std;\nTODO\nstring convertToString(vector<int> arr) {\n\tstring result = "[";\n\tfor (unsigned int i = 0; i < arr.size(); i++) {\n\t\tif (i == arr.size() - 1) {\n\t\t\tstring s = to_string(arr[i]) + "]"; \n\t\t\tresult = result + s;\n\t\t}\n\t\telse {\n\t\t\tstring s = to_string(arr[i]) + ", ";\n\t\t\tresult = result + s;\n\t\t}\n\t}\n\treturn result;\n}\n\nint main() {\nPROCESSING\n}')`,
+            `insert into public."languages" ("name", "template") values ('cpp', '#include <iostream>\n#include <vector>\nusing namespace std;\nTODO\nstring convertToString(vector<int> arr) {\n\tstring result = "[";\n\tfor (int i = 0; i < arr.size(); i++) {\n\t\tif (i == arr.size() - 1) {\n\t\t\tstring s = to_string(arr[i]) + "]"; \n\t\t\tresult = result + s;\n\t\t}\n\t\telse {\n\t\t\tstring s = to_string(arr[i]) + ", ";\n\t\t\tresult = result + s;\n\t\t}\n\t}\n\treturn result;\n}\n\nint main() {\nPROCESSING\n}')`,
         );
     } catch (err) {
         console.log(err);
@@ -101,7 +89,7 @@ const insertLevels = async () => {
         console.log(err);
         process.exit(1);
     }
-}
+};
 
 const insertProblems = async () => {
     try {
@@ -132,13 +120,13 @@ const insertUserProblems = async () => {
             `
             insert into public.user_problems (user_id, problem_id) values (1, 1);
             insert into public.user_problems (user_id, problem_id) values (1, 4);
-            `
-        )
+            `,
+        );
     } catch (err) {
         console.log(err);
         process.exit(1);
     }
-}
+};
 
 const insertUserSubmission = async () => {
     try {
@@ -146,17 +134,15 @@ const insertUserSubmission = async () => {
             `
             insert into public.submissions (user_problems_id ,  language_id,    runtime,    memory,     status,     code) 
                                     values (1,                  1,              10,         10,         'fail',     'Submit code 1');
-                                    insert into public.submissions (user_problems_id ,  language_id,    runtime,    memory,     status,     code) 
-                                                            values (2,                  1,              10,         10,         'fail',     'Submit code 2');
+            insert into public.submissions (user_problems_id ,  language_id,    runtime,    memory,     status,     code) 
+                                    values (2,                  1,              10,         10,         'fail',     'Submit code 2');
             `,
         );
     } catch (err) {
         console.log(err);
         process.exit(1);
     }
-}
-
-
+};
 
 const insertSumbission = async () => {
     try {
@@ -174,10 +160,6 @@ const insertSumbission = async () => {
     }
 };
 
-
-
-
-
 // const insertLanguages = async () => {
 //     try {
 //     } catch (err) {
@@ -192,11 +174,11 @@ const insertSumbission = async () => {
         console.log('Waiting...');
         console.log('If program does not show anything, program run sucessfully');
         await insertUsers();
+        await insertLevels();
+        await insertProblems();
         await insertTestCases();
         await insertLanguages();
         await insertProblemLanguages();
-        await insertLevels();
-        await insertProblems();
         await insertUserProblems();
         await insertSumbission();
     } catch (err) {

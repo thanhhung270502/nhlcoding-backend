@@ -12,3 +12,14 @@ Content-Type: application/json
     "name": "Example",
     "provider": "manual"
 }
+
+###
+GET http://localhost:3000/problems
+
+###
+POST http://localhost:3000/problems
+Content-Type: application/json
+
+{
+    "problem": "a"
+}
