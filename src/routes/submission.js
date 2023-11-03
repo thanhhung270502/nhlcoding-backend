@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
-// const submissionController = require('../app/controllers/SubmissionController');
+const submissionController = require('../app/controllers/SubmissionController');
 
-// router.post('/:language/code', submissionController.runCode);
+router.get('/:user_id/:problem_id', submissionController.show);
 
 module.exports = router;

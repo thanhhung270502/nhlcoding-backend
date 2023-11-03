@@ -313,7 +313,7 @@ class ProblemsController {
             }
 
             // else: outcome = 15
-            const success = String(JSON.parse(testcase.output)) === String(JSON.parse(stdout));
+            const success = testcase.output === stdout;
             const runtime = end_timestamp[0] * 1000 + end_timestamp[1] / 1000000; // convert to milliseconds
             runtimes += runtime;
 
