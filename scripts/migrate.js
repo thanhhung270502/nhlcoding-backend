@@ -305,11 +305,11 @@ const createTableTestcaseSumissions = async () => {
         console.log('Waiting...');
         console.log('If program does not show anything, program run sucessfully');
         await createTableUsers();
-        await createTableLevels();
         await createTableLanguages();
+        await createTableLevels();
+        await createTableProblems();
         await createTableProblemLanguages();
         await createTableTestCases();
-        await createTableProblems();
         await createUserProblems();
         await createTableSubmissions();
 

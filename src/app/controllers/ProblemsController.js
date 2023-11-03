@@ -313,7 +313,12 @@ class ProblemsController {
             }
 
             // else: outcome = 15
-            const success = testcase.output === stdout;
+
+            // console.log(JSON.stringify(testcase.output), typeof JSON.stringify(testcase.output));
+            // console.log(JSON.stringify(stdout), typeof JSON.stringify(stdout));
+            // console.log(JSON.stringify(stdout) === `"None\\n"`);
+
+            const success = JSON.stringify(language === 'python' ? testcase.output + "\n" : testcase.output) === JSON.stringify(stdout);
             const runtime = end_timestamp[0] * 1000 + end_timestamp[1] / 1000000; // convert to milliseconds
             runtimes += runtime;
 
