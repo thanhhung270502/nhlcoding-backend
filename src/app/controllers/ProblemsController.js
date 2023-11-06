@@ -300,6 +300,33 @@ class ProblemsController {
         }
     }
 
+    async create(req, res, next) {
+        try {
+            const { code, desc, reason, selectedOption, solutions, testcases, title, validate } = req.body;
+            await pool.query(
+                'INSERT INTO problems (title, description, solution, likes, dislikes, level) VALUES ($1, $2, $3, $4, $5, $6)',
+                [title, desc, solutions, 0, 0, 'easy'],
+            );
+
+            const currentProblem = await pool.query(
+                'SELECT * FROM problems WHERE title = $1 AND description = $2 AND solution = $3',
+                [title, desc, solutions],
+            );
+            console.log('a');
+            console.log(currentProblem);
+
+            for (let i = 0; i < testcases.length; i++) {
+                await pool.query(
+                    'INSERT INTO testcases (problem_id, "input", "output", memory, runtime) VALUES ($1, $2, $3, $4, $5)',
+                    [currentProblem.rows[0].id, testcases[i].input, testcases[i].output, 0, 0],
+                );
+            }
+        } catch (err) {
+            console.log(err);
+            return res.status(500).json('Internal Server Error');
+        }
+    }
+
     async runCodeWithJobe(req, res, next) {
         const { problem_id, language } = req.params;
         const { code } = req.body;
