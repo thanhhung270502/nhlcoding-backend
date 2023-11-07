@@ -13,6 +13,7 @@ const {
     supportCpp,
 } = require('../helper/testcase');
 const { count } = require('console');
+const { getProblemByLevel, getProblemByLevelByStatus } = require('../helper/problems');
 
 class ProblemsController {
     async index(req, res, next) {
@@ -235,6 +236,7 @@ class ProblemsController {
         const limit = parseInt(req.params.limit);
         const offset = parseInt(req.params.offset);
         const userId = parseInt(req.params.user_id);
+        console.log(req.params);
 
         try {
             const count_query = `SELECT COUNT(*) FROM problems`;
@@ -273,31 +275,46 @@ class ProblemsController {
         }
     }
 
-    async create(req, res, next) {
+    async getProblemsForFilter(req, res) {
+        const limit = req.params.limit;
+        const offset = req.params.offset;
+        const userId = req.params.user_id;
+        const level = req.params.level;
+        const status = req.params.status;
+
         try {
-            const { code, desc, reason, selectedOption, solutions, testcases, title, validate } = req.body;
-            await pool.query(
-                'INSERT INTO problems (title, description, solution, likes, dislikes, level) VALUES ($1, $2, $3, $4, $5, $6)',
-                [title, desc, solutions, 0, 0, 'easy'],
-            );
+            const count_query = `SELECT COUNT(*) FROM problems`;
+            const count_response = await pool.query(count_query);
+            if (offset > count_response.rows[0].count) throw 'Offset is too big!';
 
-            const currentProblem = await pool.query(
-                'SELECT * FROM problems WHERE title = $1 AND description = $2 AND solution = $3',
-                [title, desc, solutions],
-            );
-            console.log('a');
-            console.log(currentProblem);
-
-            for (let i = 0; i < testcases.length; i++) {
-                await pool.query(
-                    'INSERT INTO testcases (problem_id, "input", "output", memory, runtime) VALUES ($1, $2, $3, $4, $5)',
-                    [currentProblem.rows[0].id, testcases[i].input, testcases[i].output, 0, 0],
-                );
+            // Not logged in
+            if (userId === 'empty') {
+                const data = await getProblemByLevel(level, limit, offset);
+                return res.status(200).json({
+                    message: 'Get problems successfully',
+                    code: 200,
+                    body: data,
+                });
+            } else {
+                const data = await getProblemByLevelByStatus(userId, level, status, limit, offset);
+                return res.status(200).json({
+                    message: 'Get problems successfully',
+                    code: 200,
+                    body: data,
+                });
             }
+            // Logged in
         } catch (err) {
             console.log(err);
             return res.status(500).json('Internal Server Error');
         }
+    }
+
+    async filterProblems(req, res) {
+        const limit = parseInt(req.params.limit);
+        const offset = parseInt(req.params.offset);
+        const userId = parseInt(req.params.user_id);
+        // const
     }
 
     async create(req, res, next) {
