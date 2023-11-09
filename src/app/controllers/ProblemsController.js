@@ -13,7 +13,12 @@ const {
     supportCpp,
 } = require('../helper/testcase');
 const { count } = require('console');
-const { getProblemByLevel, getProblemByLevelByStatus } = require('../helper/problems');
+const {
+    getProblemByLevel,
+    getProblemByLevelByStatus,
+    getProblemByLevelByName,
+    getProblemByLevelByStatusByName,
+} = require('../helper/problems');
 
 class ProblemsController {
     async index(req, res, next) {
@@ -281,6 +286,8 @@ class ProblemsController {
         const userId = req.params.user_id;
         const level = req.params.level;
         const status = req.params.status;
+        const search = req.params.search;
+        console.log(req.params);
 
         try {
             const count_query = `SELECT COUNT(*) FROM problems`;
@@ -288,20 +295,38 @@ class ProblemsController {
             if (offset > count_response.rows[0].count) throw 'Offset is too big!';
 
             // Not logged in
-            if (userId === 'empty') {
-                const data = await getProblemByLevel(level, limit, offset);
-                return res.status(200).json({
-                    message: 'Get problems successfully',
-                    code: 200,
-                    body: data,
-                });
+            if (search === 'empty') {
+                if (userId === 'empty') {
+                    const data = await getProblemByLevel(level, limit, offset);
+                    return res.status(200).json({
+                        message: 'Get problems successfully',
+                        code: 200,
+                        body: data,
+                    });
+                } else {
+                    const data = await getProblemByLevelByStatus(userId, level, status, limit, offset);
+                    return res.status(200).json({
+                        message: 'Get problems successfully',
+                        code: 200,
+                        body: data,
+                    });
+                }
             } else {
-                const data = await getProblemByLevelByStatus(userId, level, status, limit, offset);
-                return res.status(200).json({
-                    message: 'Get problems successfully',
-                    code: 200,
-                    body: data,
-                });
+                if (userId === 'empty') {
+                    const data = await getProblemByLevelByName(search, level, limit, offset);
+                    return res.status(200).json({
+                        message: 'Get problems successfully',
+                        code: 200,
+                        body: data,
+                    });
+                } else {
+                    const data = await getProblemByLevelByStatusByName(userId, level, status, limit, offset, search);
+                    return res.status(200).json({
+                        message: 'Get problems successfully',
+                        code: 200,
+                        body: data,
+                    });
+                }
             }
             // Logged in
         } catch (err) {

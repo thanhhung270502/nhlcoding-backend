@@ -3,7 +3,7 @@ const router = express.Router();
 
 const problemsController = require('../app/controllers/ProblemsController');
 
-router.get('/:user_id/:limit/:offset/:level/:status', problemsController.getProblemsForFilter);
+router.get('/:user_id/:limit/:offset/:level/:status/:search', problemsController.getProblemsForFilter);
 // router.get('/:user_id/:limit/:offset/', problemsController.getAllProblems);
 router.post('/:problem_id/:language/run', problemsController.runCode);
 router.post('/:problem_id/:language/runMore', problemsController.runMoreTestcases);
