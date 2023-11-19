@@ -17,7 +17,7 @@ router.get('/google', passport.authenticate('google', ['profile', 'email']));
 router.get(
     '/google/callback',
     passport.authenticate('google', {
-        successRedirect: 'http://localhost:3001',
+        successRedirect: 'http://localhost:4000',
         failureRedirect: '/login/failed',
     }),
 );
@@ -27,7 +27,7 @@ router.get('/logout', (req, res, next) => {
         if (err) {
             return next(err);
         }
-        res.redirect('http://localhost:3001');
+        res.redirect('http://localhost:4000');
     });
 });
 
