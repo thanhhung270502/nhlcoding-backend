@@ -5,11 +5,7 @@ const pool = require('../../config/db');
 const { exec } = require('child_process');
 const {
     getTestcaseByProblemID,
-    isNumber,
-    isArray,
-    supportSubmitCode,
     supportConvertCode,
-    supportCpp,
 } = require('../helper/testcase');
 
 class ProblemsController {
