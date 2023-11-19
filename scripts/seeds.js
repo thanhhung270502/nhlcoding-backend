@@ -145,9 +145,9 @@ const insertUserSubmission = async () => {
         await pool.query(
             `
             insert into public.submissions (user_problems_id ,  language_id,    runtime,    memory,     status,     code) 
-                                    values (1,                  1,              10,         10,         'fail',     'Submit code 1');
+                                    values (1,                  1,              10,         10,         'Accepted',     'Submit code 1');
                                     insert into public.submissions (user_problems_id ,  language_id,    runtime,    memory,     status,     code) 
-                                                            values (2,                  1,              10,         10,         'fail',     'Submit code 2');
+                                                            values (1,                  2,              10,         10,         'Wrong answer',     'Submit code 2');
             `,
         );
     } catch (err) {
@@ -162,10 +162,10 @@ const insertSumbission = async () => {
     try {
         await pool.query(
             `
-            insert into public.submissions (user_problems_id ,  language_id,    runtime,    memory,     status,     code) 
-                                    values (1,                  1,              10,         10,         'fail',     'Submit code 1');
-            insert into public.submissions (user_problems_id ,  language_id,    runtime,    memory,     status,     code) 
-                                    values (2,                  1,              10,         10,         'fail',     'Submit code 2');
+            insert into public.submissions (user_problems_id ,  language_id,    runtime,    memory,     status,     code,     datetime) 
+                                    values (1,                  1,              10,         10,         'Accepted',     'Submit code 1', '16:54 Nov 03, 2023');
+            insert into public.submissions (user_problems_id ,  language_id,    runtime,    memory,     status,     code,     datetime)
+                                    values (1,                  2,              10,         10,         'Wrong answar',     'Submit code 2', '18:00 Nov 03, 2023');
             `,
         );
     } catch (err) {

@@ -47,7 +47,7 @@ class ProblemsController {
             testcases.push(inputs);
         });
 
-        let finalResult = [];
+        let final_result = [];
 
         if (language === 'cpp') {
             const executeCommand = async (command) => {
@@ -111,7 +111,7 @@ class ProblemsController {
                             console.log(`Deleted ${buildPath}`);
                         });
                     });
-                    finalResult.push(result);
+                    final_result.push(result);
                     console.log(`Output: ${stdout}`);
 
                     // Tiếp tục xử lý testcase tiếp theo
@@ -151,14 +151,14 @@ class ProblemsController {
                         runtime: executionTime,
                         memory: usedMemory,
                     };
-                    finalResult.push(result);
+                    final_result.push(result);
                 });
             }
         }
-        console.log(finalResult);
+        console.log(final_result);
         return res.status(200).json({
             message: 'Successfully',
-            body: finalResult,
+            body: final_result,
         });
     }
 
@@ -180,7 +180,7 @@ class ProblemsController {
 
         // console.log(testcases);
 
-        let finalResult = [];
+        let final_result = [];
         for (var i = 0; i < testcases.length; i++) {
             // console.log('---------------------------------');
             var newCode2 = await supportConvertCode(code, numParams, testcases[i], language);
@@ -211,13 +211,13 @@ class ProblemsController {
                     runtime: executionTime,
                     memory: usedMemory,
                 };
-                finalResult.push(result);
+                final_result.push(result);
             });
         }
-        console.log(finalResult);
+        console.log(final_result);
         return res.status(200).json({
             message: 'Successfully',
-            body: finalResult,
+            body: final_result,
         });
     }
 
@@ -275,11 +275,15 @@ class ProblemsController {
 
         const responseTestCase = await getTestcaseByProblemID(problem_id);
         // console.log("Response test cases", responseTestCase);
-        var finalResult = [];
+        const outcome_message = { 11: "Compilation Error", 12: "Runtime Error", 13: "Time Limit Exceeded", 15: "OK", 17: "Memory Limit Exceeded", 19: "Illegal system call", 20: "Internal Error", 21: "Server Overload" };
+        var status = "Accepted";
+        var compile_info = "";
+        var final_result = [];
+        var runtimes = 0;
 
         for (var i = 0; i < responseTestCase.length; i++) {
             const testcase = responseTestCase[i];
-            console.log("run test case", responseTestCase.indexOf(testcase));
+            console.log("Run test case", responseTestCase.indexOf(testcase));
             const inputs = testcase.input.split(' ');
             const numParams = inputs.length;
             const newCode = await supportConvertCode(code, numParams, inputs, language);
@@ -292,26 +296,46 @@ class ProblemsController {
                 }
             })
 
+            const start_timestamp = process.hrtime();
+
             const { run_id, outcome, cmpinfo, stdout, stderr } = await axios.post(`${process.env.LOCAL_JOBE_API}/runs`, payload, { headers })
                 .then(res => res.data)
                 .catch(err => console.log(err));
 
-            const success = parseInt(outcome) === 15 && !stderr && String(JSON.parse(testcase.output)) === String(JSON.parse(stdout));
+            const end_timestamp = process.hrtime(start_timestamp);
+
+            if (parseInt(outcome) !== 15) {
+                status = outcome_message[parseInt(outcome)];
+                if (parseInt(outcome) === 11) {
+                    compile_info = cmpinfo;
+                }
+                break;
+            }
+
+            // else: outcome = 15
+
+            // console.log(JSON.stringify(testcase.output), typeof JSON.stringify(testcase.output));
+            // console.log(JSON.stringify(stdout), typeof JSON.stringify(stdout));
+            // console.log(JSON.stringify(stdout) === `"None\\n"`);
+
+            const success = JSON.stringify(language === 'python' ? testcase.output + "\n" : testcase.output) === JSON.stringify(stdout);
+            const runtime = end_timestamp[0] * 1000 + end_timestamp[1] / 1000000; // convert to milliseconds
+            runtimes += runtime;
 
             const result_obj = {
                 testcase: i,
                 success: success,
                 output: stdout,
                 error: stderr,
-                runtime: 0,
-                memory: 0,
-                run_id: run_id,
-                cmpinfo: cmpinfo,
             };
 
-            finalResult.push(result_obj);
+            final_result.push(result_obj);
 
-            // if test case fails, terminate
+            if (!success) {
+                status = "Wrong answer";
+            }
+
+            // if test case has wrong answer, terminate
             if (!success && i >= 3) {
                 break;
             }
@@ -319,7 +343,12 @@ class ProblemsController {
 
         return res.status(200).json({
             message: 'Successfully',
-            body: finalResult,
+            body: {
+                status: status,
+                compile_info: compile_info,
+                avg_runtime: Math.floor(runtimes / responseTestCase.length),
+                result: final_result,
+            },
         });
     }
 

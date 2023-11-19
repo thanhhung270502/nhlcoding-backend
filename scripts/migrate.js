@@ -148,12 +148,13 @@ const createTableSubmissions = async () => {
 
         const query = `
         CREATE TABLE public.submissions (
-            id 				    SERIAL					NOT NULL,
+            id 				    SERIAL				NOT NULL,
             user_problems_id    int,
+            status              text                NOT NULL            DEFAULT 'Accepted',
+            "datetime"          text                NOT NULL,
             language_id         int,
             runtime             float               DEFAULT 0,
             memory              float               DEFAULT 0.0,
-            status              text                NOT NULL            DEFAULT 'fail',
             code                text                NOT NULL,
             CONSTRAINT submission_pk PRIMARY KEY (id),
             CONSTRAINT user_problems_fk FOREIGN KEY (user_problems_id) REFERENCES public.user_problems(id),
@@ -303,10 +304,12 @@ const createTableTestcaseSumissions = async () => {
     try {
         console.log('Waiting...');
         console.log('If program does not show anything, program run sucessfully');
-        await createTableProblemLanguages();
+        await createTableUsers();
+        await createTableLanguages();
         await createTableLevels();
-        await createTableTestCases();
         await createTableProblems();
+        await createTableProblemLanguages();
+        await createTableTestCases();
         await createUserProblems();
         await createTableSubmissions();
 
@@ -315,8 +318,6 @@ const createTableTestcaseSumissions = async () => {
         await createInsertUserProblemsTrigger();
         await createUpdateUserProblemsFunction();
         await createInsertSubmissionTrigger();
-        await createTableUsers();
-        await createTableLanguages();
     } catch (err) {
         console.log(err);
         process.exit(1);
