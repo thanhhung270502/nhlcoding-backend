@@ -15,6 +15,7 @@ const getTestcaseByProblemID = async (problem_id) => {
     }
 };
 
+// Don't use
 const splitTC = (str) => {
     if (str.contains('[')) {
         var results = [];
@@ -26,21 +27,25 @@ const splitTC = (str) => {
     }
 };
 
+// Don't use
 const isNumber = (str) => {
     console.log('isNumber: ', JSON.parse(str));
     return !isNaN(str);
 };
 
+// Don't use
 const isArray = (str) => {
     console.log(JSON.parse(str));
     return Array.isArray(JSON.parse(str));
 };
 
+// Don't use
 const convertToCorrectType = (str) => {
     if (isNumber(str)) return parseInt(str);
     else if (isArray(str)) return;
 };
 
+// Don't use
 const getNameFunc = (str) => {
     var nameFunc = '';
     var check = false;
@@ -59,6 +64,7 @@ const getNameFunc = (str) => {
     return nameFunc;
 };
 
+// Don't use
 const getInfoFunc = (str) => {
     var nameFunc = '';
     var typeFunc = '';
@@ -99,6 +105,7 @@ const getLanguageByID = async (name) => {
     }
 };
 
+// Don't use
 const supportPython = (nameFunc, numParams, input) => {
     var addParams = '';
     var params = '';
@@ -112,6 +119,8 @@ const supportPython = (nameFunc, numParams, input) => {
     }
     return addParams + '\t' + 'print(' + nameFunc + '(' + params + ')' + ')';
 };
+
+// Don't use
 const supportCpp = (infoFunc, input, code) => {
     var stdin = '';
     var stdout = '';
@@ -167,23 +176,22 @@ const supportCpp = (infoFunc, input, code) => {
     return stdin + stdout;
 };
 
-const supportConvertCode = async (code, numParams, input, language) => {
-    var resLanguage = await getLanguageByID(language);
-    var infoFunc = getInfoFunc(code);
-    var template = resLanguage.template;
-    template = template.replace('TODO', code);
-    template = template.replaceAll('\\n', '\n');
-    template = template.replaceAll('\\t', '\t');
+/*
+    Parameters:
+    - code: user's submission code
+    - fullCode: full code of this problems and language
+*/
+const supportConvertCode = async (code, fullCode) => {
+    var runCode = fullCode
+    console.log(code)
+    runCode = runCode.replace('{{ANSWER}} ', code)
+    runCode = runCode.replaceAll('\\n', '\n')
+    runCode = runCode.replaceAll('\\t', '\t')
 
-    if (language === 'cpp') {
-        template = template.replace('PROCESSING', supportCpp(infoFunc, input, code));
-    } else if (language === 'python') {
-        template += supportPython(infoFunc.name, numParams, input);
-    }
-
-    return template;
+    return runCode    
 };
 
+// Don't use
 const supportSubmitCode = (code, numParams, input) => {
     supportConvertCode(code, numParams, input, 'python');
     code = 'import sys\n' + code;
@@ -210,10 +218,6 @@ if __name__ == "__main__":
 
 module.exports = {
     getTestcaseByProblemID,
-    isNumber,
-    isArray,
-    supportSubmitCode,
     getLanguageByID,
-    supportConvertCode,
-    supportCpp,
+    supportConvertCode
 };

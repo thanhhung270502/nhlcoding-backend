@@ -6,12 +6,11 @@ const axios = require('axios');
 const { exec } = require('child_process');
 const {
     getTestcaseByProblemID,
-    isNumber,
-    isArray,
-    supportSubmitCode,
     supportConvertCode,
-    supportCpp,
 } = require('../helper/testcase');
+const {
+    getProblemLanguageByProblemIdAndLanguageId
+} = require('../helper/problem_languages')
 const { count } = require('console');
 
 class ProblemsController {
@@ -80,6 +79,9 @@ class ProblemsController {
                     // Kết thúc khi đã xử lý hết các testcase
                     return;
                 }
+                // TODO: find another way to get the language_id
+                const language_id = language === "python" ? 1 : 2
+                const problemLanguage = await getProblemLanguageByProblemIdAndLanguageId(problem_id, language_id)
 
                 const newCode = await supportConvertCode(code, numParams, testcases[index], language);
                 fs.writeFileSync(`test${index}.cpp`, newCode);
@@ -272,8 +274,12 @@ class ProblemsController {
         const headers = {
             'Content-Type': 'application/json; charset=utf-8',
         };
-
+            
         const responseTestCase = await getTestcaseByProblemID(problem_id);
+        
+        const language_id = language === "python" ? 1 : 2
+        const problemLanguage = await getProblemLanguageByProblemIdAndLanguageId(problem_id, language_id)
+        
         // console.log("Response test cases", responseTestCase);
         const outcome_message = { 11: "Compilation Error", 12: "Runtime Error", 13: "Time Limit Exceeded", 15: "OK", 17: "Memory Limit Exceeded", 19: "Illegal system call", 20: "Internal Error", 21: "Server Overload" };
         var status = "Accepted";
@@ -283,18 +289,21 @@ class ProblemsController {
 
         for (var i = 0; i < responseTestCase.length; i++) {
             const testcase = responseTestCase[i];
+            const input = testcase.input
             console.log("Run test case", responseTestCase.indexOf(testcase));
-            const inputs = testcase.input.split(' ');
-            const numParams = inputs.length;
-            const newCode = await supportConvertCode(code, numParams, inputs, language);
-            // console.log(newCode);
+            
+            const newCode = await supportConvertCode(code, problemLanguage.full_code);
 
             const payload = JSON.stringify({
                 run_spec: {
+                    
+                    // TODO: handle input for python more clearly
+                    input: language === "python" ? input.replaceAll(' ', '\n') : input,
                     language_id: language === "python" ? "python3" : "cpp",
                     sourcecode: newCode,
                 }
             })
+            console.log(payload)
 
             const start_timestamp = process.hrtime();
 
