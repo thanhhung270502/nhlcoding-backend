@@ -291,18 +291,17 @@ class ProblemsController {
             const testcase = responseTestCase[i];
             const input = testcase.input
             console.log("Run test case", responseTestCase.indexOf(testcase));
-
             const newCode = await supportConvertCode(code, problemLanguage.full_code);
 
             const payload = JSON.stringify({
                 run_spec: {
-
                     // TODO: handle input for python more clearly
                     input: language === "python" ? input.replaceAll(' ', '\n') : input,
                     language_id: language === "python" ? "python3" : "cpp",
                     sourcecode: newCode,
                 }
             })
+            // console.log(payload)
 
             const start_timestamp = process.hrtime();
 
