@@ -183,12 +183,12 @@ const supportCpp = (infoFunc, input, code) => {
 */
 const supportConvertCode = async (code, fullCode) => {
     var runCode = fullCode
-    console.log(code)
+    // console.log(code)
     runCode = runCode.replace('{{ANSWER}} ', code)
     runCode = runCode.replaceAll('\\n', '\n')
     runCode = runCode.replaceAll('\\t', '\t')
 
-    return runCode    
+    return runCode
 };
 
 // Don't use
