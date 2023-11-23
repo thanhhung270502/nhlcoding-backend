@@ -281,8 +281,6 @@ class ProblemsController {
     }
 
     async getProblemsForFilter(req, res) {
-        const limit = req.params.limit;
-        const offset = req.params.offset;
         const userId = req.params.user_id;
         const level = req.params.level;
         const status = req.params.status;
@@ -290,21 +288,17 @@ class ProblemsController {
         console.log(req.params);
 
         try {
-            const count_query = `SELECT COUNT(*) FROM problems`;
-            const count_response = await pool.query(count_query);
-            if (offset > count_response.rows[0].count) throw 'Offset is too big!';
-
             // Not logged in
             if (search === 'empty') {
                 if (userId === 'empty') {
-                    const data = await getProblemByLevel(level, limit, offset);
+                    const data = await getProblemByLevel(level);
                     return res.status(200).json({
                         message: 'Get problems successfully',
                         code: 200,
                         body: data,
                     });
                 } else {
-                    const data = await getProblemByLevelByStatus(userId, level, status, limit, offset);
+                    const data = await getProblemByLevelByStatus(userId, level, status);
                     return res.status(200).json({
                         message: 'Get problems successfully',
                         code: 200,
@@ -313,14 +307,14 @@ class ProblemsController {
                 }
             } else {
                 if (userId === 'empty') {
-                    const data = await getProblemByLevelByName(search, level, limit, offset);
+                    const data = await getProblemByLevelByName(search, level);
                     return res.status(200).json({
                         message: 'Get problems successfully',
                         code: 200,
                         body: data,
                     });
                 } else {
-                    const data = await getProblemByLevelByStatusByName(userId, level, status, limit, offset, search);
+                    const data = await getProblemByLevelByStatusByName(userId, level, status, search);
                     return res.status(200).json({
                         message: 'Get problems successfully',
                         code: 200,
@@ -335,32 +329,48 @@ class ProblemsController {
         }
     }
 
-    async filterProblems(req, res) {
-        const limit = parseInt(req.params.limit);
-        const offset = parseInt(req.params.offset);
-        const userId = parseInt(req.params.user_id);
-        // const
-    }
-
     async create(req, res, next) {
         try {
-            const { code, desc, reason, selectedOption, solutions, testcases, title, validate } = req.body;
-            await pool.query(
-                'INSERT INTO problems (title, description, solution, likes, dislikes, level) VALUES ($1, $2, $3, $4, $5, $6)',
-                [title, desc, solutions, 0, 0, 'easy'],
+            const { reason, title, description, languages, level_id, solutions, problem_languages, testcases } =
+                req.body;
+
+            const addProblem = await pool.query(
+                'INSERT INTO problems (title, description, solution, likes, dislikes, level_id) VALUES ($1, $2, $3, $4, $5, $6)',
+                [title, description, solutions, 0, 0, level_id],
             );
 
             const currentProblem = await pool.query(
-                'SELECT * FROM problems WHERE title = $1 AND description = $2 AND solution = $3',
-                [title, desc, solutions],
+                'SELECT * FROM problems WHERE title = $1 AND description = $2 AND solution = $3 AND level_id = $4',
+                [title, description, solutions, level_id],
             );
-            console.log('a');
-            console.log(currentProblem);
+            // console.log('a');
+            console.log(currentProblem.rows[currentProblem.rows.length - 1]);
 
+            // Testcases
             for (let i = 0; i < testcases.length; i++) {
                 await pool.query(
                     'INSERT INTO testcases (problem_id, "input", "output", memory, runtime) VALUES ($1, $2, $3, $4, $5)',
-                    [currentProblem.rows[0].id, testcases[i].input, testcases[i].output, 0, 0],
+                    [
+                        currentProblem.rows[currentProblem.rows.length - 1].id,
+                        testcases[i].input,
+                        testcases[i].output,
+                        0,
+                        0,
+                    ],
+                );
+            }
+
+            // problem_languages
+            for (let i = 0; i < problem_languages.length; i++) {
+                await pool.query(
+                    'INSERT INTO problem_languages (problem_id, language_id, initial_code, solution_code, full_code) VALUES ($1, $2, $3, $4, $5)',
+                    [
+                        currentProblem.rows[currentProblem.rows.length - 1].id,
+                        problem_languages[i].language_id,
+                        problem_languages[i].initialCode,
+                        problem_languages[i].solutionCode,
+                        problem_languages[i].fullCode,
+                    ],
                 );
             }
         } catch (err) {

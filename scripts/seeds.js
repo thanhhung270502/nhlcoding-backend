@@ -42,10 +42,10 @@ const insertTestCases = async () => {
 const insertLanguages = async () => {
     try {
         await pool.query(`
-            insert into public."languages" ("name", "template") 
-                                    values ('python', 'import sys \nTODO \nif __name__ == "__main__": \n');
-            insert into public."languages" ("name", "template") 
-                                    values ('cpp', '#include <iostream>\n#include <vector>\nusing namespace std;\nTODO\nstring convertToString(vector<int> arr) {\n\tstring result = "[";\n\tfor (int i = 0; i < arr.size(); i++) {\n\t\tif (i == arr.size() - 1) {\n\t\t\tstring s = to_string(arr[i]) + "]"; \n\t\t\tresult = result + s;\n\t\t}\n\t\telse {\n\t\t\tstring s = to_string(arr[i]) + ", ";\n\t\t\tresult = result + s;\n\t\t}\n\t}\n\treturn result;\n}\n\nint main() {\nPROCESSING\n}');
+            insert into public."languages" ("name") 
+                                    values ('python');
+            insert into public."languages" ("name") 
+                                    values ('cpp');
             `);
     } catch (err) {
         console.log(err);
@@ -221,12 +221,12 @@ const insertSumbission = async () => {
         await insertUsers();
         await insertLevels();
         await insertProblems();
-        await insertTestCases();
+        // await insertTestCases();
         await insertLanguages();
-        await insertProblemLanguages();
-        await insertUserProblems();
-        await insertSumbission();
-        await insertUserSubmission();
+        // await insertProblemLanguages();
+        // await insertUserProblems();
+        // await insertSumbission();
+        // await insertUserSubmission();
     } catch (err) {
         console.log(err);
         process.exit(1);

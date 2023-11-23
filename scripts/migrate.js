@@ -51,7 +51,6 @@ const createTableLanguages = async () => {
         CREATE TABLE "languages" (
             id SERIAL NOT NULL,
             "name" varchar NULL,
-            "template" varchar NULL,
             CONSTRAINT languages_pk PRIMARY KEY (id)
         )`;
         await pool.query(query);
@@ -70,7 +69,9 @@ const createTableProblemLanguages = async () => {
             id              SERIAL      NOT NULL,
             problem_id      int         NULL,
             language_id     int         NULL,
-            initialcode     varchar     NULL,
+            initial_code    varchar     NULL,
+            solution_code   varchar     NULL,
+            full_code       varchar     NULL,
             CONSTRAINT problem_languages_pk PRIMARY KEY (id),
             CONSTRAINT problem_languages_fk FOREIGN KEY (language_id) REFERENCES public."languages"(id)
         )`;
@@ -104,9 +105,9 @@ const createTableProblems = async () => {
 
         const query = `
         CREATE TABLE public.problems (
-            id 				SERIAL					NOT NULL,
-            level_id        int                 NOT NULL,
+            id 				SERIAL				NOT NULL,
             title			text				NOT NULL,
+            level_id        int                 NOT NULL,
             description		text				NOT NULL,
             solution		text				,
             likes			int					NOT NULL,

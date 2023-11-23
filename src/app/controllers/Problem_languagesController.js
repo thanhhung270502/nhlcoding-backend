@@ -36,6 +36,16 @@ class Problem_languagesController {
             return res.status(500).json('Internal Server Error');
         }
     }
+
+    async index(req, res, next) {
+        try {
+            const response = await pool.query('SELECT * FROM problem_languages');
+            return res.status(200).json(response.rows);
+        } catch (err) {
+            console.log(err);
+            return res.status(500).json('Internal Server Error');
+        }
+    }
 }
 
 module.exports = new Problem_languagesController();
