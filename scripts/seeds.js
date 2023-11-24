@@ -223,24 +223,6 @@ const insertUserProblems = async () => {
     }
 }
 
-const insertUserSubmission = async () => {
-    try {
-        await pool.query(
-            `
-            insert into public.submissions (user_problems_id ,  language_id,    runtime,    memory,     status,     code) 
-                                    values (1,                  1,              10,         10,         'Accepted',     'Submit code 1');
-                                    insert into public.submissions (user_problems_id ,  language_id,    runtime,    memory,     status,     code) 
-                                                            values (1,                  2,              10,         10,         'Wrong answer',     'Submit code 2');
-            `,
-        );
-    } catch (err) {
-        console.log(err);
-        process.exit(1);
-    }
-}
-
-
-
 const insertSumbission = async () => {
     try {
         await pool.query(
@@ -256,18 +238,6 @@ const insertSumbission = async () => {
         process.exit(1);
     }
 };
-
-
-
-
-
-// const insertLanguages = async () => {
-//     try {
-//     } catch (err) {
-//         console.log(err);
-//         process.exit(1);
-//     }
-// };
 
 (async () => {
     try {

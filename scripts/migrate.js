@@ -122,6 +122,7 @@ const createTableProblems = async () => {
     }
 }
 
+// status_list = ['Todo', 'Solved', 'Attempted']
 const createUserProblems = async () => {
     try {
         await pool.query('drop table if exists user_problems cascade');
@@ -143,6 +144,7 @@ const createUserProblems = async () => {
     }
 }
 
+// status_enum = { 11: "Compilation Error", 12: "Runtime Error", 13: "Time Limit Exceeded", 15: "OK", 17: "Memory Limit Exceeded", 19: "Illegal system call", 20: "Internal Error", 21: "Server Overload" };
 const createTableSubmissions = async () => {
     try {
         await pool.query('drop table if exists submissions cascade');
@@ -206,8 +208,8 @@ const createUpdateUserProblemsFunction = async () => {
                 select status into problem_status 
                 from user_problems
                 where id = new.user_problems_id;
-            
-                if new.status = 'fail' and (problem_status <> 'Solved') then
+
+                if ((new.status <> 'Accepted') and (problem_status <> 'Solved')) then
                     problem_status := 'Attempted';
                 else
                     problem_status := 'Solved';
@@ -260,25 +262,25 @@ const createInsertUserProblemsTrigger = async () => {
     }
 }
 
-const createTableTestcaseSumissions = async () => {
-    try {
-        await pool.query('drop table if exists testcase_submissions cascade');
+// const createTableTestcaseSumissions = async () => {
+//     try {
+//         await pool.query('drop table if exists testcase_submissions cascade');
 
-        const query = `
-        CREATE TABLE public.testcase_submissions (
-            id 				    SERIAL					NOT NULL,
-            testcase_id         int                 NOT NULL,
-            submission_id       int                 NOT NULL,
-            CONSTRAINT testcase_submissions_pk PRIMARY KEY (id)
-            CONSTRAINT testcase_fk FOREIGN KEY (testcase_id) REFERENCES public.testcases (id),
-            CONSTRAINT submission_fk FOREIGN KEY (submission_id) REERENCES public.submissions (id)
-        )`;
-        await pool.query(query);
-    } catch (err) {
-        console.log(err);
-        process.exit(1);
-    }
-}
+//         const query = `
+//         CREATE TABLE public.testcase_submissions (
+//             id 				    SERIAL					NOT NULL,
+//             testcase_id         int                 NOT NULL,
+//             submission_id       int                 NOT NULL,
+//             CONSTRAINT testcase_submissions_pk PRIMARY KEY (id)
+//             CONSTRAINT testcase_fk FOREIGN KEY (testcase_id) REFERENCES public.testcases (id),
+//             CONSTRAINT submission_fk FOREIGN KEY (submission_id) REERENCES public.submissions (id)
+//         )`;
+//         await pool.query(query);
+//     } catch (err) {
+//         console.log(err);
+//         process.exit(1);
+//     }
+// }
 
 // const create = async () => {
 //     try {
