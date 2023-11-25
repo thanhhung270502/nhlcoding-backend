@@ -33,4 +33,11 @@ router.get('/logout', (req, res, next) => {
 
 router.get('/test', (req, res) => res.send('Hello World'));
 
+router.get('/checkAuthentication', authController.verifyJwt, (req, res) => {
+    return res.json({
+        message: 'Authenticated',
+        login: true,
+    });
+});
+
 module.exports = router;

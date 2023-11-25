@@ -1,4 +1,5 @@
 const pool = require('../../config/db');
+const jwt = require('jsonwebtoken');
 
 class SessionsController {
     // [POST] /
@@ -10,11 +11,20 @@ class SessionsController {
 
             if (response.rows.length > 0) {
                 console.log(response.rows[0]);
+                const payload = response.rows[0].id;
+                const accessToken = jwt.sign({ payload }, 'jwtSecretKey', { expiresIn: 3000 });
+                const currentUser = {
+                    role: response.rows[0].role,
+                    name: response.rows[0].name,
+                    avatar: response.rows[0].avatar,
+                };
+
                 return res.status(200).json({
                     message: 'Login successfully completed',
                     code: 200,
                     body: {
-                        user: response.rows[0],
+                        accessToken,
+                        user: currentUser,
                     },
                 });
             } else {

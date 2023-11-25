@@ -343,8 +343,6 @@ class ProblemsController {
                 'SELECT * FROM problems WHERE title = $1 AND description = $2 AND solution = $3 AND level_id = $4',
                 [title, description, solutions, level_id],
             );
-            // console.log('a');
-            console.log(currentProblem.rows[currentProblem.rows.length - 1]);
 
             // Testcases
             for (let i = 0; i < testcases.length; i++) {
@@ -373,6 +371,12 @@ class ProblemsController {
                     ],
                 );
             }
+            return res.status(200).json({
+                message: 'problem created successfully',
+                body: {
+                    problem: currentProblem.rows[0],
+                },
+            });
         } catch (err) {
             console.log(err);
             return res.status(500).json('Internal Server Error');
