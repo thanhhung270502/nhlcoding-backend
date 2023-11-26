@@ -407,11 +407,12 @@ class ProblemsController {
         var compile_info = '';
         var final_result = [];
         var runtimes = 0;
+        var wrong_testcase = null;
 
         for (var i = 0; i < responseTestCase.length; i++) {
             const testcase = responseTestCase[i];
             const input = testcase.input;
-            console.log('Run test case', responseTestCase.indexOf(testcase));
+            console.log("Run test case", responseTestCase.indexOf(testcase));
             const newCode = await supportConvertCode(code, problemLanguage.full_code);
 
             const payload = JSON.stringify({
@@ -440,35 +441,40 @@ class ProblemsController {
                 }
                 break;
             }
-
             // else: outcome = 15
+            else {
+                // console.log(JSON.stringify(testcase.output), typeof JSON.stringify(testcase.output));
+                // console.log(JSON.stringify(stdout), typeof JSON.stringify(stdout));
+                // console.log(JSON.stringify(stdout) === `"None\\n"`);
+                const success = JSON.stringify(language === 'python' ? testcase.output + "\n" : testcase.output) === JSON.stringify(stdout);
+                const runtime = end_timestamp[0] * 1000 + end_timestamp[1] / 1000000; // convert to milliseconds
+                runtimes += runtime;
 
-            // console.log(JSON.stringify(testcase.output), typeof JSON.stringify(testcase.output));
-            // console.log(JSON.stringify(stdout), typeof JSON.stringify(stdout));
-            // console.log(JSON.stringify(stdout) === `"None\\n"`);
+                const result_obj = {
+                    testcase: i,
+                    success: success,
+                    output: stdout,
+                    error: stderr,
+                };
 
-            const success =
-                JSON.stringify(language === 'python' ? testcase.output + '\n' : testcase.output) ===
-                JSON.stringify(stdout);
-            const runtime = end_timestamp[0] * 1000 + end_timestamp[1] / 1000000; // convert to milliseconds
-            runtimes += runtime;
+                final_result.push(result_obj);
 
-            const result_obj = {
-                testcase: i,
-                success: success,
-                output: stdout,
-                error: stderr,
-            };
-
-            final_result.push(result_obj);
-
-            if (!success) {
-                status = 'Wrong answer';
-            }
-
-            // if test case has wrong answer, terminate
-            if (!success && i >= 3) {
-                break;
+                if (!success) {
+                    if (i < 3) {
+                        status = "Wrong answer";
+                    }
+                    else if (i >= 3 && status === "Wrong answer") {
+                        break;
+                    } else {
+                        // store first wrong hidden test case
+                        wrong_testcase = {
+                            ...testcase,
+                            actual_output: stdout,
+                        };
+                        status = "Wrong answer";
+                        break;
+                    }
+                }
             }
         }
 
@@ -479,6 +485,7 @@ class ProblemsController {
                 compile_info: compile_info,
                 avg_runtime: Math.floor(runtimes / responseTestCase.length),
                 result: final_result,
+                wrong_testcase: wrong_testcase,
             },
         });
     }

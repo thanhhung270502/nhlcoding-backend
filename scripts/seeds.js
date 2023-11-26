@@ -18,6 +18,8 @@ const insertTestCases = async () => {
         await pool.query(`insert into public.testcases (problem_id, "input", "output") values (1, '1 2', '3')`);
         await pool.query(`insert into public.testcases (problem_id, "input", "output") values (1, '3 4', '7')`);
         await pool.query(`insert into public.testcases (problem_id, "input", "output") values (1, '4 6', '10')`);
+        await pool.query(`insert into public.testcases (problem_id, "input", "output") values (1, '1 -1', '0')`);
+        await pool.query(`insert into public.testcases (problem_id, "input", "output") values (1, '-999999 999999', '0')`);
         await pool.query(
             `insert into public.testcases (problem_id, "input", "output") values (2, '4\n2 7 11 15\n9', '[0, 1]')`,
         );

@@ -159,9 +159,11 @@ const createTableSubmissions = async () => {
             runtime             float               DEFAULT 0,
             memory              float               DEFAULT 0.0,
             code                text                NOT NULL,
+            wrong_testcase_id   int                 DEFAULT NULL,
             CONSTRAINT submission_pk PRIMARY KEY (id),
             CONSTRAINT user_problems_fk FOREIGN KEY (user_problems_id) REFERENCES public.user_problems(id),
-            CONSTRAINT submission_languages_fk FOREIGN KEY (language_id) REFERENCES public."languages"(id)
+            CONSTRAINT submission_languages_fk FOREIGN KEY (language_id) REFERENCES public."language"(id),
+            CONSTRAINT wrong_testcase_fk FOREIGN KEY (wrong_testcase_id) REFERENCES public.testcases(id)
         )`;
         await pool.query(query);
     } catch (err) {
