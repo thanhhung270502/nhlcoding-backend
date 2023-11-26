@@ -67,7 +67,7 @@ class AuthController {
             jwt.verify(token, 'jwtSecretKey', (err, decoded) => {
                 if (err) {
                     res.json({
-                        message: 'Not authenticated',
+                        message: 'Not authenticated. Please try again',
                         login: false,
                     });
                 } else {
