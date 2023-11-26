@@ -18,6 +18,7 @@ class AuthController {
                     const payload = getCurrentUser.rows[0].id;
                     const accessToken = jwt.sign({ payload }, 'jwtSecretKey', { expiresIn: 3000 });
                     const currentUser = {
+                        id: getCurrentUser.rows[0].id,
                         role: getCurrentUser.rows[0].role,
                         name: getCurrentUser.rows[0].name,
                         avatar: getCurrentUser.rows[0].avatar,
@@ -34,6 +35,7 @@ class AuthController {
                     const payload = getUser.rows[0].id;
                     const accessToken = jwt.sign({ payload }, 'jwtSecretKey', { expiresIn: 3000 });
                     const currentUser = {
+                        id: getUser.rows[0].id,
                         role: getUser.rows[0].role,
                         name: getUser.rows[0].name,
                         avatar: getUser.rows[0].avatar,

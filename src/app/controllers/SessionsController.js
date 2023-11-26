@@ -14,6 +14,7 @@ class SessionsController {
                 const payload = response.rows[0].id;
                 const accessToken = jwt.sign({ payload }, 'jwtSecretKey', { expiresIn: 3000 });
                 const currentUser = {
+                    id: response.rows[0].id,
                     role: response.rows[0].role,
                     name: response.rows[0].name,
                     avatar: response.rows[0].avatar,

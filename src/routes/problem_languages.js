@@ -1,5 +1,5 @@
 const express = require('express');
-const problem_languagesController = require('../app/controllers/Problem_languagesController');
+const problem_languagesController = require('../app/controllers/ProblemLanguagesController');
 const router = express.Router();
 
 router.get('/:problem_id/:language_id', problem_languagesController.getByProblemIDLanguageID);

@@ -122,6 +122,7 @@ const createTableProblems = async () => {
     }
 };
 
+// status_list = ['Todo', 'Solved', 'Attempted']
 const createUserProblems = async () => {
     try {
         await pool.query('drop table if exists user_problems cascade');
@@ -143,18 +144,20 @@ const createUserProblems = async () => {
     }
 };
 
+// status_enum = { 11: "Compilation Error", 12: "Runtime Error", 13: "Time Limit Exceeded", 15: "OK", 17: "Memory Limit Exceeded", 19: "Illegal system call", 20: "Internal Error", 21: "Server Overload" };
 const createTableSubmissions = async () => {
     try {
         await pool.query('drop table if exists submissions cascade');
 
         const query = `
         CREATE TABLE public.submissions (
-            id 				    SERIAL					NOT NULL,
+            id 				    SERIAL				NOT NULL,
             user_problems_id    int,
+            status              text                NOT NULL            DEFAULT 'Accepted',
+            "datetime"          text                NOT NULL,
             language_id         int,
             runtime             float               DEFAULT 0,
             memory              float               DEFAULT 0.0,
-            status              text                NOT NULL            DEFAULT 'fail',
             code                text                NOT NULL,
             CONSTRAINT submission_pk PRIMARY KEY (id),
             CONSTRAINT user_problems_fk FOREIGN KEY (user_problems_id) REFERENCES public.user_problems(id),
@@ -205,8 +208,8 @@ const createUpdateUserProblemsFunction = async () => {
                 select status into problem_status 
                 from user_problems
                 where id = new.user_problems_id;
-            
-                if new.status = 'fail' and (problem_status <> 'Solved') then
+
+                if ((new.status <> 'Accepted') and (problem_status <> 'Solved')) then
                     problem_status := 'Attempted';
                 else
                     problem_status := 'Solved';
@@ -305,9 +308,9 @@ const createTableTestcaseSumissions = async () => {
         console.log('Waiting...');
         console.log('If program does not show anything, program run sucessfully');
         await createTableUsers();
+        await createTableLanguages();
         await createTableLevels();
         await createTableProblems();
-        await createTableLanguages();
         await createTableProblemLanguages();
         await createTableTestCases();
         await createUserProblems();
