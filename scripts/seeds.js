@@ -4,9 +4,9 @@ const insertUsers = async () => {
     try {
         await pool.query(`
         INSERT INTO public.users(email, "password", name, avatar, provider, role)
-        VALUES('kane.ly@digibank.vn', '123456', 'Thanh Hùng', 'https://kenh14cdn.com/203336854389633024/2023/8/9/photo-6-1691581011481133485486.jpg', 'manual', 0);
+        VALUES('kane.ly@digibank.vn', 'IjEyMzQ1NiI=', 'Thanh Hùng', 'https://kenh14cdn.com/203336854389633024/2023/8/9/photo-6-1691581011481133485486.jpg', 'manual', 0);
         INSERT INTO public.users(email, "password", name, avatar, provider, role)
-        VALUES('thanhhung2705@gmail.com', '123456', 'Thanh Hùng', 'https://kenh14cdn.com/203336854389633024/2023/8/9/photo-6-1691581011481133485486.jpg', 'manual', 0);`);
+        VALUES('thanhhung2705@gmail.com', 'IjEyMzQ1NiI=', 'Thanh Hùng', 'https://kenh14cdn.com/203336854389633024/2023/8/9/photo-6-1691581011481133485486.jpg', 'manual', 0);`);
     } catch (err) {
         console.log(err);
         process.exit(1);
@@ -247,11 +247,6 @@ const insertUserProblems = async () => {
         await pool.query(
             `
             insert into public.user_problems (user_id, problem_id) values (1, 1);
-            insert into public.user_problems (user_id, problem_id) values (1, 2);
-            insert into public.user_problems (user_id, problem_id) values (1, 3);
-            insert into public.user_problems (user_id, problem_id) values (1, 4);
-            insert into public.user_problems (user_id, problem_id) values (2, 1);
-            insert into public.user_problems (user_id, problem_id) values (2, 2);
             `,
         );
     } catch (err) {
