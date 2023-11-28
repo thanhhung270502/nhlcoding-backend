@@ -6,7 +6,7 @@ const insertUsers = async () => {
         INSERT INTO public.users(email, "password", name, avatar, provider, role)
         VALUES('kane.ly@digibank.vn', '123456', 'Thanh Hùng', 'https://kenh14cdn.com/203336854389633024/2023/8/9/photo-6-1691581011481133485486.jpg', 'manual', 0);
         INSERT INTO public.users(email, "password", name, avatar, provider, role)
-        VALUES('thanhhung270502@gmail.com', '123456', 'Thanh Hùng', 'https://kenh14cdn.com/203336854389633024/2023/8/9/photo-6-1691581011481133485486.jpg', 'manual', 0);`);
+        VALUES('thanhhung2705@gmail.com', '123456', 'Thanh Hùng', 'https://kenh14cdn.com/203336854389633024/2023/8/9/photo-6-1691581011481133485486.jpg', 'manual', 0);`);
     } catch (err) {
         console.log(err);
         process.exit(1);
@@ -19,7 +19,9 @@ const insertTestCases = async () => {
         await pool.query(`insert into public.testcases (problem_id, "input", "output") values (1, '3 4', '7')`);
         await pool.query(`insert into public.testcases (problem_id, "input", "output") values (1, '4 6', '10')`);
         await pool.query(`insert into public.testcases (problem_id, "input", "output") values (1, '1 -1', '0')`);
-        await pool.query(`insert into public.testcases (problem_id, "input", "output") values (1, '-999999 999999', '0')`);
+        await pool.query(
+            `insert into public.testcases (problem_id, "input", "output") values (1, '-999999 999999', '0')`,
+        );
         await pool.query(
             `insert into public.testcases (problem_id, "input", "output") values (2, '4\n2 7 11 15\n9', '[0, 1]')`,
         );

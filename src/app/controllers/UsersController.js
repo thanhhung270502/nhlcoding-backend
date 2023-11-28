@@ -1,4 +1,6 @@
 const pool = require('../../config/db');
+const { encode } = require('../helper/user');
+const jwt = require('jsonwebtoken');
 
 class UsersController {
     // [GET] /
@@ -40,17 +42,35 @@ class UsersController {
     async create(req, res) {
         try {
             const { email, password, name, provider, role, avatar } = req.body;
+            var newPassword = encode(password);
+            console.log(typeof newPassword);
             const response = await pool.query(
                 'INSERT INTO users (email, password, name, provider, role, avatar) VALUES ($1, $2, $3, $4, $5, $6)',
-                [email, password, name, provider, role, avatar],
+                [email, newPassword, name, provider, role, avatar],
             );
 
-            const getUser = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
+            const getUser = await pool.query('SELECT * FROM users WHERE email = $1 AND password = $2', [
+                email,
+                newPassword,
+            ]);
+
+            console.log('abc', getUser);
+
+            const payload = getUser.rows[0].id;
+            const accessToken = jwt.sign({ payload }, 'jwtSecretKey', { expiresIn: 3000 });
+
+            const currentUser = {
+                id: getUser.rows[0].id,
+                role: getUser.rows[0].role,
+                name: getUser.rows[0].name,
+                avatar: getUser.rows[0].avatar,
+            };
 
             return res.status(200).json({
                 message: 'User created successfully',
                 body: {
-                    user: getUser.rows[0],
+                    accessToken,
+                    user: currentUser,
                 },
             });
         } catch (err) {

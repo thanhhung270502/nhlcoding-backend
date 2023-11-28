@@ -1,13 +1,15 @@
 const pool = require('../../config/db');
 const jwt = require('jsonwebtoken');
+const { encode } = require('../helper/user');
 
 class SessionsController {
     // [POST] /
     async create(req, res) {
         try {
             const { email, password } = req.body;
-            const query = 'SELECT * FROM users WHERE email = $1';
-            const response = await pool.query(query, [email]);
+            var newPassword = encode(password);
+            const query = 'SELECT * FROM users WHERE email = $1 AND password = $2';
+            const response = await pool.query(query, [email, newPassword]);
 
             if (response.rows.length > 0) {
                 console.log(response.rows[0]);

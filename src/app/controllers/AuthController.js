@@ -15,13 +15,17 @@ class AuthController {
                     const getCurrentUser = await pool.query('SELECT * FROM users WHERE email = $1', [
                         req.user._json.email,
                     ]);
-                    const payload = getCurrentUser.rows[0].id;
+                    var index = 0;
+                    for (let i = 0; i < getCurrentUser.rows.length; i++) {
+                        if (getCurrentUser.rows[i].provider === 'google') index = i;
+                    }
+                    const payload = getCurrentUser.rows[index].id;
                     const accessToken = jwt.sign({ payload }, 'jwtSecretKey', { expiresIn: 3000 });
                     const currentUser = {
-                        id: getCurrentUser.rows[0].id,
-                        role: getCurrentUser.rows[0].role,
-                        name: getCurrentUser.rows[0].name,
-                        avatar: getCurrentUser.rows[0].avatar,
+                        id: getCurrentUser.rows[index].id,
+                        role: getCurrentUser.rows[index].role,
+                        name: getCurrentUser.rows[index].name,
+                        avatar: getCurrentUser.rows[index].avatar,
                     };
                     return res.status(200).json({
                         error: false,
