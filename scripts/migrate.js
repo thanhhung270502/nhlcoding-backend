@@ -109,7 +109,7 @@ const createTableProblems = async () => {
             title			text				NOT NULL,
             level_id        int                 NOT NULL,
             description		text				NOT NULL,
-            solution		text				,
+            instruction		text				,
             likes			int					NOT NULL,
             dislikes		int					NOT NULL,
             CONSTRAINT problem_pk PRIMARY KEY (id),
