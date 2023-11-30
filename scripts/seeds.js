@@ -171,7 +171,14 @@ const insertProblems = async () => {
     try {
         await pool.query(`
             insert into public.problems (level_id, title, description, instruction, likes, dislikes) values (2, 'Problem 1', 'Description 1', 'Instruction 1', 10, 10);
-            insert into public.problems (level_id, title, description, instruction, likes, dislikes) values (3, 'Problem 2', 'Description 2', 'Instruction 2', 10, 10);
+            insert into public.problems (level_id, title, description, instruction, likes, dislikes) values (
+                1, 
+                'Two Sum', 
+                'Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target. You may assume that each input would have exactly one solution, and you may not use the same element twice. You can return the answer in any order.\n\n**Example 1:**\n\`\`\`text\nInput: nums = [2, 7, 11, 15], target = 9\nOutput: [0, 1]\nExplanation: Because nums[0] + nums[1] == 9, we return [0, 1].\n\`\`\`\n\n**Example 2:**\n\`\`\`text\nInput: nums = [3,2,4], target = 6\nOutput: [1, 2]\n\`\`\`\n\n**Example 3:**\n\`\`\`text\nInput: nums = [3,3], target = 6\nOutput: [0, 1]\n\`\`\`\n\n**Constraints:**\n\n- \`2 <= nums.length <= 104\`\n- \`-109 <= nums[i] <= 109\`\n- \`-109 <= target <= 109\`\n- **Only one valid answer exists.**\n',
+                '##### Approach\n\nThe brute force approach is simple. Loop through each element $x$ and find if there is another value that equals to $target - x$.\n\n##### Implementation\n\n\`\`\`cpp\nclass Solution {\npublic:\n    vector<int> twoSum(vector<int>& nums, int target) {\n        for (int i = 0; i < nums.size(); i++) {\n            for  (int j = i + 1; j < nums.size(); j++) {\n                if (nums[j] + nums[i] == target) {\n                    return vector<int>{i, j};\n                }\n            }\n        }\n\n        return vector<int>();\n    }\n};\n\`\`\`\n\n\`\`\`python\nclass Solution:\n    def twoSum(self, nums: List[int], target: int) -> List[int]:\n        for i in range(len(nums)):\n            for j in range(i + 1, len(nums)):\n                if nums[j] == target - nums[i]:\n                    return [i, j]\n\`\`\`\n\n##### Complexity Analysis\n\n-   Time complexity: $O(n^2)$.\n    For each element, we try to find its complement by looping through the rest of the array which takes $O(n)$ time.\n    Therefore, the time complexity is $O(n^2)$.\n\n-   Space complexity: $O(1)$.\n    The space required does not depend on the size of the input array, so only constant space is used.\n',
+                0,
+                0
+            );
             insert into public.problems (level_id, title, description, instruction, likes, dislikes) values (1, 'Problem 3', 'Description 3', 'Instruction 3', 10, 10);
             insert into public.problems (level_id, title, description, instruction, likes, dislikes) values (2, 'Problem 4', 'Description 4', 'Instruction 4', 10, 10);
             insert into public.problems (level_id, title, description, instruction, likes, dislikes) values (3, 'Problem 5', 'Description 5', 'Instruction 5', 10, 10);
