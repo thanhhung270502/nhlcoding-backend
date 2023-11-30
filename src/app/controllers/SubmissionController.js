@@ -45,14 +45,14 @@ class SubmissionController {
     }
 
     async create(req, res, next) {
-        const { user_id, problem_id, status, datetime, language_id, runtime, code } = req.body;
+        const { user_id, problem_id, status, datetime, language_id, runtime, code, wrong_testcase_id } = req.body;
         const user_problems_id = await getUserProblemByIds(user_id, problem_id);
 
         try {
-            const query = `INSERT INTO submissions (user_problems_id, status, datetime, language_id, runtime, code)
-                            VALUES ($1, $2, $3, $4, $5, $6)
+            const query = `INSERT INTO submissions (user_problems_id, status, datetime, language_id, runtime, code, wrong_testcase_id)
+                            VALUES ($1, $2, $3, $4, $5, $6, $7)
                             RETURNING *`;
-            const response = await pool.query(query, [user_problems_id, status, datetime, language_id, runtime, code]);
+            const response = await pool.query(query, [user_problems_id, status, datetime, language_id, runtime, code, wrong_testcase_id]);
             if (response.rows.length > 0) {
                 return res.status(201).json({
                     message: 'Submission created successfully',

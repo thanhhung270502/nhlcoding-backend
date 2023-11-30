@@ -4,5 +4,6 @@ const router = express.Router();
 
 router.get('/:problem_id/:language_id', problem_languagesController.getByProblemIDLanguageID);
 router.get('/:problem_id', problem_languagesController.getByProblemID);
+router.get('/', problem_languagesController.index);
 
 module.exports = router;

@@ -1,4 +1,5 @@
 const pool = require('../../config/db');
+const jwt = require('jsonwebtoken');
 
 class AuthController {
     async create_or_update(req, res) {
@@ -14,19 +15,37 @@ class AuthController {
                     const getCurrentUser = await pool.query('SELECT * FROM users WHERE email = $1', [
                         req.user._json.email,
                     ]);
+                    const payload = getCurrentUser.rows[0].id;
+                    const accessToken = jwt.sign({ payload }, 'jwtSecretKey', { expiresIn: 3000 });
+                    const currentUser = {
+                        id: getCurrentUser.rows[0].id,
+                        role: getCurrentUser.rows[0].role,
+                        name: getCurrentUser.rows[0].name,
+                        avatar: getCurrentUser.rows[0].avatar,
+                    };
                     return res.status(200).json({
                         error: false,
                         message: 'Successfully Logged In',
                         body: {
-                            user: getCurrentUser.rows[0],
+                            accessToken,
+                            user: currentUser,
                         },
                     });
                 } else {
+                    const payload = getUser.rows[0].id;
+                    const accessToken = jwt.sign({ payload }, 'jwtSecretKey', { expiresIn: 3000 });
+                    const currentUser = {
+                        id: getUser.rows[0].id,
+                        role: getUser.rows[0].role,
+                        name: getUser.rows[0].name,
+                        avatar: getUser.rows[0].avatar,
+                    };
                     return res.status(200).json({
                         error: false,
                         message: 'Successfully Logged In',
                         body: {
-                            user: getUser.rows[0],
+                            accessToken,
+                            user: currentUser,
                         },
                     });
                 }
@@ -36,6 +55,28 @@ class AuthController {
             }
         } else {
             return res.status(403).json({ error: true, message: 'Not Authorized' });
+        }
+    }
+
+    async verifyJwt(req, res, next) {
+        const token = req.headers['access-token'];
+        if (!token) {
+            return res.status(200).json({
+                message: 'We need token please provide it for next time',
+                login: false,
+            });
+        } else {
+            jwt.verify(token, 'jwtSecretKey', (err, decoded) => {
+                if (err) {
+                    res.json({
+                        message: 'Not authenticated. Please try again',
+                        login: false,
+                    });
+                } else {
+                    req.userID = decoded.id;
+                    next();
+                }
+            });
         }
     }
 }

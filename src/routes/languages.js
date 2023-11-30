@@ -3,5 +3,6 @@ const languagesController = require('../app/controllers/LanguagesController');
 const router = express.Router();
 
 router.get('/:language_id', languagesController.show);
+router.get('/', languagesController.index);
 
 module.exports = router;

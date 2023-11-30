@@ -60,3 +60,14 @@ insert into public.problem_languages (id, problem_id, language_id, initialcode) 
 insert into public.problem_languages (id, problem_id, language_id, initialcode) values (2, 1, 2, 'int add(int a, int b) {\n\t\n}');
 insert into public.problem_languages (id, problem_id, language_id, initialcode) values (3, 1, 1, 'def twoSum(nums, target):\n\t');
 insert into public.problem_languages (id, problem_id, language_id, initialcode) values (4, 1, 2, 'vector<int> twoSum(vector<int>& nums, int target) {\n\t\n}');
+
+
+CREATE TABLE public.problems (
+	id int NOT NULL,
+	title varchar NULL,
+	description varchar NULL,
+	solution varchar NULL,
+	likes int NULL,
+	dislikes int NULL,
+	CONSTRAINT problems_pk PRIMARY KEY (id)
+);
