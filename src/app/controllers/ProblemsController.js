@@ -12,6 +12,7 @@ const {
     getProblemByLevelByStatus,
     getProblemByLevelByName,
     getProblemByLevelByStatusByName,
+    getProblemById,
 } = require('../helper/problems');
 
 class ProblemsController {
@@ -533,5 +534,43 @@ class ProblemsController {
             console.log(err);
         }
     }
+
+    async getProblemById(req, res, next) {
+        const { problem_id } = req.params;
+        const query = `
+            SELECT problems.*, levels.name AS level_name
+            FROM problems
+            JOIN levels ON problems.level_id = levels.id
+            WHERE problems.id=$1;
+        `;
+
+        try {
+            const response = await pool.query(query, [parseInt(problem_id)]);
+            if (response.rows.length > 0) {
+                return res.status(200).json({
+                    message: 'Found problem successfully',
+                    code: 200,
+                    body: response.rows[0],
+                });
+            } else {
+                return res.status(200).json({
+                    message: 'Cannot find problem',
+                    code: 200,
+                })
+            }
+        } catch (error) {
+            console.log(error);
+            return res.status(500).json('Internal Server Error');
+        }
+    };
+
+    // async getInstruction(req, res, next) {
+    //     const { problem_id } = req.params;
+    //     const problem = await getProblemById(problem_id)
+    //         .then((res) => res.data)
+    //         .catch((err) => console.log(err));
+
+    //     return problem.instruction;
+    // }
 }
 module.exports = new ProblemsController();
