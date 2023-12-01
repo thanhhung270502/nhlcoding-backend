@@ -8,11 +8,10 @@ class SessionsController {
         try {
             const { email, password } = req.body;
             var newPassword = encode(password);
-            const query = 'SELECT * FROM users WHERE email = $1 AND password = $2';
-            const response = await pool.query(query, [email, newPassword]);
+            const query = 'SELECT * FROM users WHERE email = $1 AND password = $2 AND provider = $3';
+            const response = await pool.query(query, [email, newPassword, 'manual']);
 
             if (response.rows.length > 0) {
-                console.log(response.rows[0]);
                 const payload = response.rows[0].id;
                 const accessToken = jwt.sign({ payload }, 'jwtSecretKey', { expiresIn: 3000 });
                 const currentUser = {
@@ -31,7 +30,7 @@ class SessionsController {
                     },
                 });
             } else {
-                return res.status(401).json({
+                return res.status(200).json({
                     message: 'Account not found',
                     code: 401,
                 });
