@@ -4,9 +4,9 @@ const insertUsers = async () => {
     try {
         await pool.query(`
         INSERT INTO public.users(email, "password", name, avatar, provider, role)
-        VALUES('kane.ly@digibank.vn', '123456', 'Thanh Hùng', 'https://kenh14cdn.com/203336854389633024/2023/8/9/photo-6-1691581011481133485486.jpg', 'manual', 0);
+        VALUES('kane.ly@digibank.vn', 'IjEyMzQ1NiI=', 'Thanh Hùng', 'https://kenh14cdn.com/203336854389633024/2023/8/9/photo-6-1691581011481133485486.jpg', 'manual', 0);
         INSERT INTO public.users(email, "password", name, avatar, provider, role)
-        VALUES('thanhhung270502@gmail.com', '123456', 'Thanh Hùng', 'https://kenh14cdn.com/203336854389633024/2023/8/9/photo-6-1691581011481133485486.jpg', 'manual', 0);`);
+        VALUES('thanhhung2705@gmail.com', 'IjEyMzQ1NiI=', 'Thanh Hùng', 'https://kenh14cdn.com/203336854389633024/2023/8/9/photo-6-1691581011481133485486.jpg', 'manual', 0);`);
     } catch (err) {
         console.log(err);
         process.exit(1);
@@ -19,7 +19,9 @@ const insertTestCases = async () => {
         await pool.query(`insert into public.testcases (problem_id, "input", "output") values (1, '3 4', '7')`);
         await pool.query(`insert into public.testcases (problem_id, "input", "output") values (1, '4 6', '10')`);
         await pool.query(`insert into public.testcases (problem_id, "input", "output") values (1, '1 -1', '0')`);
-        await pool.query(`insert into public.testcases (problem_id, "input", "output") values (1, '-999999 999999', '0')`);
+        await pool.query(
+            `insert into public.testcases (problem_id, "input", "output") values (1, '-999999 999999', '0')`,
+        );
         await pool.query(
             `insert into public.testcases (problem_id, "input", "output") values (2, '4\n2 7 11 15\n9', '[0, 1]')`,
         );
@@ -168,36 +170,43 @@ const insertLevels = async () => {
 const insertProblems = async () => {
     try {
         await pool.query(`
-            insert into public.problems (level_id, title, description, solution, likes, dislikes) values (2, 'Problem 1', 'Description 1', 'Solution 1', 10, 10);
-            insert into public.problems (level_id, title, description, solution, likes, dislikes) values (3, 'Problem 2', 'Description 2', 'Solution 2', 10, 10);
-            insert into public.problems (level_id, title, description, solution, likes, dislikes) values (1, 'Problem 3', 'Description 3', 'Solution 3', 10, 10);
-            insert into public.problems (level_id, title, description, solution, likes, dislikes) values (2, 'Problem 4', 'Description 4', 'Solution 4', 10, 10);
-            insert into public.problems (level_id, title, description, solution, likes, dislikes) values (3, 'Problem 5', 'Description 5', 'Solution 5', 10, 10);
-            insert into public.problems (level_id, title, description, solution, likes, dislikes) values (1, 'Problem 6', 'Description 6', 'Solution 6', 10, 10);
-            insert into public.problems (level_id, title, description, solution, likes, dislikes) values (2, 'Problem 7', 'Description 7', 'Solution 7', 10, 10);
-            insert into public.problems (level_id, title, description, solution, likes, dislikes) values (3, 'Problem 8', 'Description 8', 'Solution 8', 10, 10);
-            insert into public.problems (level_id, title, description, solution, likes, dislikes) values (1, 'Problem 9', 'Description 9', 'Solution 9', 10, 10);
-            insert into public.problems (level_id, title, description, solution, likes, dislikes) values (2, 'Problem 10', 'Description 10', 'Solution 10', 10, 10);
-            insert into public.problems (level_id, title, description, solution, likes, dislikes) values (3, 'Problem 11', 'Description 11', 'Solution 11', 10, 10);
-            insert into public.problems (level_id, title, description, solution, likes, dislikes) values (1, 'Problem 12', 'Description 12', 'Solution 12', 10, 10);
-            insert into public.problems (level_id, title, description, solution, likes, dislikes) values (2, 'Problem 13', 'Description 13', 'Solution 13', 10, 10);
-            insert into public.problems (level_id, title, description, solution, likes, dislikes) values (3, 'Problem 14', 'Description 14', 'Solution 14', 10, 10);
-            insert into public.problems (level_id, title, description, solution, likes, dislikes) values (1, 'Problem 15', 'Description 15', 'Solution 15', 10, 10);
-            insert into public.problems (level_id, title, description, solution, likes, dislikes) values (2, 'Problem 16', 'Description 16', 'Solution 16', 10, 10);
-            insert into public.problems (level_id, title, description, solution, likes, dislikes) values (3, 'Problem 17', 'Description 17', 'Solution 17', 10, 10);
-            insert into public.problems (level_id, title, description, solution, likes, dislikes) values (1, 'Problem 18', 'Description 18', 'Solution 18', 10, 10);
-            insert into public.problems (level_id, title, description, solution, likes, dislikes) values (2, 'Problem 19', 'Description 19', 'Solution 19', 10, 10);
-            insert into public.problems (level_id, title, description, solution, likes, dislikes) values (3, 'Problem 20', 'Description 20', 'Solution 20', 10, 10);
-            insert into public.problems (level_id, title, description, solution, likes, dislikes) values (1, 'Problem 21', 'Description 21', 'Solution 21', 10, 10);
-            insert into public.problems (level_id, title, description, solution, likes, dislikes) values (2, 'Problem 22', 'Description 22', 'Solution 22', 10, 10);
-            insert into public.problems (level_id, title, description, solution, likes, dislikes) values (3, 'Problem 23', 'Description 23', 'Solution 23', 10, 10);
-            insert into public.problems (level_id, title, description, solution, likes, dislikes) values (1, 'Problem 24', 'Description 24', 'Solution 24', 10, 10);
-            insert into public.problems (level_id, title, description, solution, likes, dislikes) values (2, 'Problem 25', 'Description 25', 'Solution 25', 10, 10);
-            insert into public.problems (level_id, title, description, solution, likes, dislikes) values (3, 'Problem 26', 'Description 26', 'Solution 26', 10, 10);
-            insert into public.problems (level_id, title, description, solution, likes, dislikes) values (1, 'Problem 27', 'Description 27', 'Solution 27', 10, 10);
-            insert into public.problems (level_id, title, description, solution, likes, dislikes) values (2, 'Problem 28', 'Description 28', 'Solution 28', 10, 10);
-            insert into public.problems (level_id, title, description, solution, likes, dislikes) values (3, 'Problem 29', 'Description 29', 'Solution 29', 10, 10);
-            insert into public.problems (level_id, title, description, solution, likes, dislikes) values (1, 'Problem 30', 'Description 30', 'Solution 30', 10, 10);
+            insert into public.problems (level_id, title, description, instruction, likes, dislikes) values (2, 'Problem 1', 'Description 1', 'Instruction 1', 10, 10);
+            insert into public.problems (level_id, title, description, instruction, likes, dislikes) values (
+                1, 
+                'Two Sum', 
+                'Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target. You may assume that each input would have exactly one solution, and you may not use the same element twice. You can return the answer in any order.\n\n**Example 1:**\n\`\`\`text\nInput: nums = [2, 7, 11, 15], target = 9\nOutput: [0, 1]\nExplanation: Because nums[0] + nums[1] == 9, we return [0, 1].\n\`\`\`\n\n**Example 2:**\n\`\`\`text\nInput: nums = [3,2,4], target = 6\nOutput: [1, 2]\n\`\`\`\n\n**Example 3:**\n\`\`\`text\nInput: nums = [3,3], target = 6\nOutput: [0, 1]\n\`\`\`\n\n**Constraints:**\n\n- \`2 <= nums.length <= 104\`\n- \`-109 <= nums[i] <= 109\`\n- \`-109 <= target <= 109\`\n- **Only one valid answer exists.**\n',
+                '##### Approach\n\nThe brute force approach is simple. Loop through each element $x$ and find if there is another value that equals to $target - x$.\n\n##### Implementation\n\n\`\`\`cpp\nclass Solution {\npublic:\n    vector<int> twoSum(vector<int>& nums, int target) {\n        for (int i = 0; i < nums.size(); i++) {\n            for  (int j = i + 1; j < nums.size(); j++) {\n                if (nums[j] + nums[i] == target) {\n                    return vector<int>{i, j};\n                }\n            }\n        }\n\n        return vector<int>();\n    }\n};\n\`\`\`\n\n\`\`\`python\nclass Solution:\n    def twoSum(self, nums: List[int], target: int) -> List[int]:\n        for i in range(len(nums)):\n            for j in range(i + 1, len(nums)):\n                if nums[j] == target - nums[i]:\n                    return [i, j]\n\`\`\`\n\n##### Complexity Analysis\n\n-   Time complexity: $O(n^2)$.\n    For each element, we try to find its complement by looping through the rest of the array which takes $O(n)$ time.\n    Therefore, the time complexity is $O(n^2)$.\n\n-   Space complexity: $O(1)$.\n    The space required does not depend on the size of the input array, so only constant space is used.\n',
+                0,
+                0
+            );
+            insert into public.problems (level_id, title, description, instruction, likes, dislikes) values (1, 'Problem 3', 'Description 3', 'Instruction 3', 10, 10);
+            insert into public.problems (level_id, title, description, instruction, likes, dislikes) values (2, 'Problem 4', 'Description 4', 'Instruction 4', 10, 10);
+            insert into public.problems (level_id, title, description, instruction, likes, dislikes) values (3, 'Problem 5', 'Description 5', 'Instruction 5', 10, 10);
+            insert into public.problems (level_id, title, description, instruction, likes, dislikes) values (1, 'Problem 6', 'Description 6', 'Instruction 6', 10, 10);
+            insert into public.problems (level_id, title, description, instruction, likes, dislikes) values (2, 'Problem 7', 'Description 7', 'Instruction 7', 10, 10);
+            insert into public.problems (level_id, title, description, instruction, likes, dislikes) values (3, 'Problem 8', 'Description 8', 'Instruction 8', 10, 10);
+            insert into public.problems (level_id, title, description, instruction, likes, dislikes) values (1, 'Problem 9', 'Description 9', 'Instruction 9', 10, 10);
+            insert into public.problems (level_id, title, description, instruction, likes, dislikes) values (2, 'Problem 10', 'Description 10', 'Instruction 10', 10, 10);
+            insert into public.problems (level_id, title, description, instruction, likes, dislikes) values (3, 'Problem 11', 'Description 11', 'Instruction 11', 10, 10);
+            insert into public.problems (level_id, title, description, instruction, likes, dislikes) values (1, 'Problem 12', 'Description 12', 'Instruction 12', 10, 10);
+            insert into public.problems (level_id, title, description, instruction, likes, dislikes) values (2, 'Problem 13', 'Description 13', 'Instruction 13', 10, 10);
+            insert into public.problems (level_id, title, description, instruction, likes, dislikes) values (3, 'Problem 14', 'Description 14', 'Instruction 14', 10, 10);
+            insert into public.problems (level_id, title, description, instruction, likes, dislikes) values (1, 'Problem 15', 'Description 15', 'Instruction 15', 10, 10);
+            insert into public.problems (level_id, title, description, instruction, likes, dislikes) values (2, 'Problem 16', 'Description 16', 'Instruction 16', 10, 10);
+            insert into public.problems (level_id, title, description, instruction, likes, dislikes) values (3, 'Problem 17', 'Description 17', 'Instruction 17', 10, 10);
+            insert into public.problems (level_id, title, description, instruction, likes, dislikes) values (1, 'Problem 18', 'Description 18', 'Instruction 18', 10, 10);
+            insert into public.problems (level_id, title, description, instruction, likes, dislikes) values (2, 'Problem 19', 'Description 19', 'Instruction 19', 10, 10);
+            insert into public.problems (level_id, title, description, instruction, likes, dislikes) values (3, 'Problem 20', 'Description 20', 'Instruction 20', 10, 10);
+            insert into public.problems (level_id, title, description, instruction, likes, dislikes) values (1, 'Problem 21', 'Description 21', 'Instruction 21', 10, 10);
+            insert into public.problems (level_id, title, description, instruction, likes, dislikes) values (2, 'Problem 22', 'Description 22', 'Instruction 22', 10, 10);
+            insert into public.problems (level_id, title, description, instruction, likes, dislikes) values (3, 'Problem 23', 'Description 23', 'Instruction 23', 10, 10);
+            insert into public.problems (level_id, title, description, instruction, likes, dislikes) values (1, 'Problem 24', 'Description 24', 'Instruction 24', 10, 10);
+            insert into public.problems (level_id, title, description, instruction, likes, dislikes) values (2, 'Problem 25', 'Description 25', 'Instruction 25', 10, 10);
+            insert into public.problems (level_id, title, description, instruction, likes, dislikes) values (3, 'Problem 26', 'Description 26', 'Instruction 26', 10, 10);
+            insert into public.problems (level_id, title, description, instruction, likes, dislikes) values (1, 'Problem 27', 'Description 27', 'Instruction 27', 10, 10);
+            insert into public.problems (level_id, title, description, instruction, likes, dislikes) values (2, 'Problem 28', 'Description 28', 'Instruction 28', 10, 10);
+            insert into public.problems (level_id, title, description, instruction, likes, dislikes) values (3, 'Problem 29', 'Description 29', 'Instruction 29', 10, 10);
+            insert into public.problems (level_id, title, description, instruction, likes, dislikes) values (1, 'Problem 30', 'Description 30', 'Instruction 30', 10, 10);
         `);
     } catch (err) {
         console.log(err);
@@ -245,11 +254,6 @@ const insertUserProblems = async () => {
         await pool.query(
             `
             insert into public.user_problems (user_id, problem_id) values (1, 1);
-            insert into public.user_problems (user_id, problem_id) values (1, 2);
-            insert into public.user_problems (user_id, problem_id) values (1, 3);
-            insert into public.user_problems (user_id, problem_id) values (1, 4);
-            insert into public.user_problems (user_id, problem_id) values (2, 1);
-            insert into public.user_problems (user_id, problem_id) values (2, 2);
             `,
         );
     } catch (err) {

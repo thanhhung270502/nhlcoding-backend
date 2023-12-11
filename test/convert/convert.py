@@ -1,5 +1,5 @@
 # Open the file in read mode
-file = open('template_winput.cpp', 'r')
+file = open('../editorial_sample.md', 'r')
 
 # Read the contents of the file
 content = file.read()
@@ -8,10 +8,10 @@ content = file.read()
 file.close()
 
 # convert code to single-line string
-single_line_content = content.replace('\n', '\\n').replace('\r', '\\r').replace('\'', '\\\'').replace('\"', '\\"')
+single_line_content = content.replace('\n', '\\n').replace('\r', '\\r').replace('\'', '\\\'').replace('\"', '\\"').replace('`', '\`')
 
 # Open the file in write mode
-file = open('convert/template2str.txt', 'w')
+file = open('singleline.txt', 'w')
 
 # Write content to the file
 file.write(single_line_content)

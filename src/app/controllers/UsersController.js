@@ -1,4 +1,6 @@
 const pool = require('../../config/db');
+const { encode } = require('../helper/user');
+const jwt = require('jsonwebtoken');
 
 class UsersController {
     // [GET] /
@@ -36,23 +38,53 @@ class UsersController {
             return res.status(500).json('Internal Server Error');
         }
     }
-
+    // 200: successful, 409: User exists
     async create(req, res) {
         try {
             const { email, password, name, provider, role, avatar } = req.body;
-            const response = await pool.query(
-                'INSERT INTO users (email, password, name, provider, role, avatar) VALUES ($1, $2, $3, $4, $5, $6)',
-                [email, password, name, provider, role, avatar],
-            );
+            var newPassword = encode(password);
 
-            const getUser = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
+            // Check if the user already exists
+            const query = 'SELECT * FROM users WHERE email = $1 AND provider = $2';
+            var getUser = await pool.query(query, [email, 'manual']);
+            if (getUser.rows.length > 0) {
+                res.status(200).json({
+                    message: 'This email exist',
+                    code: 409,
+                    body: '',
+                });
+            } else {
+                const response = await pool.query(
+                    'INSERT INTO users (email, password, name, provider, role, avatar) VALUES ($1, $2, $3, $4, $5, $6)',
+                    [email, newPassword, name, provider, role, avatar],
+                );
 
-            return res.status(200).json({
-                message: 'User created successfully',
-                body: {
-                    user: getUser.rows[0],
-                },
-            });
+                getUser = await pool.query('SELECT * FROM users WHERE email = $1 AND password = $2', [
+                    email,
+                    newPassword,
+                ]);
+
+                console.log('abc', getUser);
+
+                const payload = getUser.rows[0].id;
+                const accessToken = jwt.sign({ payload }, 'jwtSecretKey', { expiresIn: 3000 });
+
+                const currentUser = {
+                    id: getUser.rows[0].id,
+                    role: getUser.rows[0].role,
+                    name: getUser.rows[0].name,
+                    avatar: getUser.rows[0].avatar,
+                };
+
+                return res.status(200).json({
+                    message: 'User created successfully',
+                    code: 200,
+                    body: {
+                        accessToken,
+                        user: currentUser,
+                    },
+                });
+            }
         } catch (err) {
             console.log(err);
             return res.status(500).json('Internal Server Error');

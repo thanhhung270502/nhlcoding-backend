@@ -12,6 +12,7 @@ const {
     getProblemByLevelByStatus,
     getProblemByLevelByName,
     getProblemByLevelByStatusByName,
+    getProblemById,
 } = require('../helper/problems');
 
 class ProblemsController {
@@ -328,17 +329,17 @@ class ProblemsController {
 
     async create(req, res, next) {
         try {
-            const { reason, title, description, languages, level_id, solutions, problem_languages, testcases } =
+            const { reason, title, description, languages, level_id, instruction, problem_languages, testcases } =
                 req.body;
 
             const addProblem = await pool.query(
-                'INSERT INTO problems (title, description, solution, likes, dislikes, level_id) VALUES ($1, $2, $3, $4, $5, $6)',
-                [title, description, solutions, 0, 0, level_id],
+                'INSERT INTO problems (title, description, instruction, likes, dislikes, level_id) VALUES ($1, $2, $3, $4, $5, $6)',
+                [title, description, instruction, 0, 0, level_id],
             );
 
             const currentProblem = await pool.query(
-                'SELECT * FROM problems WHERE title = $1 AND description = $2 AND solution = $3 AND level_id = $4',
-                [title, description, solutions, level_id],
+                'SELECT * FROM problems WHERE title = $1 AND description = $2 AND instruction = $3 AND level_id = $4',
+                [title, description, instruction, level_id],
             );
 
             // Testcases
@@ -412,7 +413,7 @@ class ProblemsController {
         for (var i = 0; i < responseTestCase.length; i++) {
             const testcase = responseTestCase[i];
             const input = testcase.input;
-            console.log("Run test case", responseTestCase.indexOf(testcase));
+            console.log('Run test case', responseTestCase.indexOf(testcase));
             const newCode = await supportConvertCode(code, problemLanguage.full_code);
 
             const payload = JSON.stringify({
@@ -446,7 +447,9 @@ class ProblemsController {
                 // console.log(JSON.stringify(testcase.output), typeof JSON.stringify(testcase.output));
                 // console.log(JSON.stringify(stdout), typeof JSON.stringify(stdout));
                 // console.log(JSON.stringify(stdout) === `"None\\n"`);
-                const success = JSON.stringify(language === 'python' ? testcase.output + "\n" : testcase.output) === JSON.stringify(stdout);
+                const success =
+                    JSON.stringify(language === 'python' ? testcase.output + '\n' : testcase.output) ===
+                    JSON.stringify(stdout);
                 const runtime = end_timestamp[0] * 1000 + end_timestamp[1] / 1000000; // convert to milliseconds
                 runtimes += runtime;
 
@@ -461,9 +464,8 @@ class ProblemsController {
 
                 if (!success) {
                     if (i < 3) {
-                        status = "Wrong answer";
-                    }
-                    else if (i >= 3 && status === "Wrong answer") {
+                        status = 'Wrong answer';
+                    } else if (i >= 3 && status === 'Wrong answer') {
                         break;
                     } else {
                         // store first wrong hidden test case
@@ -471,7 +473,7 @@ class ProblemsController {
                             ...testcase,
                             actual_output: stdout,
                         };
-                        status = "Wrong answer";
+                        status = 'Wrong answer';
                         break;
                     }
                 }
@@ -532,5 +534,43 @@ class ProblemsController {
             console.log(err);
         }
     }
+
+    async getProblemById(req, res, next) {
+        const { problem_id } = req.params;
+        const query = `
+            SELECT problems.*, levels.name AS level_name
+            FROM problems
+            JOIN levels ON problems.level_id = levels.id
+            WHERE problems.id=$1;
+        `;
+
+        try {
+            const response = await pool.query(query, [parseInt(problem_id)]);
+            if (response.rows.length > 0) {
+                return res.status(200).json({
+                    message: 'Found problem successfully',
+                    code: 200,
+                    body: response.rows[0],
+                });
+            } else {
+                return res.status(200).json({
+                    message: 'Cannot find problem',
+                    code: 200,
+                })
+            }
+        } catch (error) {
+            console.log(error);
+            return res.status(500).json('Internal Server Error');
+        }
+    };
+
+    // async getInstruction(req, res, next) {
+    //     const { problem_id } = req.params;
+    //     const problem = await getProblemById(problem_id)
+    //         .then((res) => res.data)
+    //         .catch((err) => console.log(err));
+
+    //     return problem.instruction;
+    // }
 }
 module.exports = new ProblemsController();

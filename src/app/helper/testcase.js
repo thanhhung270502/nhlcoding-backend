@@ -182,6 +182,7 @@ const supportCpp = (infoFunc, input, code) => {
     - fullCode: full code of this problems and language
 */
 const supportConvertCode = async (code, fullCode) => {
+    if (!fullCode) return;
     var runCode = fullCode
     // console.log(code)
     runCode = runCode.replace('{{ANSWER}}', code)

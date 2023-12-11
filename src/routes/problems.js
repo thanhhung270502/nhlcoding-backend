@@ -8,7 +8,8 @@ router.get('/:user_id/:level/:status/:search', problemsController.getProblemsFor
 router.post('/:problem_id/:language/run', problemsController.runCode);
 router.post('/:problem_id/:language/runMore', problemsController.runMoreTestcases);
 router.post('/:problem_id/:language/run-jobe', problemsController.runCodeWithJobe);
-router.post('/test-jobe', problemsController.testJobe);
+router.get('/:problem_id', problemsController.getProblemById);
+// router.post('/test-jobe', problemsController.testJobe);
 router.post('/', problemsController.create);
 router.get('/', problemsController.index);
 
