@@ -1,9 +1,31 @@
 const express = require('express');
-const problem_languagesController = require('../app/controllers/ProblemLanguagesController');
+const problemLanguagesService = require('../app/services/ProblemLanguagesService');
 const router = express.Router();
 
-router.get('/:problem_id/:language_id', problem_languagesController.getByProblemIDLanguageID);
-router.get('/:problem_id', problem_languagesController.getByProblemID);
-router.get('/', problem_languagesController.index);
+/**
+ * @swagger
+ * /problem_languages/{problem_id}/{language_id}:
+ *  get:
+ *      summary: Returns the language with language_id
+ *      tags: [Languages]
+ *      parameters:
+ *          - in: path
+ *            name: id
+ *            schema:
+ *              type: int
+ *            required: true
+ *            description: The language id
+ *      responses:
+ *          200:
+ *              description: The language object
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/components/schemas/Language'
+ *                  
+ */
+router.get('/:problem_id/:language_id', problemLanguagesService.getByProblemIDLanguageID);
+router.get('/:problem_id', problemLanguagesService.getByProblemID);
+router.get('/', problemLanguagesService.index);
 
 module.exports = router;

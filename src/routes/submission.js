@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
 
-const submissionController = require('../app/controllers/SubmissionController');
+const submissionService = require('../app/services/SubmissionService');
 
 // router.put("/:id", submissionController.update);
-router.delete("/:id", submissionController.delete);
-router.post("/create", submissionController.create);
-router.get("/:user_id/:problem_id", submissionController.show);
-router.get("/", submissionController.showAll);
+router.delete("/:id", submissionService.delete);
+router.post("/create", submissionService.create);
+router.get("/:user_id/:problem_id", submissionService.show);
+router.get("/", submissionService.showAll);
 
 module.exports = router;

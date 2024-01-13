@@ -1,6 +1,6 @@
 const pool = require('../../config/db');
 
-class LanguagesController {
+class LanguagesService {
     async index(req, res, next) {
         try {
             const response = await pool.query('SELECT * FROM languages');
@@ -30,4 +30,4 @@ class LanguagesController {
     }
 }
 
-module.exports = new LanguagesController();
+module.exports = new LanguagesService();

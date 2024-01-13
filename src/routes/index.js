@@ -17,11 +17,10 @@ function route(app) {
     app.use('/user_problems', userProblemsRouter);
     app.use('/testcases', testcasesRouter);
     app.use('/problems', problemsRouter);
-    app.use('/submissions', submissionRouter);
-    app.use('/auth', authRouter);
-    app.use('/sessions', sessionsRouter);
+    app.use('/testcases', testcasesRouter);
     app.use('/users', usersRouter);
-    app.use('/', siteRouter);
+    app.use('/submissions', submissionRouter);
+    app.use('/sessions', sessionsRouter);
 }
 
 module.exports = route;

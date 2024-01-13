@@ -1,16 +1,16 @@
 const express = require('express');
 const router = express.Router();
 
-const problemsController = require('../app/controllers/ProblemsController');
+const problemsService = require('../app/services/ProblemsService');
 
-router.get('/:user_id/:level/:status/:search', problemsController.getProblemsForFilter);
-// router.get('/:user_id/:limit/:offset/', problemsController.getAllProblems);
-router.post('/:problem_id/:language/run', problemsController.runCode);
-router.post('/:problem_id/:language/runMore', problemsController.runMoreTestcases);
-router.post('/:problem_id/:language/run-jobe', problemsController.runCodeWithJobe);
-router.get('/:problem_id', problemsController.getProblemById);
-// router.post('/test-jobe', problemsController.testJobe);
-router.post('/', problemsController.create);
-router.get('/', problemsController.index);
+router.get('/:user_id/:level/:status/:search', problemsService.getProblemsForFilter);
+// router.get('/:user_id/:limit/:offset/', problemsService.getAllProblems);
+router.post('/:problem_id/:language/run', problemsService.runCode);
+router.post('/:problem_id/:language/runMore', problemsService.runMoreTestcases);
+router.post('/:problem_id/:language/run-jobe', problemsService.runCodeWithJobe);
+router.get('/:problem_id', problemsService.getProblemById);
+// router.post('/test-jobe', problemsService.testJobe);
+router.post('/', problemsService.create);
+router.get('/', problemsService.index);
 
 module.exports = router;

@@ -1,6 +1,6 @@
 const pool = require('../../config/db');
 
-class Problem_languagesController {
+class ProblemLanguagesService {
     async getByProblemIDLanguageID(req, res, next) {
         const { problem_id, language_id } = req.params;
         try {
@@ -48,4 +48,4 @@ class Problem_languagesController {
     }
 }
 
-module.exports = new Problem_languagesController();
+module.exports = new ProblemLanguagesService();
