@@ -1,6 +1,6 @@
 const pool = require('../../config/db');
 
-class LevelController {
+class LevelService {
     async index(req, res, next) {
         try {
             const response = await pool.query('SELECT * FROM levels');
@@ -30,4 +30,4 @@ class LevelController {
     }
 }
 
-module.exports = new LevelController();
+module.exports = new LevelService();

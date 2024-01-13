@@ -10,7 +10,7 @@ const router = express.Router();
  *      tags: [Languages]
  *      parameters:
  *          - in: path
- *            name: id
+ *            name: language_id
  *            schema:
  *              type: int
  *            required: true

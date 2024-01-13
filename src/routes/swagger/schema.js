@@ -17,4 +17,9 @@
  *          example:
  *              id: 1
  *              name: kotlin
+ *      Level:
+ *          type: object
+ *          required:
+ *              - id
+ *              - 
  */

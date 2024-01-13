@@ -1,7 +1,7 @@
 const express = require('express')
-const UserProblemsController = require('../app/controllers/UserProblemsController')
+const UserProblemsService = require('../app/services/UserProblemsService')
 const router = express.Router();
 
-router.post('/:user_id/:problem_id', UserProblemsController.insertUserProblem);
+router.post('/:user_id/:problem_id', UserProblemsService.insertUserProblem);
 
 module.exports = router
