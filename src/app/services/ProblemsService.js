@@ -392,8 +392,6 @@ class ProblemsController {
 
         const language_id = language === 'python' ? 1 : 2;
         const problemLanguage = await getProblemLanguageByProblemIdAndLanguageId(problem_id, language_id);
-
-        // console.log("Response test cases", responseTestCase);
         const outcome_message = {
             11: 'Compilation Error',
             12: 'Runtime Error',
@@ -413,18 +411,18 @@ class ProblemsController {
         for (var i = 0; i < responseTestCase.length; i++) {
             const testcase = responseTestCase[i];
             const input = testcase.input;
-            console.log('Run test case', responseTestCase.indexOf(testcase));
             const newCode = await supportConvertCode(code, problemLanguage.full_code);
 
             const payload = JSON.stringify({
                 run_spec: {
                     // TODO: handle input for python more clearly
-                    input: language === 'python' ? input.replaceAll(' ', '\n') : input,
+                    input,
                     language_id: language === 'python' ? 'python3' : 'cpp',
-                    sourcecode: newCode,
+                    sourcecode: JSON.parse(newCode),
                 },
             });
-            // console.log(payload)
+
+            // console.log(payload);
 
             const start_timestamp = process.hrtime();
 
@@ -435,6 +433,8 @@ class ProblemsController {
 
             const end_timestamp = process.hrtime(start_timestamp);
 
+            console.log('Run test case', responseTestCase.indexOf(testcase), outcome_message[parseInt(outcome)]);
+
             if (parseInt(outcome) !== 15) {
                 status = outcome_message[parseInt(outcome)];
                 if (parseInt(outcome) === 11) {
@@ -444,12 +444,11 @@ class ProblemsController {
             }
             // else: outcome = 15
             else {
-                // console.log(JSON.stringify(testcase.output), typeof JSON.stringify(testcase.output));
-                // console.log(JSON.stringify(stdout), typeof JSON.stringify(stdout));
-                // console.log(JSON.stringify(stdout) === `"None\\n"`);
+                // IMPORTANT: condition to compare stdout vs expected
+                // Using Array.trim() to remove leading and trailing whitespace (i.e. ' ', '\n', ...)
                 const success =
-                    JSON.stringify(language === 'python' ? testcase.output + '\n' : testcase.output) ===
-                    JSON.stringify(stdout);
+                    JSON.stringify(testcase.output.trim()) ===
+                    JSON.stringify(stdout.trim());
                 const runtime = end_timestamp[0] * 1000 + end_timestamp[1] / 1000000; // convert to milliseconds
                 runtimes += runtime;
 
@@ -487,7 +486,7 @@ class ProblemsController {
                 compile_info: compile_info,
                 avg_runtime: Math.floor(runtimes / responseTestCase.length),
                 result: final_result,
-                wrong_testcase: wrong_testcase,
+                wrong_testcase: wrong_testcase
             },
         });
     }

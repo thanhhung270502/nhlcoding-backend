@@ -1,11 +1,12 @@
 const pool = require('../../config/db');
+const { sortById } = require('../../utils');
 
 const getTestcaseByProblemID = async (problem_id) => {
     try {
         const query = 'SELECT * FROM testcases WHERE problem_id = $1';
         const response = await pool.query(query, [problem_id]);
         if (response.rows.length > 0) {
-            return response.rows;
+            return sortById(response.rows);
         } else {
             return [];
         }
@@ -183,13 +184,9 @@ const supportCpp = (infoFunc, input, code) => {
 */
 const supportConvertCode = async (code, fullCode) => {
     if (!fullCode) return;
-    var runCode = fullCode
-    // console.log(code)
-    runCode = runCode.replace('{{ANSWER}}', code)
-    runCode = runCode.replaceAll('\\n', '\n')
-    runCode = runCode.replaceAll('\\t', '\t')
 
-    return runCode
+    const runCode = fullCode.replace('{{ANSWER}}', code);
+    return JSON.stringify(runCode);
 };
 
 // Don't use
