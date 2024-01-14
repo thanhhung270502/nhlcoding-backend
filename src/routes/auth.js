@@ -1,9 +1,9 @@
 const router = require('express').Router();
 const passport = require('passport');
 
-const authController = require('../app/controllers/AuthController');
+const authService = require('../app/services/AuthService');
 
-router.get('/login/success', authController.create_or_update);
+router.get('/login/success', authService.create_or_update);
 
 router.get('/login/failed', (req, res) => {
     res.status(401).json({
@@ -33,7 +33,7 @@ router.get('/logout', (req, res, next) => {
 
 router.get('/test', (req, res) => res.send('Hello World'));
 
-router.get('/checkAuthentication', authController.verifyJwt, (req, res) => {
+router.get('/checkAuthentication', authService.verifyJwt, (req, res) => {
     return res.json({
         message: 'Authenticated',
         login: true,

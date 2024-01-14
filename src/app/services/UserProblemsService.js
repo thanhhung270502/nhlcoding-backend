@@ -1,6 +1,6 @@
 const pool = require('../../config/db')
 
-class UserProblemsController {
+class UserProblemsService {
     async insertUserProblem(req, res, next) {
         const { user_id, problem_id } = req.params;
         const { status } = req.body;
@@ -20,4 +20,4 @@ class UserProblemsController {
     }
 }
 
-module.exports = new UserProblemsController()
+module.exports = new UserProblemsService()
