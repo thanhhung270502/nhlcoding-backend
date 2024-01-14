@@ -32,8 +32,6 @@ const createTableTestCases = async () => {
             problem_id      int         NULL,
             "input"         varchar     NULL,
             "output"        varchar     NULL,
-            memory          decimal     NULL,
-            runtime         decimal     NULL,
             CONSTRAINT testcases_pk PRIMARY KEY (id)
         )`;
         await pool.query(query);

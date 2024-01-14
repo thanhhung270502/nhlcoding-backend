@@ -433,7 +433,7 @@ class ProblemsController {
 
             const end_timestamp = process.hrtime(start_timestamp);
 
-            console.log('Run test case', responseTestCase.indexOf(testcase), outcome_message[parseInt(outcome)]);
+            console.log('Run test case', testcase.id, outcome_message[parseInt(outcome)]);
 
             if (parseInt(outcome) !== 15) {
                 status = outcome_message[parseInt(outcome)];
