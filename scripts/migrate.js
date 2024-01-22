@@ -519,6 +519,31 @@ $$ LANGUAGE plpgsql
     }
 };
 
+const createCheckUserRoleTrigger = async () => {
+    try {
+        await pool.query(`    
+        CREATE OR REPLACE FUNCTION validate_user_role()
+        RETURNS TRIGGER AS $$
+      BEGIN
+        IF NEW.role NOT IN ('normal', 'admin', 'teacher', 'student') THEN
+          RAISE EXCEPTION 'Invalid user role. Allowed roles are: normal, admin, teacher, student.';
+        END IF;
+        RETURN NEW;
+      END;
+      $$ LANGUAGE plpgsql
+        `);
+        await pool.query(`
+        CREATE TRIGGER check_user_role
+        BEFORE INSERT OR UPDATE ON users
+        FOR EACH ROW
+        EXECUTE FUNCTION validate_user_role()
+        `);
+    } catch (err) {
+        console.log(err);
+        process.exit(1);
+    }
+};
+
 (async () => {
     try {
         console.log('Waiting...');
@@ -551,6 +576,7 @@ $$ LANGUAGE plpgsql
         await createCheckProblemClassesTrigger();
         await createCheckStudentClassesTrigger();
         await createCheckTeacherClassesTrigger();
+        await createCheckUserRoleTrigger();
     } catch (err) {
         console.log(err);
         process.exit(1);
