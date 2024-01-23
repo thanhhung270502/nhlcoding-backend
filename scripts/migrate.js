@@ -64,8 +64,8 @@ const createTableProblems = async () => {
             level_id integer not null,
             description text not null,
             instruction text,
-            likes integer not null,
-            dislikes integer not null,
+            likes integer not null default 0,
+            dislikes integer not null default 0,
             categories text[],
             is_public bool default true,
             constraint fk_problem_level
@@ -379,10 +379,11 @@ const createUpdateUserProblemsFunction = async () => {
         returns trigger as $$
         declare 
             problem_status text;
-            begin 
+            begin
                 select status into problem_status 
                 from user_problems
-                where id = new.user_problems_id;
+                where user_id = new.user_id
+                and problem_id = new.problem_id;
 
                 if ((new.status <> 'Accepted') and (problem_status <> 'Solved')) then
                     problem_status := 'Attempted';
@@ -392,7 +393,8 @@ const createUpdateUserProblemsFunction = async () => {
             
                 update public.user_problems 
                 set status = problem_status
-                where id = new.user_problems_id;
+                where user_id = new.user_id
+                and problem_id = new.problem_id;
                 
                 return null;
             end

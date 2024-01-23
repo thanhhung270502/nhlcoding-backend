@@ -9,9 +9,9 @@ class UserProblemsService {
             const query = 'INSERT INTO user_problems(problem_id, user_id, status) VALUES ($1, $2, $3)';
 
             await pool.query(query, [problem_id, user_id, status]);
-            return res.status(200).json({
+            return res.status(201).json({
                 message: 'UserProblem modified successfully',
-                code: 200
+                code: 201
             })
         } catch (error) {
             console.log(error)

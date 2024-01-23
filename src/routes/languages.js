@@ -4,27 +4,52 @@ const router = express.Router();
 
 /**
  * @swagger
+ * /languages:
+ *  get:
+ *      summary: Get a list of all languages
+ *      tags: [Languages]
+ *      responses:
+ *          200:
+ *              description: OK
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: array
+ *                          items:
+ *                              $ref: '#/components/schemas/Language'
+ *          500:
+ *              description: Internal Server Error                          
+ *                  
+ */
+router.get('/', languagesService.index);
+
+/**
+ * @swagger
  * /languages/{language_id}:
  *  get:
- *      summary: Returns the language with language_id
+ *      summary: Get a specific language by ID
  *      tags: [Languages]
  *      parameters:
  *          - in: path
  *            name: language_id
- *            schema:
- *              type: int
  *            required: true
- *            description: The language id
+ *            schema:
+ *              type: integer
+ *            description: ID of the language to retrieve
  *      responses:
  *          200:
- *              description: The language object
+ *              description: OK
  *              content:
  *                  application/json:
  *                      schema:
- *                          $ref: '#/components/schemas/Language'
- *                  
+ *                          allOf: 
+ *                            - $ref: '#/components/schemas/Response'
+ *                            - properties:
+ *                                body:
+ *                                   $ref: '#/components/schemas/Language'    
+ *          500:
+ *              description: Internal Server Error                                        
  */
 router.get('/:language_id', languagesService.show);
-router.get('/', languagesService.index);
 
 module.exports = router;

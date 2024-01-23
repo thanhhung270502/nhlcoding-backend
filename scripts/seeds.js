@@ -2519,21 +2519,21 @@ const insertProblems = async () => {
      }
 };
 
-const insertSumbissions = async () => {
-     try {
-          await pool.query(
-               `
-            insert into public.submissions (user_problems_id ,  language_id,    runtime,    memory,     status,     code,     datetime) 
-                                    values (1,                  1,              10,         10,         'Accepted',     'Submit code 1', '16:54 Nov 03, 2023');
-            insert into public.submissions (user_problems_id ,  language_id,    runtime,    memory,     status,     code,     datetime)
-                                    values (1,                  2,              10,         10,         'Wrong answar',     'Submit code 2', '18:00 Nov 03, 2023');
-            `,
-          );
-     } catch (err) {
-          console.log(err);
-          process.exit(1);
-     }
-};
+// const insertSumbissions = async () => {
+//      try {
+//           await pool.query(
+//                `
+//             insert into public.submissions (user_problems_id ,  language_id,    runtime,    memory,     status,     code,     datetime) 
+//                                     values (1,                  1,              10,         10,         'Accepted',     'Submit code 1', '16:54 Nov 03, 2023');
+//             insert into public.submissions (user_problems_id ,  language_id,    runtime,    memory,     status,     code,     datetime)
+//                                     values (1,                  2,              10,         10,         'Wrong answar',     'Submit code 2', '18:00 Nov 03, 2023');
+//             `,
+//           );
+//      } catch (err) {
+//           console.log(err);
+//           process.exit(1);
+//      }
+// };
 
 const insertSemesters = async () => {
      try {
