@@ -1,4 +1,5 @@
 const pool = require('../../config/db');
+const { sortById } = require('../../utils');
 
 class TestcasesController {
     async index(req, res, next) {
@@ -16,12 +17,16 @@ class TestcasesController {
         try {
             const query = 'SELECT * FROM testcases WHERE problem_id = $1';
             const response = await pool.query(query, [problem_id]);
+
+            // Default: only return the first 3 testcases as example
+            const testcases = sortById(response.rows).slice(0, 3);
+
             if (response.rows.length > 0) {
                 return res.status(200).json({
                     message: 'Found testcases successfully',
                     code: 200,
                     body: {
-                        testcases: response.rows,
+                        testcases,
                     },
                 });
             } else {
