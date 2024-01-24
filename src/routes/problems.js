@@ -46,31 +46,9 @@ const problemsService = require('../app/services/ProblemsService');
  *                     body:
  *                       type: array
  *                       items:
- *                          type: object
- *                          properties:
- *                            id: 
- *                               type: integer
- *                            title: 
- *                               type: string
- *                            description: 
- *                               type: string
- *                            name: 
- *                               type: string
- *                            status: 
- *                               type: string
- *                            user_id: 
- *                               type: integer
- *               example:
- *                  message: Get problems successfully
- *                  code: 200
- *                  body:
- *                      - id: 1
- *                        title: Add Two Numbers
- *                        description: Problem Description
- *                        name: Easy
- *                        status: Todo
- *                        user_id: 1
- *                          
+ *                          allOf:
+ *                              - $ref: '#/components/schemas/Id'
+ *                              - $ref: '#/components/schemas/FilteredProblem'                        
  *       '500':
  *         description: Internal Server Error
  */

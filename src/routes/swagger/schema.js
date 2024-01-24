@@ -162,6 +162,25 @@
  *                      type: string
  *                example:
  *                  level_name: Easy
+ *      FilteredProblem:
+ *          type: object
+ *          properties:
+ *              title: 
+ *                 type: string
+ *              description: 
+ *                 type: string
+ *              name: 
+ *                 type: string
+ *              status: 
+ *                 type: string
+ *              user_id: 
+ *                 type: integer
+ *          example:
+ *              title: Add Two Numbers
+ *              description: Problem Description
+ *              name: Easy
+ *              status: Todo
+ *              user_id: 1
  *      Testcase:
  *          allOf:
  *              - properties:
