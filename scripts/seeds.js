@@ -1,21 +1,27 @@
 const pool = require('../src/config/db');
 
 const insertUsers = async () => {
-    try {
-        await pool.query(`
-        INSERT INTO public.users(email, "password", name, avatar, provider, role)
-        VALUES('kane.ly@digibank.vn', 'IjEyMzQ1NiI=', 'Thanh Hùng', 'https://kenh14cdn.com/203336854389633024/2023/8/9/photo-6-1691581011481133485486.jpg', 'manual', 0);
-        INSERT INTO public.users(email, "password", name, avatar, provider, role)
-        VALUES('thanhhung2705@gmail.com', 'IjEyMzQ1NiI=', 'Thanh Hùng', 'https://kenh14cdn.com/203336854389633024/2023/8/9/photo-6-1691581011481133485486.jpg', 'manual', 0);`);
-    } catch (err) {
-        console.log(err);
-        process.exit(1);
-    }
+     try {
+          await pool.query(`
+          INSERT INTO public.users (email,"password","name",avatar,"role",provider) VALUES
+	 ('thanhhung2705@gmail.com','IjEyMzQ1NiI=','Thanh Hùng','https://kenh14cdn.com/203336854389633024/2023/8/9/photo-6-1691581011481133485486.jpg','admin','manual'),
+	 ('loc.ta2020@hcmut.edu.vn','IjEyMzQ1NiI=','Đắc Lộc','','admin','manual'),
+	 ('nguyen.truong@hcmut.edu.vn','IjEyMzQ1NiI=','Khôi Nguyên','','admin','manual'),
+	 ('useremail0@gmail.com','IjEyMzQ1NiI=','User 0','','admin','manual'),
+	 ('useremail1@gmail.com','IjEyMzQ1NiI=','User 1','','teacher','manual'),
+	 ('useremail2@gmail.com','IjEyMzQ1NiI=','User 2','','student','manual'),
+	 ('useremail3@gmail.com','IjEyMzQ1NiI=','User 3','','normal','manual');
+
+          `);
+     } catch (err) {
+          console.log(err);
+          process.exit(1);
+     }
 };
 
 const insertTestCases = async () => {
-    try {
-        await pool.query(`
+     try {
+          await pool.query(`
         INSERT INTO public.testcases (problem_id,"input","output") VALUES
         (7,'2','TRUE'),
         (1,'"babad"','bab'),
@@ -1169,987 +1175,920 @@ const insertTestCases = async () => {
    INSERT INTO public.testcases (problem_id,"input","output") VALUES
         (10,'2790','MMDCCXC');
         `);
-    } catch (err) {
-        console.log(err);
-        process.exit(1);
-    }
+     } catch (err) {
+          console.log(err);
+          process.exit(1);
+     }
 };
 
 const insertLanguages = async () => {
-    try {
-        await pool.query(`
-            insert into public."languages" ("name") 
-                                    values ('python');
-            insert into public."languages" ("name") 
-                                    values ('cpp');
+     try {
+          await pool.query(`
+          INSERT INTO public.languages ("name") VALUES
+	 ('python'),
+	 ('cpp');
             `);
-    } catch (err) {
-        console.log(err);
-        process.exit(1);
-    }
+     } catch (err) {
+          console.log(err);
+          process.exit(1);
+     }
 };
 
 const insertProblemLanguages = async () => {
-    try {
-        await pool.query(`
-        INSERT INTO public.problem_languages (problem_id,language_id,initial_code,solution_code,full_code) VALUES
-        (1,1,'class Solution:
-       def longestPalindrome(self, s: str) -> str:
-           ','class Solution:
-       def longestPalindrome(self, s: str) -> str:
-           def expand(i, j):
-               left = i
-               right = j
-               
-               while left >= 0 and right < len(s) and s[left] == s[right]:
-                   left -= 1
-                   right += 1
-                   
-               return right - left - 1
-           
-           ans = [0, 0]
-   
-           for i in range(len(s)):
-               odd_length = expand(i, i)
-               if odd_length > ans[1] - ans[0] + 1:
-                   dist = odd_length // 2
-                   ans = [i - dist, i + dist]
-   
-               even_length = expand(i, i + 1)
-               if even_length > ans[1] - ans[0] + 1:
-                   dist = (even_length // 2) - 1
-                   ans = [i - dist, i + 1 + dist]
-                   
-           i, j = ans
-           return s[i:j + 1]
-   ','{{ANSWER}}
-   
-   if __name__ == "__main__":
-       solution = Solution()
-       s = input()[1:-1]
-       print(solution.longestPalindrome(s))'),
-        (1,2,'class Solution {
-   public:
-       string longestPalindrome(string s) {
-           
-       }
-   };','class Solution
-   {
-   public:
-       string longestPalindrome(string s)
-       {
-           int len = s.length();
-           auto expand = [&](int i, int j)
-           {
-               int left = i;
-               int right = j;
-   
-               while (left >= 0 && right < len && s[left] == s[right])
-               {
-                   left--;
-                   right++;
-               }
-   
-               return right - left - 1;
-           };
-   
-           pair<int, int> ans = {0, 0};
-   
-           for (int i = 0; i < len; i++)
-           {
-               int odd_length = expand(i, i);
-               if (odd_length > ans.second - ans.first + 1)
-               {
-                   int dist = odd_length / 2;
-                   ans = {i - dist, i + dist};
-               }
-   
-               int even_length = expand(i, i + 1);
-               if (even_length > ans.second - ans.first + 1)
-               {
-                   int dist = (even_length / 2) - 1;
-                   ans = {i - dist, i + 1 + dist};
-               }
-           }
-   
-           int i = ans.first;
-           int j = ans.second;
-           return s.substr(i, j - i + 1);
-       }
-   };','#include <iostream>
-   #include <string>
-   
-   using namespace std;
-   
-   {{ANSWER}}
-   
-   int main() {
-       Solution solution;
-       string s;
-       cin >> s;
-       s = s.substr(1, s.length() - 2);
-       cout << solution.longestPalindrome(s) << endl;
-       return 0;
-   }'),
-        (3,1,'class Solution:
-       def lengthOfLongestSubstring(self, s: str) -> int:
-           ','class Solution:
-       def lengthOfLongestSubstring(self, s: str) -> int:
-           start = result = 0
-           seen = {}
-           for i, letter in enumerate(s):
-               if seen.get(letter, -1) >= start:
-                   start = seen[letter] + 1
-               result = max(result, i - start + 1)
-               seen[letter] = i
-           return result','{{ANSWER}}
-       
-   if __name__ == "__main__":
-       solution = Solution()
-       s = input()[1:-1]
-       print(solution.lengthOfLongestSubstring(s))'),
-        (3,2,'class Solution {
-   public:
-       int lengthOfLongestSubstring(string s) {
-           
-       }
-   };','class Solution
-   {
-   public:
-       int lengthOfLongestSubstring(string s)
-       {
-           int len = s.length();
-           int start = 0;
-           int result = 0;
-           unordered_map<char, int> seen;
-   
-           for (int i = 0; i < len; i++)
-           {
-               char letter = s[i];
-   
-               if (seen.find(letter) != seen.end() && seen[letter] >= start)
-               {
-                   start = seen[letter] + 1;
-               }
-   
-               result = max(result, i - start + 1);
-               seen[letter] = i;
-           }
-   
-           return result;
-       }
-   };','#include <algorithm>
-   #include <iostream>
-   #include <string>
-   #include <unordered_map>
-   
-   using namespace std;
-   
-   {{ANSWER}}
-   
-   int main() {
-       Solution solution;
-       string s;
-       cin >> s;
-       s = s.substr(1, s.length() - 2);
-       cout << solution.lengthOfLongestSubstring(s) << endl;
-       return 0;
-   }'),
-        (4,1,'class Solution:
-       def convert(self, s: str, numRows: int) -> str:
-           ','class Solution:
-       def convert(self, s, numRows):
-           if numRows == 1 or numRows >= len(s):
-               return s
-   
-           L = [''''] * numRows
-           index, step = 0, 1
-   
-           for x in s:
-               L[index] += x
-               if index == 0:
-                   step = 1
-               elif index == numRows -1:
-                   step = -1
-               index += step
-   
-           return ''''.join(L)','{{ANSWER}}
-   
-   if __name__ == "__main__":
-       solution = Solution()
-       s = input()[1:-1]
-       numRows = input()
-       print(solution.convert(s, int(numRows)))'),
-        (4,2,'class Solution {
-   public:
-       string convert(string s, int numRows) {
-           
-       }
-   };','class Solution
-   {
-   public:
-       string convert(string s, int numRows)
-       {
-           int len = s.length();
-           if (numRows == 1 || numRows >= len)
-           {
-               return s;
-           }
-   
-           vector<string> L(numRows, "");
-           int index = 0;
-           int step = 1;
-   
-           for (char x : s)
-           {
-               L[index] += x;
-               if (index == 0)
-               {
-                   step = 1;
-               }
-               else if (index == numRows - 1)
-               {
-                   step = -1;
-               }
-               index += step;
-           }
-   
-           string result;
-           for (const string &row : L)
-           {
-               result += row;
-           }
-   
-           return result;
-       }
-   };','#include <iostream>
-   #include <string>
-   #include <vector>
-   
-   using namespace std;
-   
-   {{ANSWER}}
-   
-   int main() {
-       Solution solution;
-       string s;
-       cin >> s;
-       s = s.substr(1, s.length() - 2);
-       int numRows;
-       cin >> numRows;
-       cout << solution.convert(s, numRows) << endl;
-       return 0;
-   }'),
-        (5,1,'class Solution:
-       def reverse(self, x: int) -> int:
-           ','class Solution:
-       def reverse(self, x: int) -> int:
-           max_int = pow(2, 31)-1
-           min_int = pow(-2, 31)
-   
-           str_x = str(abs(x))
-           str_x_reversed = str_x[::-1]
-           result = int(str_x_reversed)
-           result = result * -1 if x < 0 else result
-   
-           return result if (result < max_int and result > min_int) else 0','{{ANSWER}}
-       
-   if __name__ == "__main__":
-       solution = Solution()
-       x = int(input())
-       print(solution.reverse(x))'),
-        (2,1,'class Solution:
-       def twoSum(self, nums: List[int], target: int) -> List[int]:
-           ','class Solution:
-     def twoSum(self, nums, target):
-       for i in range(len(nums)):
-         for j in range(i+1, len(nums)):
-           if nums[i] + nums[j] == target:
-             return [i, j]','from typing import List
-   
-   {{ANSWER}}
-       
-   if __name__ == "__main__":
-       solution = Solution()
-       nums = list(map(int, input().split()))
-       target = int(input())
-       print(solution.twoSum(nums, target))'),
-        (5,2,'class Solution {
-   public:
-       int reverse(int x) {
-           
-       }
-   };','class Solution
-   {
-   public:
-       int reverse(int x)
-       {
-           int max_int = pow(2, 31) - 1;
-           int min_int = pow(-2, 31);
-           long r = 0; // decleare r
-           while (x)
-           {
-               r = r * 10 + x % 10; // find remainder and add its to r
-               x = x / 10;          // Update the value of x
-           }
-           if (r > max_int || r < min_int)
-               return 0;  // check range if r is outside the range then return 0
-           return int(r); // if r in the 32 bit range then return r
-       }
-   };','#include <iostream>
-   #include <cmath>
-   #include <limits>
-   
-   using namespace std;
-   
-   {{ANSWER}}
-   
-   int main() {
-       Solution solution;
-       int x;
-       cin >> x;
-       cout << solution.reverse(x) << endl;
-       return 0;
-   }'),
-        (6,1,'class Solution:
-       def myAtoi(self, s: str) -> int:
-           ','class Solution:
-       def myAtoi(self, str: str) -> int:
-           value, state, pos, sign = 0, 0, 0, 1
-   
-           if len(str) == 0:
-               return 0
-   
-           while pos < len(str):
-               current_char = str[pos]
-               if state == 0:
-                   if current_char == " ":
-                       state = 0
-                   elif current_char == "+" or current_char == "-":
-                       state = 1
-                       sign = 1 if current_char == "+" else -1
-                   elif current_char.isdigit():
-                       state = 2
-                       value = value * 10 + int(current_char)
-                   else:
-                       return 0
-               elif state == 1:
-                   if current_char.isdigit():
-                       state = 2
-                       value = value * 10 + int(current_char)
-                   else:
-                       return 0
-               elif state == 2:
-                   if current_char.isdigit():
-                       state = 2
-                       value = value * 10 + int(current_char)
-                   else:
-                       break
-               else:
-                   return 0
-               pos += 1
-   
-           value = sign * value
-           value = min(value, 2 ** 31 - 1)
-           value = max(-(2 ** 31), value)
-   
-           return value','{{ANSWER}}
-   
-   if __name__ == "__main__":
-       solution = Solution()
-       s = input()[1:-1]
-       print(solution.myAtoi(s))');
-   INSERT INTO public.problem_languages (problem_id,language_id,initial_code,solution_code,full_code) VALUES
-        (7,2,'class Solution {
-   public:
-       bool isPalindrome(int x) {
-           
-       }
-   };','class Solution {
-   public:
-       bool isPalindrome(int x) {
-           if (x < 0) {
-               return false;
-           } else if (x >= 0 && x < 10) {
-               return true;
-           }
-   
-           int reversed_num = 0;
-           int temp = x;
-   
-           while (temp != 0) {
-               int digit = temp % 10;
-               reversed_num = reversed_num * 10 + digit;
-               temp /= 10;
-           }
-   
-           return reversed_num == x;
-       }
-   };','#include <iostream>
-   #include <string>
-   #include <algorithm>
-   
-   using namespace std;
-   
-   {{ANSWER}}
-   
-   int main() {
-       Solution solution;
-       int x;
-       cin >> x;
-       string result = solution.isPalindrome(x) == true ? "TRUE" : "FALSE";
-       cout << result << endl;
-       return 0;
-   }'),
-        (8,1,'class Solution:
-       def isMatch(self, s: str, p: str) -> bool:
-           ','class Solution:
-       def isMatch(self, s: str, p: str) -> bool:
-           i, j = len(s) - 1, len(p) - 1
-           return self.backtrack({}, s, p, i, j)
-   
-       def backtrack(self, cache, s, p, i, j):
-           key = (i, j)
-           if key in cache:
-               return cache[key]
-   
-           if i == -1 and j == -1:
-               cache[key] = True
-               return True
-   
-           if i != -1 and j == -1:
-               cache[key] = False
-               return cache[key]
-   
-           if i == -1 and p[j] == ''*'':
-               k = j
-               while k != -1 and p[k] == ''*'':
-                   k -= 2
-               
-               if k == -1:
-                   cache[key] = True
-                   return cache[key]
-               
-               cache[key] = False
-               return cache[key]
-           
-           if i == -1 and p[j] != ''*'':
-               cache[key] = False
-               return cache[key]
-   
-           if p[j] == ''*'':
-               if self.backtrack(cache, s, p, i, j - 2):
-                   cache[key] = True
-                   return cache[key]
-               
-               if p[j - 1] == s[i] or p[j - 1] == ''.'':
-                   if self.backtrack(cache, s, p, i - 1, j):
-                       cache[key] = True
-                       return cache[key]
-           
-           if p[j] == ''.'' or s[i] == p[j]:
-               if self.backtrack(cache, s, p, i - 1, j - 1):
-                   cache[key] = True
-                   return cache[key]
-   
-           cache[key] = False
-           return cache[key]','{{ANSWER}}
-   
-   if __name__ == "__main__":
-       solution = Solution()
-       s = input()[1:-1]
-       p = input()[1:-1]
-       print(str(solution.isMatch(s, p)).upper())'),
-        (8,2,'class Solution {
-   public:
-       bool isMatch(string s, string p) {
-           
-       }
-   };','class Solution {
-   public:
-       bool isMatch(string s, string p) {
-           int i = s.length() - 1;
-           int j = p.length() - 1;
-           unordered_map<string, bool> cache;
-           return backtrack(cache, s, p, i, j);
-       }
-   
-   private:
-       bool backtrack(unordered_map<string, bool>& cache, string s, string p, int i, int j) {
-           string key = to_string(i) + "," + to_string(j);
-           if (cache.count(key)) {
-               return cache[key];
-           }
-   
-           if (i == -1 && j == -1) {
-               cache[key] = true;
-               return true;
-           }
-   
-           if (i != -1 && j == -1) {
-               cache[key] = false;
-               return false;
-           }
-   
-           if (i == -1 && p[j] == ''*'') {
-               int k = j;
-               while (k != -1 && p[k] == ''*'') {
-                   k -= 2;
-               }
-   
-               if (k == -1) {
-                   cache[key] = true;
-                   return true;
-               }
-   
-               cache[key] = false;
-               return false;
-           }
-   
-           if (i == -1 && p[j] != ''*'') {
-               cache[key] = false;
-               return false;
-           }
-   
-           if (p[j] == ''*'') {
-               if (backtrack(cache, s, p, i, j - 2)) {
-                   cache[key] = true;
-                   return true;
-               }
-   
-               if (p[j - 1] == s[i] || p[j - 1] == ''.'') {
-                   if (backtrack(cache, s, p, i - 1, j)) {
-                       cache[key] = true;
-                       return true;
-                   }
-               }
-           }
-   
-           if (p[j] == ''.'' || s[i] == p[j]) {
-               if (backtrack(cache, s, p, i - 1, j - 1)) {
-                   cache[key] = true;
-                   return true;
-               }
-           }
-   
-           cache[key] = false;
-           return false;
-       }
-   };','#include <iostream>
-   #include <string>
-   #include <unordered_map>
-   
-   using namespace std;
-   
-   {{ANSWER}}
-   
-   int main() {
-       Solution solution;
-       string s, p;
-       getline(cin, s);
-       getline(cin, p);
-       string result = solution.isMatch(s, p) == true ? "TRUE" : "FALSE";
-       cout << result << endl;
-       return 0;
-   }'),
-        (9,1,'class Solution:
-       def maxArea(self, height: List[int]) -> int:
-           ','class Solution:
-       def maxArea(self, height: List[int]) -> int:
-           left = 0
-           right = len(height) - 1
-           maxArea = 0
-   
-           while left < right:
-               currentArea = min(height[left], height[right]) * (right - left)
-               maxArea = max(maxArea, currentArea)
-   
-               if height[left] < height[right]:
-                   left += 1
-               else:
-                   right -= 1
-   
-           return maxArea','from typing import List
-   
-   {{ANSWER}}
-   
-   if __name__ == "__main__":
-       solution = Solution()
-       # n = input()
-       height = list(map(int, input().split()))
-       print(solution.maxArea(height))'),
-        (9,2,'class Solution {
-   public:
-       int maxArea(vector<int>& height) {
-           
-       }
-   };','class Solution {
-   public:
-       int maxArea(vector<int>& height) {
-           int left = 0;
-           int right = height.size() - 1;
-           int maxArea = 0;
-   
-           while (left < right) {
-               int currentArea = min(height[left], height[right]) * (right - left);
-               maxArea = max(maxArea, currentArea);
-   
-               if (height[left] < height[right]) {
-                   left++;
-               } else {
-                   right--;
-               }
-           }
-   
-           return maxArea;
-       }
-   };','#include <iostream>
-   #include <vector>
-   #include <algorithm>
-   
-   using namespace std;
-   
-   {{ANSWER}}
-   
-   int main() {
-       Solution solution;
-       vector<int> height;
-       int num;
-       while (cin >> num) {
-           height.push_back(num);
-       }
-       cout << solution.maxArea(height) << endl;
-       return 0;
-   }'),
-        (7,1,'class Solution:
-       def isPalindrome(self, x: int) -> bool:
-           ','class Solution:
-       def isPalindrome(self, x: int) -> bool:
-           if x < 0:
-               return False
-   
-           reversed_num = 0
-           temp = x
-   
-           while temp != 0:
-               digit = temp % 10
-               reversed_num = reversed_num * 10 + digit
-               temp //= 10
-   
-           return reversed_num == x','{{ANSWER}}
-       
-   if __name__ == "__main__":
-       solution = Solution()
-       x = int(input())
-       print(str(solution.isPalindrome(x)).upper())'),
-        (10,1,'class Solution:
-       def intToRoman(self, num: int) -> str:
-           ','class Solution:
-       def intToRoman(self, num: int) -> str:
-           num_map = {
-               1: "I",
-               5: "V",    4: "IV",
-               10: "X",   9: "IX",
-               50: "L",   40: "XL",
-               100: "C",  90: "XC",
-               500: "D",  400: "CD",
-               1000: "M", 900: "CM",
-           }
-           
-           r = ''''
-           
-           for n in [1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1]:
-               while n <= num:
-                   r += num_map[n]
-                   num-=n
-           return r','{{ANSWER}}
-   
-   if __name__ == "__main__":
-       solution = Solution()
-       num = int(input())
-       print(solution.intToRoman(num))'),
-        (10,2,'class Solution {
-   public:
-       string intToRoman(int num) {
-           
-       }
-   };','class Solution {
-   public:
-       string intToRoman(int num) {
-           unordered_map<int, string> numMap = {
-               {1, "I"},
-               {4, "IV"}, {5, "V"},
-               {9, "IX"}, {10, "X"},
-               {40, "XL"}, {50, "L"},
-               {90, "XC"}, {100, "C"},
-               {400, "CD"}, {500, "D"},
-               {900, "CM"}, {1000, "M"}
-           };
-   
-           string result = "";
-   
-           for (int n : {1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1}) {
-               while (n <= num) {
-                   result += numMap[n];
-                   num -= n;
-               }
-           }
-   
-           return result;
-       }
-   };
-   ','#include <iostream>
-   #include <string>
-   #include <unordered_map>
-   
-   using namespace std;
-   
-   {{ANSWER}}
-   
-   int main() {
-       Solution solution;
-       int num;
-       cin >> num;
-       cout << solution.intToRoman(num) << endl;
-       return 0;
-   }'),
-        (2,2,'class Solution {
-   public:
-       vector<int> twoSum(vector<int>& nums, int target) {
-           
-       }
-   };
-   ','class Solution
-   {
-   public:
-       vector<int> twoSum(vector<int> &nums, int target)
-       {
-           int n = nums.size();
-           for (int i = 0; i < n - 1; ++i)
-           {
-               for (int j = i + 1; j < n; ++j)
-               {
-                   if (nums[i] + nums[j] == target)
-                       return {i, j};
-               }
-           }
-           return {};
-       }
-   };','#include <iostream>
-   #include <unordered_map>
-   #include <vector>
-   
-   using namespace std;
-   
-   {{ANSWER}}
-   
-   int main() {
-       Solution solution;
-       vector<int> nums;
-       int num;
-       while (cin >> num) {
-           nums.push_back(num);
-           if (cin.get() == ''\n'') {
-               break;
-           }
-       }
-       int target;
-       cin >> target;
-       vector<int> result = solution.twoSum(nums, target);
-       cout << "[" << result[0] << ", " << result[1] << "]" << endl;
-       return 0;
-   }'),
-        (6,2,'class Solution {
-   public:
-       int myAtoi(string s) {
-           
-       }
-   };','class Solution
-   {
-   public:
-       int myAtoi(string str)
-       {
-           int len = str.length();
-           int value = 0;
-           int state = 0;
-           int pos = 0;
-           int sign = 1;
-   
-           if (len == 0)
-           {
-               return 0;
-           }
-   
-           while (pos < len)
-           {
-               char current_char = str[pos];
-               if (state == 0)
-               {
-                   if (current_char == '' '')
-                   {
-                       state = 0;
-                   }
-                   else if (current_char == ''+'' || current_char == ''-'')
-                   {
-                       state = 1;
-                       sign = (current_char == ''+'') ? 1 : -1;
-                   }
-                   else if (isdigit(current_char))
-                   {
-                       state = 2;
-                       value = value * 10 + (current_char - ''0'');
-                   }
-                   else
-                   {
-                       return 0;
-                   }
-               }
-               else if (state == 1)
-               {
-                   if (isdigit(current_char))
-                   {
-                       state = 2;
-                       value = value * 10 + (current_char - ''0'');
-                   }
-                   else
-                   {
-                       return 0;
-                   }
-               }
-               else if (state == 2)
-               {
-                   if (isdigit(current_char))
-                   {
-                       state = 2;
-                       value = value * 10 + (current_char - ''0'');
-                   }
-                   else
-                   {
-                       break;
-                   }
-               }
-               else
-               {
-                   return 0;
-               }
-               pos++;
-           }
-   
-           value = sign * value;
-           value = min(value, static_cast<int>(pow(2, 31) - 1));
-           value = max(static_cast<int>(-(pow(2, 31))), value);
-   
-           return value;
-       }
-   };','#include <iostream>
-   #include <string>
-   #include <limits>
-   #include <cmath>
-   
-   using namespace std;
-   
-   {{ANSWER}}
-   
-   int main() {
-       Solution solution;
-       string s;
-       cin >> s;
-       s = s.substr(1, s.length() - 2);
-       cout << solution.myAtoi(s) << endl;
-       return 0;
-   }');   
-        `);
-    } catch (err) {
-        console.log(err);
-        process.exit(1);
+     try {
+          await pool.query(`
+          INSERT INTO public.problem_languages (problem_id,language_id,initial_code,solution_code,full_code) VALUES
+	 (1,1,'class Solution:
+    def longestPalindrome(self, s: str) -> str:
+        ','class Solution:
+    def longestPalindrome(self, s: str) -> str:
+        def expand(i, j):
+            left = i
+            right = j
+            
+            while left >= 0 and right < len(s) and s[left] == s[right]:
+                left -= 1
+                right += 1
+                
+            return right - left - 1
+        
+        ans = [0, 0]
+
+        for i in range(len(s)):
+            odd_length = expand(i, i)
+            if odd_length > ans[1] - ans[0] + 1:
+                dist = odd_length // 2
+                ans = [i - dist, i + dist]
+
+            even_length = expand(i, i + 1)
+            if even_length > ans[1] - ans[0] + 1:
+                dist = (even_length // 2) - 1
+                ans = [i - dist, i + 1 + dist]
+                
+        i, j = ans
+        return s[i:j + 1]
+','{{ANSWER}}
+
+if __name__ == "__main__":
+    solution = Solution()
+    s = input()[1:-1]
+    print(solution.longestPalindrome(s))'),
+	 (1,2,'class Solution {
+public:
+    string longestPalindrome(string s) {
+        
     }
+};','class Solution
+{
+public:
+    string longestPalindrome(string s)
+    {
+        int len = s.length();
+        auto expand = [&](int i, int j)
+        {
+            int left = i;
+            int right = j;
+
+            while (left >= 0 && right < len && s[left] == s[right])
+            {
+                left--;
+                right++;
+            }
+
+            return right - left - 1;
+        };
+
+        pair<int, int> ans = {0, 0};
+
+        for (int i = 0; i < len; i++)
+        {
+            int odd_length = expand(i, i);
+            if (odd_length > ans.second - ans.first + 1)
+            {
+                int dist = odd_length / 2;
+                ans = {i - dist, i + dist};
+            }
+
+            int even_length = expand(i, i + 1);
+            if (even_length > ans.second - ans.first + 1)
+            {
+                int dist = (even_length / 2) - 1;
+                ans = {i - dist, i + 1 + dist};
+            }
+        }
+
+        int i = ans.first;
+        int j = ans.second;
+        return s.substr(i, j - i + 1);
+    }
+};','#include <iostream>
+#include <string>
+
+using namespace std;
+
+{{ANSWER}}
+
+int main() {
+    Solution solution;
+    string s;
+    cin >> s;
+    s = s.substr(1, s.length() - 2);
+    cout << solution.longestPalindrome(s) << endl;
+    return 0;
+}'),
+	 (3,1,'class Solution:
+    def lengthOfLongestSubstring(self, s: str) -> int:
+        ','class Solution:
+    def lengthOfLongestSubstring(self, s: str) -> int:
+        start = result = 0
+        seen = {}
+        for i, letter in enumerate(s):
+            if seen.get(letter, -1) >= start:
+                start = seen[letter] + 1
+            result = max(result, i - start + 1)
+            seen[letter] = i
+        return result','{{ANSWER}}
+    
+if __name__ == "__main__":
+    solution = Solution()
+    s = input()[1:-1]
+    print(solution.lengthOfLongestSubstring(s))'),
+	 (3,2,'class Solution {
+public:
+    int lengthOfLongestSubstring(string s) {
+        
+    }
+};','class Solution
+{
+public:
+    int lengthOfLongestSubstring(string s)
+    {
+        int len = s.length();
+        int start = 0;
+        int result = 0;
+        unordered_map<char, int> seen;
+
+        for (int i = 0; i < len; i++)
+        {
+            char letter = s[i];
+
+            if (seen.find(letter) != seen.end() && seen[letter] >= start)
+            {
+                start = seen[letter] + 1;
+            }
+
+            result = max(result, i - start + 1);
+            seen[letter] = i;
+        }
+
+        return result;
+    }
+};','#include <algorithm>
+#include <iostream>
+#include <string>
+#include <unordered_map>
+
+using namespace std;
+
+{{ANSWER}}
+
+int main() {
+    Solution solution;
+    string s;
+    cin >> s;
+    s = s.substr(1, s.length() - 2);
+    cout << solution.lengthOfLongestSubstring(s) << endl;
+    return 0;
+}'),
+	 (4,1,'class Solution:
+    def convert(self, s: str, numRows: int) -> str:
+        ','class Solution:
+    def convert(self, s, numRows):
+        if numRows == 1 or numRows >= len(s):
+            return s
+
+        L = [''''] * numRows
+        index, step = 0, 1
+
+        for x in s:
+            L[index] += x
+            if index == 0:
+                step = 1
+            elif index == numRows -1:
+                step = -1
+            index += step
+
+        return ''''.join(L)','{{ANSWER}}
+
+if __name__ == "__main__":
+    solution = Solution()
+    s = input()[1:-1]
+    numRows = input()
+    print(solution.convert(s, int(numRows)))'),
+	 (4,2,'class Solution {
+public:
+    string convert(string s, int numRows) {
+        
+    }
+};','class Solution
+{
+public:
+    string convert(string s, int numRows)
+    {
+        int len = s.length();
+        if (numRows == 1 || numRows >= len)
+        {
+            return s;
+        }
+
+        vector<string> L(numRows, "");
+        int index = 0;
+        int step = 1;
+
+        for (char x : s)
+        {
+            L[index] += x;
+            if (index == 0)
+            {
+                step = 1;
+            }
+            else if (index == numRows - 1)
+            {
+                step = -1;
+            }
+            index += step;
+        }
+
+        string result;
+        for (const string &row : L)
+        {
+            result += row;
+        }
+
+        return result;
+    }
+};','#include <iostream>
+#include <string>
+#include <vector>
+
+using namespace std;
+
+{{ANSWER}}
+
+int main() {
+    Solution solution;
+    string s;
+    cin >> s;
+    s = s.substr(1, s.length() - 2);
+    int numRows;
+    cin >> numRows;
+    cout << solution.convert(s, numRows) << endl;
+    return 0;
+}'),
+	 (5,1,'class Solution:
+    def reverse(self, x: int) -> int:
+        ','class Solution:
+    def reverse(self, x: int) -> int:
+        max_int = pow(2, 31)-1
+        min_int = pow(-2, 31)
+
+        str_x = str(abs(x))
+        str_x_reversed = str_x[::-1]
+        result = int(str_x_reversed)
+        result = result * -1 if x < 0 else result
+
+        return result if (result < max_int and result > min_int) else 0','{{ANSWER}}
+    
+if __name__ == "__main__":
+    solution = Solution()
+    x = int(input())
+    print(solution.reverse(x))'),
+	 (2,1,'class Solution:
+    def twoSum(self, nums: List[int], target: int) -> List[int]:
+        ','class Solution:
+  def twoSum(self, nums, target):
+    for i in range(len(nums)):
+      for j in range(i+1, len(nums)):
+        if nums[i] + nums[j] == target:
+          return [i, j]','from typing import List
+
+{{ANSWER}}
+    
+if __name__ == "__main__":
+    solution = Solution()
+    nums = list(map(int, input().split()))
+    target = int(input())
+    print(solution.twoSum(nums, target))'),
+	 (5,2,'class Solution {
+public:
+    int reverse(int x) {
+        
+    }
+};','class Solution
+{
+public:
+    int reverse(int x)
+    {
+        int max_int = pow(2, 31) - 1;
+        int min_int = pow(-2, 31);
+        long r = 0; // decleare r
+        while (x)
+        {
+            r = r * 10 + x % 10; // find remainder and add its to r
+            x = x / 10;          // Update the value of x
+        }
+        if (r > max_int || r < min_int)
+            return 0;  // check range if r is outside the range then return 0
+        return int(r); // if r in the 32 bit range then return r
+    }
+};','#include <iostream>
+#include <cmath>
+#include <limits>
+
+using namespace std;
+
+{{ANSWER}}
+
+int main() {
+    Solution solution;
+    int x;
+    cin >> x;
+    cout << solution.reverse(x) << endl;
+    return 0;
+}'),
+	 (6,1,'class Solution:
+    def myAtoi(self, s: str) -> int:
+        ','class Solution:
+    def myAtoi(self, str: str) -> int:
+        value, state, pos, sign = 0, 0, 0, 1
+
+        if len(str) == 0:
+            return 0
+
+        while pos < len(str):
+            current_char = str[pos]
+            if state == 0:
+                if current_char == " ":
+                    state = 0
+                elif current_char == "+" or current_char == "-":
+                    state = 1
+                    sign = 1 if current_char == "+" else -1
+                elif current_char.isdigit():
+                    state = 2
+                    value = value * 10 + int(current_char)
+                else:
+                    return 0
+            elif state == 1:
+                if current_char.isdigit():
+                    state = 2
+                    value = value * 10 + int(current_char)
+                else:
+                    return 0
+            elif state == 2:
+                if current_char.isdigit():
+                    state = 2
+                    value = value * 10 + int(current_char)
+                else:
+                    break
+            else:
+                return 0
+            pos += 1
+
+        value = sign * value
+        value = min(value, 2 ** 31 - 1)
+        value = max(-(2 ** 31), value)
+
+        return value','{{ANSWER}}
+
+if __name__ == "__main__":
+    solution = Solution()
+    s = input()[1:-1]
+    print(solution.myAtoi(s))');
+INSERT INTO public.problem_languages (problem_id,language_id,initial_code,solution_code,full_code) VALUES
+	 (7,2,'class Solution {
+public:
+    bool isPalindrome(int x) {
+        
+    }
+};','class Solution {
+public:
+    bool isPalindrome(int x) {
+        if (x < 0) {
+            return false;
+        } else if (x >= 0 && x < 10) {
+            return true;
+        }
+
+        int reversed_num = 0;
+        int temp = x;
+
+        while (temp != 0) {
+            int digit = temp % 10;
+            reversed_num = reversed_num * 10 + digit;
+            temp /= 10;
+        }
+
+        return reversed_num == x;
+    }
+};','#include <iostream>
+#include <string>
+#include <algorithm>
+
+using namespace std;
+
+{{ANSWER}}
+
+int main() {
+    Solution solution;
+    int x;
+    cin >> x;
+    string result = solution.isPalindrome(x) == true ? "TRUE" : "FALSE";
+    cout << result << endl;
+    return 0;
+}'),
+	 (8,1,'class Solution:
+    def isMatch(self, s: str, p: str) -> bool:
+        ','class Solution:
+    def isMatch(self, s: str, p: str) -> bool:
+        i, j = len(s) - 1, len(p) - 1
+        return self.backtrack({}, s, p, i, j)
+
+    def backtrack(self, cache, s, p, i, j):
+        key = (i, j)
+        if key in cache:
+            return cache[key]
+
+        if i == -1 and j == -1:
+            cache[key] = True
+            return True
+
+        if i != -1 and j == -1:
+            cache[key] = False
+            return cache[key]
+
+        if i == -1 and p[j] == ''*'':
+            k = j
+            while k != -1 and p[k] == ''*'':
+                k -= 2
+            
+            if k == -1:
+                cache[key] = True
+                return cache[key]
+            
+            cache[key] = False
+            return cache[key]
+        
+        if i == -1 and p[j] != ''*'':
+            cache[key] = False
+            return cache[key]
+
+        if p[j] == ''*'':
+            if self.backtrack(cache, s, p, i, j - 2):
+                cache[key] = True
+                return cache[key]
+            
+            if p[j - 1] == s[i] or p[j - 1] == ''.'':
+                if self.backtrack(cache, s, p, i - 1, j):
+                    cache[key] = True
+                    return cache[key]
+        
+        if p[j] == ''.'' or s[i] == p[j]:
+            if self.backtrack(cache, s, p, i - 1, j - 1):
+                cache[key] = True
+                return cache[key]
+
+        cache[key] = False
+        return cache[key]','{{ANSWER}}
+
+if __name__ == "__main__":
+    solution = Solution()
+    s = input()[1:-1]
+    p = input()[1:-1]
+    print(str(solution.isMatch(s, p)).upper())'),
+	 (8,2,'class Solution {
+public:
+    bool isMatch(string s, string p) {
+        
+    }
+};','class Solution {
+public:
+    bool isMatch(string s, string p) {
+        int i = s.length() - 1;
+        int j = p.length() - 1;
+        unordered_map<string, bool> cache;
+        return backtrack(cache, s, p, i, j);
+    }
+
+private:
+    bool backtrack(unordered_map<string, bool>& cache, string s, string p, int i, int j) {
+        string key = to_string(i) + "," + to_string(j);
+        if (cache.count(key)) {
+            return cache[key];
+        }
+
+        if (i == -1 && j == -1) {
+            cache[key] = true;
+            return true;
+        }
+
+        if (i != -1 && j == -1) {
+            cache[key] = false;
+            return false;
+        }
+
+        if (i == -1 && p[j] == ''*'') {
+            int k = j;
+            while (k != -1 && p[k] == ''*'') {
+                k -= 2;
+            }
+
+            if (k == -1) {
+                cache[key] = true;
+                return true;
+            }
+
+            cache[key] = false;
+            return false;
+        }
+
+        if (i == -1 && p[j] != ''*'') {
+            cache[key] = false;
+            return false;
+        }
+
+        if (p[j] == ''*'') {
+            if (backtrack(cache, s, p, i, j - 2)) {
+                cache[key] = true;
+                return true;
+            }
+
+            if (p[j - 1] == s[i] || p[j - 1] == ''.'') {
+                if (backtrack(cache, s, p, i - 1, j)) {
+                    cache[key] = true;
+                    return true;
+                }
+            }
+        }
+
+        if (p[j] == ''.'' || s[i] == p[j]) {
+            if (backtrack(cache, s, p, i - 1, j - 1)) {
+                cache[key] = true;
+                return true;
+            }
+        }
+
+        cache[key] = false;
+        return false;
+    }
+};','#include <iostream>
+#include <string>
+#include <unordered_map>
+
+using namespace std;
+
+{{ANSWER}}
+
+int main() {
+    Solution solution;
+    string s, p;
+    getline(cin, s);
+    getline(cin, p);
+    string result = solution.isMatch(s, p) == true ? "TRUE" : "FALSE";
+    cout << result << endl;
+    return 0;
+}'),
+	 (9,1,'class Solution:
+    def maxArea(self, height: List[int]) -> int:
+        ','class Solution:
+    def maxArea(self, height: List[int]) -> int:
+        left = 0
+        right = len(height) - 1
+        maxArea = 0
+
+        while left < right:
+            currentArea = min(height[left], height[right]) * (right - left)
+            maxArea = max(maxArea, currentArea)
+
+            if height[left] < height[right]:
+                left += 1
+            else:
+                right -= 1
+
+        return maxArea','from typing import List
+
+{{ANSWER}}
+
+if __name__ == "__main__":
+    solution = Solution()
+    # n = input()
+    height = list(map(int, input().split()))
+    print(solution.maxArea(height))'),
+	 (9,2,'class Solution {
+public:
+    int maxArea(vector<int>& height) {
+        
+    }
+};','class Solution {
+public:
+    int maxArea(vector<int>& height) {
+        int left = 0;
+        int right = height.size() - 1;
+        int maxArea = 0;
+
+        while (left < right) {
+            int currentArea = min(height[left], height[right]) * (right - left);
+            maxArea = max(maxArea, currentArea);
+
+            if (height[left] < height[right]) {
+                left++;
+            } else {
+                right--;
+            }
+        }
+
+        return maxArea;
+    }
+};','#include <iostream>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+{{ANSWER}}
+
+int main() {
+    Solution solution;
+    vector<int> height;
+    int num;
+    while (cin >> num) {
+        height.push_back(num);
+    }
+    cout << solution.maxArea(height) << endl;
+    return 0;
+}'),
+	 (7,1,'class Solution:
+    def isPalindrome(self, x: int) -> bool:
+        ','class Solution:
+    def isPalindrome(self, x: int) -> bool:
+        if x < 0:
+            return False
+
+        reversed_num = 0
+        temp = x
+
+        while temp != 0:
+            digit = temp % 10
+            reversed_num = reversed_num * 10 + digit
+            temp //= 10
+
+        return reversed_num == x','{{ANSWER}}
+    
+if __name__ == "__main__":
+    solution = Solution()
+    x = int(input())
+    print(str(solution.isPalindrome(x)).upper())'),
+	 (10,1,'class Solution:
+    def intToRoman(self, num: int) -> str:
+        ','class Solution:
+    def intToRoman(self, num: int) -> str:
+        num_map = {
+            1: "I",
+            5: "V",    4: "IV",
+            10: "X",   9: "IX",
+            50: "L",   40: "XL",
+            100: "C",  90: "XC",
+            500: "D",  400: "CD",
+            1000: "M", 900: "CM",
+        }
+        
+        r = ''''
+        
+        for n in [1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1]:
+            while n <= num:
+                r += num_map[n]
+                num-=n
+        return r','{{ANSWER}}
+
+if __name__ == "__main__":
+    solution = Solution()
+    num = int(input())
+    print(solution.intToRoman(num))'),
+	 (10,2,'class Solution {
+public:
+    string intToRoman(int num) {
+        
+    }
+};','class Solution {
+public:
+    string intToRoman(int num) {
+        unordered_map<int, string> numMap = {
+            {1, "I"},
+            {4, "IV"}, {5, "V"},
+            {9, "IX"}, {10, "X"},
+            {40, "XL"}, {50, "L"},
+            {90, "XC"}, {100, "C"},
+            {400, "CD"}, {500, "D"},
+            {900, "CM"}, {1000, "M"}
+        };
+
+        string result = "";
+
+        for (int n : {1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1}) {
+            while (n <= num) {
+                result += numMap[n];
+                num -= n;
+            }
+        }
+
+        return result;
+    }
+};
+','#include <iostream>
+#include <string>
+#include <unordered_map>
+
+using namespace std;
+
+{{ANSWER}}
+
+int main() {
+    Solution solution;
+    int num;
+    cin >> num;
+    cout << solution.intToRoman(num) << endl;
+    return 0;
+}'),
+	 (2,2,'class Solution {
+public:
+    vector<int> twoSum(vector<int>& nums, int target) {
+        
+    }
+};
+','class Solution
+{
+public:
+    vector<int> twoSum(vector<int> &nums, int target)
+    {
+        int n = nums.size();
+        for (int i = 0; i < n - 1; ++i)
+        {
+            for (int j = i + 1; j < n; ++j)
+            {
+                if (nums[i] + nums[j] == target)
+                	return {i, j};
+            }
+        }
+        return {};
+    }
+};','#include <iostream>
+#include <unordered_map>
+#include <vector>
+
+using namespace std;
+
+{{ANSWER}}
+
+int main() {
+    Solution solution;
+    vector<int> nums;
+    int num;
+    while (cin >> num) {
+        nums.push_back(num);
+        if (cin.get() == ''n'') {
+            break;
+        }
+    }
+    int target;
+    cin >> target;
+    vector<int> result = solution.twoSum(nums, target);
+    cout << "[" << result[0] << ", " << result[1] << "]" << endl;
+    return 0;
+}'),
+	 (6,2,'class Solution {
+public:
+    int myAtoi(string s) {
+        
+    }
+};','class Solution
+{
+public:
+    int myAtoi(string str)
+    {
+        int len = str.length();
+        int value = 0;
+        int state = 0;
+        int pos = 0;
+        int sign = 1;
+
+        if (len == 0)
+        {
+            return 0;
+        }
+
+        while (pos < len)
+        {
+            char current_char = str[pos];
+            if (state == 0)
+            {
+                if (current_char == '' '')
+                {
+                    state = 0;
+                }
+                else if (current_char == ''+'' || current_char == ''-'')
+                {
+                    state = 1;
+                    sign = (current_char == ''+'') ? 1 : -1;
+                }
+                else if (isdigit(current_char))
+                {
+                    state = 2;
+                    value = value * 10 + (current_char - ''0'');
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+            else if (state == 1)
+            {
+                if (isdigit(current_char))
+                {
+                    state = 2;
+                    value = value * 10 + (current_char - ''0'');
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+            else if (state == 2)
+            {
+                if (isdigit(current_char))
+                {
+                    state = 2;
+                    value = value * 10 + (current_char - ''0'');
+                }
+                else
+                {
+                    break;
+                }
+            }
+            else
+            {
+                return 0;
+            }
+            pos++;
+        }
+
+        value = sign * value;
+        value = min(value, static_cast<int>(pow(2, 31) - 1));
+        value = max(static_cast<int>(-(pow(2, 31))), value);
+
+        return value;
+    }
+};','#include <iostream>
+#include <string>
+#include <limits>
+#include <cmath>
+
+using namespace std;
+
+{{ANSWER}}
+
+int main() {
+    Solution solution;
+    string s;
+    cin >> s;
+    s = s.substr(1, s.length() - 2);
+    cout << solution.myAtoi(s) << endl;
+    return 0;
+}');
+          `);
+     } catch (err) {
+          console.log(err);
+          process.exit(1);
+     }
 };
 
 const insertLevels = async () => {
-    try {
-        await pool.query(`
-            insert into public.levels (name) values ('Easy');
-            insert into public.levels (name) values ('Medium');
-            insert into public.levels (name) values ('Hard');
+     try {
+          await pool.query(`
+          INSERT INTO public.levels ("name") VALUES
+	 ('Easy'),
+	 ('Medium'),
+	 ('Hard');
             `);
-    } catch (err) {
-        console.log(err);
-        process.exit(1);
-    }
+     } catch (err) {
+          console.log(err);
+          process.exit(1);
+     }
 };
 
 const insertProblems = async () => {
-    try {
-        await pool.query(`
-        INSERT INTO public.problems (title,level_id,description,instruction,likes,dislikes) VALUES
-        ('Longest Palindromic Substring',2,'Can you solve this real interview question? Longest Palindromic Substring - Given a string s, return the longest palindromic substring in s.
-   
-    
-   
-   Example 1:
-   
-   
-   Input: s = "babad"
-   Output: "bab"
-   Explanation: "aba" is also a valid answer.
-   
-   
-   Example 2:
-   
-   
-   Input: s = "cbbd"
-   Output: "bb"
-   
-   
-    
-   
-   Constraints:
-   
-   * 1 <= s.length <= 1000
-   * s consist of only digits and English letters.','',27904,1650),
-        ('Two Sum',1,'Can you solve this real interview question? Two Sum - Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.
-   
-   You may assume that each input would have exactly one solution, and you may not use the same element twice.
-   
-   You can return the answer in any order.
-   
-    
-   
-   Example 1:
-   
-   
-   Input: nums = [2,7,11,15], target = 9
-   Output: [0,1]
-   Explanation: Because nums[0] + nums[1] == 9, we return [0, 1].
-   
-   
-   Example 2:
-   
-   
-   Input: nums = [3,2,4], target = 6
-   Output: [1,2]
-   
-   
-   Example 3:
-   
-   
-   Input: nums = [3,3], target = 6
-   Output: [0,1]
-   
-   
-    
-   
-   Constraints:
-   
-   * 2 <= nums.length <= 104
-   * -109 <= nums[i] <= 109
-   * -109 <= target <= 109
-   * Only one valid answer exists.
-   
-    
-   
-   Follow-up: Can you come up with an algorithm that is less than O(n2) time complexity?','',52736,1729),
-        ('Longest Substring Without Repeating Characters',2,'Can you solve this real interview question? Longest Substring Without Repeating Characters - Given a string s, find the length of the longest substring without repeating characters.
+     try {
+          await pool.query(`
+          INSERT INTO public.problems (title,level_id,description,instruction,likes,dislikes,categories,is_public) VALUES
+	 ('Longest Substring Without Repeating Characters',2,'Can you solve this real interview question? Longest Substring Without Repeating Characters - Given a string s, find the length of the longest substring without repeating characters.
    
     
    
@@ -2183,59 +2122,8 @@ const insertProblems = async () => {
    Constraints:
    
    * 0 <= s.length <= 5 * 104
-   * s consists of English letters, digits, symbols and spaces.','',37676,1704),
-        ('Zigzag Conversion',2,'Can you solve this real interview question? Zigzag Conversion - The string "PAYPALISHIRING" is written in a zigzag pattern on a given number of rows like this: (you may want to display this pattern in a fixed font for better legibility)
-   
-   
-   P A H N
-   A P L S I I G
-   Y I R
-   
-   
-   And then read line by line: "PAHNAPLSIIGYIR"
-   
-   Write the code that will take a string and make this conversion given a number of rows:
-   
-   
-   string convert(string s, int numRows);
-   
-   
-    
-   
-   Example 1:
-   
-   
-   Input: s = "PAYPALISHIRING", numRows = 3
-   Output: "PAHNAPLSIIGYIR"
-   
-   
-   Example 2:
-   
-   
-   Input: s = "PAYPALISHIRING", numRows = 4
-   Output: "PINALSIGYAHRPI"
-   Explanation:
-   P I N
-   A L S I G
-   Y A H R
-   P I
-   
-   
-   Example 3:
-   
-   
-   Input: s = "A", numRows = 1
-   Output: "A"
-   
-   
-    
-   
-   Constraints:
-   
-   * 1 <= s.length <= 1000
-   * s consists of English letters (lower-case and upper-case), '','' and ''.''.
-   * 1 <= numRows <= 1000','',6898,13571),
-        ('Reverse Integer',2,'Can you solve this real interview question? Reverse Integer - Given a signed 32-bit integer x, return x with its digits reversed. If reversing x causes the value to go outside the signed 32-bit integer range [-231, 231 - 1], then return 0.
+   * s consists of English letters, digits, symbols and spaces.','',37676,1704,'{String,"Hash Table","Sliding Window"}',true),
+	 ('Reverse Integer',2,'Can you solve this real interview question? Reverse Integer - Given a signed 32-bit integer x, return x with its digits reversed. If reversing x causes the value to go outside the signed 32-bit integer range [-231, 231 - 1], then return 0.
    
    Assume the environment does not allow you to store 64-bit integers (signed or unsigned).
    
@@ -2266,8 +2154,8 @@ const insertProblems = async () => {
    
    Constraints:
    
-   * -231 <= x <= 231 - 1','',12045,13074),
-        ('String to Integer (atoi)',2,'Can you solve this real interview question? String to Integer (atoi) - Implement the myAtoi(string s) function, which converts a string to a 32-bit signed integer (similar to C/C++''s atoi function).
+   * -231 <= x <= 231 - 1','',12045,13074,'{Math}',true),
+	 ('String to Integer (atoi)',2,'Can you solve this real interview question? String to Integer (atoi) - Implement the myAtoi(string s) function, which converts a string to a 32-bit signed integer (similar to C/C++''s atoi function).
    
    The algorithm for myAtoi(string s) is as follows:
    
@@ -2338,8 +2226,8 @@ const insertProblems = async () => {
    Constraints:
    
    * 0 <= s.length <= 200
-   * s consists of English letters (lower-case and upper-case), digits (0-9), '' '', ''+'', ''-'', and ''.''.','',3952,12263),
-        ('Palindrome Number',1,'Can you solve this real interview question? Palindrome Number - Given an integer x, return true if x is a palindrome, and false otherwise.
+   * s consists of English letters (lower-case and upper-case), digits (0-9), '' '', ''+'', ''-'', and ''.''.','',3952,12263,'{String}',true),
+	 ('Palindrome Number',1,'Can you solve this real interview question? Palindrome Number - Given an integer x, return true if x is a palindrome, and false otherwise.
    
     
    
@@ -2375,8 +2263,8 @@ const insertProblems = async () => {
    
     
    
-   Follow up: Could you solve it without converting the integer to a string?','',11404,2619),
-        ('Regular Expression Matching',3,'Can you solve this real interview question? Regular Expression Matching - Given an input string s and a pattern p, implement regular expression matching with support for ''.'' and ''*'' where:
+   Follow up: Could you solve it without converting the integer to a string?','',11404,2619,'{Math}',true),
+	 ('Regular Expression Matching',3,'Can you solve this real interview question? Regular Expression Matching - Given an input string s and a pattern p, implement regular expression matching with support for ''.'' and ''*'' where:
    
    * ''.'' Matches any single character.
    * ''*'' Matches zero or more of the preceding element.
@@ -2417,8 +2305,84 @@ const insertProblems = async () => {
    * 1 <= p.length <= 20
    * s contains only lowercase English letters.
    * p contains only lowercase English letters, ''.'', and ''*''.
-   * It is guaranteed for each appearance of the character ''*'', there will be a previous valid character to match.','',11517,1941),
-        ('Container With Most Water',2,'Can you solve this real interview question? Container With Most Water - You are given an integer array height of length n. There are n vertical lines drawn such that the two endpoints of the ith line are (i, 0) and (i, height[i]).
+   * It is guaranteed for each appearance of the character ''*'', there will be a previous valid character to match.','',11517,1941,'{String,"Dynamic Programming",Recursion}',true),
+	 ('Longest Palindromic Substring',2,'Can you solve this real interview question? Longest Palindromic Substring - Given a string s, return the longest palindromic substring in s.
+   
+    
+   
+   Example 1:
+   
+   
+   Input: s = "babad"
+   Output: "bab"
+   Explanation: "aba" is also a valid answer.
+   
+   
+   Example 2:
+   
+   
+   Input: s = "cbbd"
+   Output: "bb"
+   
+   
+    
+   
+   Constraints:
+   
+   * 1 <= s.length <= 1000
+   * s consist of only digits and English letters.','',27904,1650,'{String,"Dynamic Programming"}',true),
+	 ('Zigzag Conversion',2,'Can you solve this real interview question? Zigzag Conversion - The string "PAYPALISHIRING" is written in a zigzag pattern on a given number of rows like this: (you may want to display this pattern in a fixed font for better legibility)
+   
+   
+   P A H N
+   A P L S I I G
+   Y I R
+   
+   
+   And then read line by line: "PAHNAPLSIIGYIR"
+   
+   Write the code that will take a string and make this conversion given a number of rows:
+   
+   
+   string convert(string s, int numRows);
+   
+   
+    
+   
+   Example 1:
+   
+   
+   Input: s = "PAYPALISHIRING", numRows = 3
+   Output: "PAHNAPLSIIGYIR"
+   
+   
+   Example 2:
+   
+   
+   Input: s = "PAYPALISHIRING", numRows = 4
+   Output: "PINALSIGYAHRPI"
+   Explanation:
+   P I N
+   A L S I G
+   Y A H R
+   P I
+   
+   
+   Example 3:
+   
+   
+   Input: s = "A", numRows = 1
+   Output: "A"
+   
+   
+    
+   
+   Constraints:
+   
+   * 1 <= s.length <= 1000
+   * s consists of English letters (lower-case and upper-case), '','' and ''.''.
+   * 1 <= numRows <= 1000','',6898,13571,'{String}',true),
+	 ('Container With Most Water',2,'Can you solve this real interview question? Container With Most Water - You are given an integer array height of length n. There are n vertical lines drawn such that the two endpoints of the ith line are (i, 0) and (i, height[i]).
    
    Find two lines that together with the x-axis form a container, such that the container contains the most water.
    
@@ -2451,8 +2415,8 @@ const insertProblems = async () => {
    
    * n == height.length
    * 2 <= n <= 105
-   * 0 <= height[i] <= 104','',27132,1493),
-        ('Integer to Roman',2,'Can you solve this real interview question? Integer to Roman - Roman numerals are represented by seven different symbols: I, V, X, L, C, D and M.
+   * 0 <= height[i] <= 104','',27132,1493,'{Array,"Two Pointers",Greedy}',true),
+	 ('Integer to Roman',2,'Can you solve this real interview question? Integer to Roman - Roman numerals are represented by seven different symbols: I, V, X, L, C, D and M.
    
    
    Symbol Value
@@ -2504,57 +2468,184 @@ const insertProblems = async () => {
    
    Constraints:
    
-   * 1 <= num <= 3999','',6476,5353);
-        `);
-    } catch (err) {
-        console.log(err);
-        process.exit(1);
-    }
+   * 1 <= num <= 3999','',6476,5353,'{"Hash Table",Math,String}',true),
+	 ('Two Sum',1,'Can you solve this real interview question? Two Sum - Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.
+   
+   You may assume that each input would have exactly one solution, and you may not use the same element twice.
+   
+   You can return the answer in any order.
+   
+    
+   
+   Example 1:
+   
+   
+   Input: nums = [2,7,11,15], target = 9
+   Output: [0,1]
+   Explanation: Because nums[0] + nums[1] == 9, we return [0, 1].
+   
+   
+   Example 2:
+   
+   
+   Input: nums = [3,2,4], target = 6
+   Output: [1,2]
+   
+   
+   Example 3:
+   
+   
+   Input: nums = [3,3], target = 6
+   Output: [0,1]
+   
+   
+    
+   
+   Constraints:
+   
+   * 2 <= nums.length <= 104
+   * -109 <= nums[i] <= 109
+   * -109 <= target <= 109
+   * Only one valid answer exists.
+   
+    
+   
+   Follow-up: Can you come up with an algorithm that is less than O(n2) time complexity?','',52736,1729,'{Array,"Hash Table"}',false);
+
+          `);
+     } catch (err) {
+          console.log(err);
+          process.exit(1);
+     }
 };
 
-const insertUserProblems = async () => {
-    try {
-        await pool.query(
-            `
-            insert into public.user_problems (user_id, problem_id) values (1, 1);
-            `,
-        );
-    } catch (err) {
-        console.log(err);
-        process.exit(1);
-    }
+// const insertSumbissions = async () => {
+//      try {
+//           await pool.query(
+//                `
+//             insert into public.submissions (user_problems_id ,  language_id,    runtime,    memory,     status,     code,     datetime) 
+//                                     values (1,                  1,              10,         10,         'Accepted',     'Submit code 1', '16:54 Nov 03, 2023');
+//             insert into public.submissions (user_problems_id ,  language_id,    runtime,    memory,     status,     code,     datetime)
+//                                     values (1,                  2,              10,         10,         'Wrong answar',     'Submit code 2', '18:00 Nov 03, 2023');
+//             `,
+//           );
+//      } catch (err) {
+//           console.log(err);
+//           process.exit(1);
+//      }
+// };
+
+const insertSemesters = async () => {
+     try {
+          await pool.query(`
+          INSERT INTO public.semesters ("name",start_date,end_date) VALUES
+	 ('231','2023-08-28 00:00:00',NULL),
+	 ('232','2024-02-19 00:00:00',NULL),
+	 ('233','2024-06-10 00:00:00',NULL);
+          `);
+     } catch (err) {
+          console.log(err);
+          process.exit(1);
+     }
 };
 
-const insertSumbission = async () => {
-    try {
-        await pool.query(
-            `
-            insert into public.submissions (user_problems_id ,  language_id,    runtime,    memory,     status,     code,     datetime) 
-                                    values (1,                  1,              10,         10,         'Accepted',     'Submit code 1', '16:54 Nov 03, 2023');
-            insert into public.submissions (user_problems_id ,  language_id,    runtime,    memory,     status,     code,     datetime)
-                                    values (1,                  2,              10,         10,         'Wrong answar',     'Submit code 2', '18:00 Nov 03, 2023');
-            `,
-        );
-    } catch (err) {
-        console.log(err);
-        process.exit(1);
-    }
+const insertSubjects = async () => {
+     try {
+          await pool.query(`
+          INSERT INTO public.subjects ("name",short_name) VALUES
+	 ('Programming Fundamentals','PF'),
+	 ('Data Structures and Algorithms','DSA'),
+	 ('Principles of Programming Languages','PPL');
+          `);
+     } catch (err) {
+          console.log(err);
+          process.exit(1);
+     }
 };
+
+const insertClasses = async () => {
+     try {
+          await pool.query(`
+          INSERT INTO public.classes (subject_id,semester_id,"name") VALUES
+	 (1,1,'L01'),
+	 (1,1,'L02'),
+	 (1,1,'L03'),
+	 (1,1,'L04'),
+	 (1,1,'L05'),
+	 (2,1,'L01'),
+	 (2,1,'L02'),
+	 (2,1,'L03'),
+	 (2,1,'L04'),
+	 (2,1,'L05');
+INSERT INTO public.classes (subject_id,semester_id,"name") VALUES
+	 (3,1,'L01'),
+	 (3,1,'L02'),
+	 (3,1,'L03'),
+	 (3,1,'L04'),
+	 (3,1,'L05');
+          `);
+     } catch (err) {
+          console.log(err);
+          process.exit(1);
+     }
+};
+
+const insertProblemClasses = async () => {
+     try {
+          await pool.query(`
+          INSERT INTO public.problem_classes (problem_id,class_id,subject_id,semester_id,time_limit,start_time,end_time,retries) VALUES
+	 (10,1,1,1,60.0,'2024-01-21 00:00:00','2024-01-28 23:59:59',10);
+          `);
+     } catch (err) {
+          console.log(err);
+          process.exit(1);
+     }
+};
+
+const insertStudentClasses = async () => {
+     try {
+          await pool.query(`
+          INSERT INTO public.student_classes (student_id,class_id,subject_id,semester_id) VALUES
+	 (6,1,1,1);
+          `);
+     } catch (err) {
+          console.log(err);
+          process.exit(1);
+     }
+};
+
+const insertTeacherClasses = async () => {
+     try {
+          await pool.query(`
+          INSERT INTO public.teacher_classes (teacher_id,class_id,subject_id,semester_id) VALUES
+	 (5,1,1,1);
+          `);
+     } catch (err) {
+          console.log(err);
+          process.exit(1);
+     }
+};
+
 (async () => {
-    try {
-        // Insert testcases into database
-        console.log('Waiting...');
-        console.log('If program does not show anything, program run sucessfully');
-        await insertUsers();
-        await insertLevels();
-        await insertLanguages();
-        await insertProblems();
-        await insertTestCases();
-        await insertProblemLanguages();
-        // await insertUserProblems();
-        // await insertSumbission();
-    } catch (err) {
-        console.log(err);
-        process.exit(1);
-    }
+     try {
+          console.log('Waiting...');
+          console.log('If program does not show anything, program run sucessfully');
+
+          await insertUsers();
+          await insertLanguages();
+          await insertLevels();
+          await insertProblems();
+          await insertSemesters();
+          await insertSubjects();
+          await insertTestCases();
+          await insertClasses();
+
+          await insertProblemLanguages();
+          await insertProblemClasses();
+          await insertStudentClasses();
+          await insertTeacherClasses();
+     } catch (err) {
+          console.log(err);
+          process.exit(1);
+     }
 })();

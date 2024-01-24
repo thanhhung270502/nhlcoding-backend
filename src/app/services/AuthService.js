@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 class AuthController {
     async create_or_update(req, res) {
         if (req.user) {
+            console.log(req.user);
             try {
                 // Flow: 0 - create, 1 - get
                 var flow = -1;
@@ -25,9 +26,9 @@ class AuthController {
                     }
                 }
                 if (flow === 0) {
-                    const addUser = await pool.query(
+                    await pool.query(
                         'INSERT INTO users (email, password, name, provider, role, avatar) VALUES ($1, $2, $3, $4, $5, $6)',
-                        [req.user._json.email, '', req.user._json.name, req.user.provider, 0, req.user._json.picture],
+                        [req.user._json.email, '', req.user._json.name, req.user.provider, 'normal', req.user._json.picture],
                     );
 
                     const getCurrentUser = await pool.query('SELECT * FROM users WHERE email = $1', [
@@ -47,6 +48,7 @@ class AuthController {
                     return res.status(200).json({
                         error: false,
                         message: 'Successfully Logged In',
+                        code: 200,
                         body: {
                             accessToken,
                             user: currentUser,
@@ -64,6 +66,7 @@ class AuthController {
                     return res.status(200).json({
                         error: false,
                         message: 'Successfully Logged In',
+                        code: 200,
                         body: {
                             accessToken,
                             user: currentUser,
@@ -75,22 +78,24 @@ class AuthController {
                 return res.status(500).json('Internal Server Error');
             }
         } else {
-            return res.status(403).json({ error: true, message: 'Not Authorized' });
+            return res.status(403).json({ error: true, message: 'Not Authorized', code: 403 });
         }
     }
 
     async verifyJwt(req, res, next) {
         const token = req.headers['access-token'];
         if (!token) {
-            return res.status(200).json({
+            return res.status(403).json({
                 message: 'We need token please provide it for next time',
+                code: 403,
                 login: false,
             });
         } else {
             jwt.verify(token, 'jwtSecretKey', (err, decoded) => {
                 if (err) {
-                    res.json({
+                    res.status(401).json({
                         message: 'Not authenticated. Please try again',
+                        code: 401,
                         login: false,
                     });
                 } else {

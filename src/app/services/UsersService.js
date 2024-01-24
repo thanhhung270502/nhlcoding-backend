@@ -38,7 +38,7 @@ class UsersController {
             return res.status(500).json('Internal Server Error');
         }
     }
-    // 200: successful, 409: User exists
+    // 201: successful, 409: User exists
     async create(req, res) {
         try {
             const { email, password, name, provider, role, avatar } = req.body;
@@ -48,8 +48,8 @@ class UsersController {
             const query = 'SELECT * FROM users WHERE email = $1 AND provider = $2';
             var getUser = await pool.query(query, [email, 'manual']);
             if (getUser.rows.length > 0) {
-                res.status(200).json({
-                    message: 'This email exist',
+                res.status(409).json({
+                    message: 'Email existed',
                     code: 409,
                     body: '',
                 });
@@ -76,9 +76,9 @@ class UsersController {
                     avatar: getUser.rows[0].avatar,
                 };
 
-                return res.status(200).json({
+                return res.status(201).json({
                     message: 'User created successfully',
-                    code: 200,
+                    code: 201,
                     body: {
                         accessToken,
                         user: currentUser,
