@@ -10,9 +10,29 @@ const createTableUsers = async () => {
             email text not null,
             "password" text not null,
             "name" text not null,
-            avatar text,
+            avatar text default '',
             "role" text default 'normal',
             provider text default 'manual'
+        );`;
+        await pool.query(query);
+    } catch (err) {
+        console.log(err);
+        process.exit(1);
+    }
+};
+
+const createTableStudents = async () => {
+    try {
+        await pool.query('drop table if exists students cascade');
+
+        const query = `
+        create table students (
+            id SERIAL primary key,
+            user_id integer not null,
+            student_code text not null,
+            constraint fk_user_student_id
+                foreign key (user_id)
+                    references users(id)	
         )`;
         await pool.query(query);
     } catch (err) {
@@ -154,18 +174,17 @@ const createTableClasses = async () => {
 
         const query = `
         create table classes (
-            id SERIAL,
-            subject_id integer,
-            semester_id integer,
-            "name" text not null,
-            primary key (id, subject_id, semester_id),
+            id SERIAL primary key,
+            subject_id integer, 	
+            semester_id integer,	
+            "name" text,
             constraint fk_subject_id
                 foreign key (subject_id)
                     references subjects(id),
             constraint fk_semester_id
                 foreign key (semester_id)
                     references semesters(id)
-        )`;
+        );`;
         await pool.query(query);
     } catch (err) {
         console.log(err);
@@ -205,8 +224,6 @@ const createTableProblemClasses = async () => {
             id SERIAL primary key,
             problem_id integer,
             class_id integer,
-            subject_id integer,
-            semester_id integer,
             time_limit float,
             start_time timestamp,
             end_time timestamp,
@@ -215,8 +232,8 @@ const createTableProblemClasses = async () => {
                 foreign key (problem_id)
                     references problems(id),
             constraint fk_pc_class_id
-                foreign key (class_id, subject_id, semester_id)
-                    references classes(id, subject_id, semester_id)
+                foreign key (class_id)
+                    references classes(id)
         )`;
         await pool.query(query);
     } catch (err) {
@@ -260,14 +277,12 @@ const createTableStudentClasses = async () => {
             id SERIAL primary key,
             student_id integer,
             class_id integer,
-            subject_id integer,
-            semester_id integer,
-            constraint fk_uc_student_id
+            constraint fk_uc_user_id
                 foreign key (student_id)
                     references users(id),
             constraint fk_uc_class_id
-                foreign key (class_id, subject_id, semester_id)
-                    references classes(id, subject_id, semester_id)
+                foreign key (class_id)
+                    references classes(id)
         )`;
         await pool.query(query);
     } catch (err) {
@@ -285,14 +300,12 @@ const createTableTeacherClasses = async () => {
             id SERIAL primary key,
             teacher_id integer,
             class_id integer,
-            subject_id integer,
-            semester_id integer,
             constraint fk_tc_teacher_id
                 foreign key (teacher_id)
                     references users(id),
             constraint fk_tc_class_id
-                foreign key (class_id, subject_id, semester_id)
-                    references classes(id, subject_id, semester_id)
+                foreign key (class_id)
+                    references classes(id)
         )`;
         await pool.query(query);
     } catch (err) {
@@ -552,6 +565,7 @@ const createCheckUserRoleTrigger = async () => {
         console.log('If program does not show anything, program run sucessfully');
 
         await createTableUsers();
+        await createTableStudents();
         await createTableLanguages();
         await createTableLevels();
         await createTableProblems();
