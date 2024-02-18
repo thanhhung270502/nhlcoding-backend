@@ -1,6 +1,8 @@
 const pool = require('../../config/db');
 const { encode } = require('../helper/user');
 const jwt = require('jsonwebtoken');
+const { generateToken } = require('../middlewares/authMiddlewares');
+const bcrypt = require('bcrypt');
 
 class UsersController {
     // [GET] /
@@ -42,7 +44,6 @@ class UsersController {
     async create(req, res) {
         try {
             const { email, password, name, provider, role, avatar } = req.body;
-            var newPassword = encode(password);
 
             // Check if the user already exists
             const query = 'SELECT * FROM users WHERE email = $1 AND provider = $2';
@@ -54,34 +55,30 @@ class UsersController {
                     body: '',
                 });
             } else {
+                // var newPassword = encode(password);
+                const hashedPassword = await bcrypt.hash(password, 10);
+
                 const response = await pool.query(
                     'INSERT INTO users (email, password, name, provider, role, avatar) VALUES ($1, $2, $3, $4, $5, $6)',
-                    [email, newPassword, name, provider, role, avatar],
+                    [email, hashedPassword, name, provider, role, avatar],
                 );
 
-                getUser = await pool.query('SELECT * FROM users WHERE email = $1 AND password = $2', [
+                getUser = await pool.query('SELECT * FROM users WHERE email = $1 AND password = $2 AND provider = $3', [
                     email,
-                    newPassword,
+                    hashedPassword,
+                    'manual',
                 ]);
-
-                console.log('abc', getUser);
-
-                const payload = getUser.rows[0].id;
-                const accessToken = jwt.sign({ payload }, 'jwtSecretKey', { expiresIn: 3000 });
-
-                const currentUser = {
-                    id: getUser.rows[0].id,
-                    role: getUser.rows[0].role,
-                    name: getUser.rows[0].name,
-                    avatar: getUser.rows[0].avatar,
-                };
 
                 return res.status(201).json({
                     message: 'User created successfully',
                     code: 201,
                     body: {
-                        accessToken,
-                        user: currentUser,
+                        id: getUser.rows[0].id,
+                        role: getUser.rows[0].role,
+                        name: getUser.rows[0].name,
+                        email: getUser.rows[0].email,
+                        avatar: getUser.rows[0].avatar,
+                        accessToken: generateToken(getUser.rows[0].id, getUser.rows[0].role),
                     },
                 });
             }

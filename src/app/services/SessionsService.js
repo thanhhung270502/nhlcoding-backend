@@ -1,38 +1,39 @@
 const pool = require('../../config/db');
 const jwt = require('jsonwebtoken');
 const { encode } = require('../helper/user');
+const bcrypt = require('bcrypt');
+const { generateToken } = require('../middlewares/authMiddlewares');
 
 class SessionsController {
     // [POST] /
     async create(req, res) {
         try {
             const { email, password } = req.body;
-            var newPassword = encode(password);
-            const query = 'SELECT * FROM users WHERE email = $1 AND password = $2 AND provider = $3';
-            const response = await pool.query(query, [email, newPassword, 'manual']);
 
-            if (response.rows.length > 0) {
-                const payload = response.rows[0].id;
-                const accessToken = jwt.sign({ payload }, 'jwtSecretKey', { expiresIn: 3000 });
-                const currentUser = {
+            if ((!email, !password)) return res.status(400).json({ message: 'Invalid email or password' });
+
+            const query = 'SELECT * FROM users WHERE email = $1 AND provider = $2';
+            const response = await pool.query(query, [email, 'manual']);
+
+            if (response.rows.length === 0) {
+                return res.status(400).json({ message: 'Account not found', code: 400 });
+            }
+
+            const passwordMatch = await bcrypt.compare(password, response.rows[0].password);
+
+            if (passwordMatch) {
+                return res.status(201).json({
                     id: response.rows[0].id,
                     role: response.rows[0].role,
+                    email: response.rows[0].email,
                     name: response.rows[0].name,
                     avatar: response.rows[0].avatar,
-                };
-
-                return res.status(200).json({
-                    message: 'Login successfully completed',
-                    code: 200,
-                    body: {
-                        accessToken,
-                        user: currentUser,
-                    },
+                    accessToken: generateToken(response.rows[0].id, response.rows[0].role),
                 });
             } else {
-                return res.status(401).json({
-                    message: 'Account not found',
-                    code: 401,
+                return res.status(400).json({
+                    message: 'Invalid credentials',
+                    code: 400,
                 });
             }
         } catch (err) {
