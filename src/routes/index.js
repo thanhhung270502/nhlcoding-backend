@@ -10,8 +10,10 @@ const languagesRouter = require('./languages');
 const levelRouter = require('./levels');
 const userProblemsRouter = require('./user_problems');
 const semestersRouter = require('./semesters');
+const subjectsRouter = require('./subjects');
 
 function route(app) {
+    app.use('/subjects', subjectsRouter);
     app.use('/semesters', semestersRouter);
     app.use('/levels', levelRouter);
     app.use('/languages', languagesRouter);
