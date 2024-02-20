@@ -1,190 +1,190 @@
 const pool = require('../src/config/db');
 
 const insertUsers = async () => {
-     try {
-          await pool.query(`
-          INSERT INTO public.users (email,"password","name",avatar,"role",provider) VALUES
-          ('thanhhung2705@gmail.com','IjEyMzQ1NiI=','Thanh Hùng','https://kenh14cdn.com/203336854389633024/2023/8/9/photo-6-1691581011481133485486.jpg','admin','manual'),
-          ('daclocbd123@gmail.com','IjEyMzQ1NiI=','Đắc Lộc',NULL,'admin','manual'),
-          ('nguyentruong@gmail.com','IjEyMzQ1NiI=','Nguyên Trương',NULL,'admin','manual'),
-          ('teacher1@hcmut.edu.vn','IjEyMzQ1NiI=','Teacher 1',NULL,'teacher','google'),
-          ('teacher2@hcmut.edu.vn','IjEyMzQ1NiI=','Teacher 2',NULL,'teacher','google'),
-          ('teacher3@hcmut.edu.vn','IjEyMzQ1NiI=','Teacher 3',NULL,'teacher','google');
+    try {
+        await pool.query(`
     INSERT INTO public.users (email,"password","name",avatar,"role",provider) VALUES
-          ('student1@hcmut.edu.vn','IjEyMzQ1NiI=','Student 1',NULL,'student','google'),
-          ('student2@hcmut.edu.vn','IjEyMzQ1NiI=','Student 2',NULL,'student','google'),
-          ('student3@hcmut.edu.vn','IjEyMzQ1NiI=','Student 3',NULL,'student','google'),
-          ('student4@hcmut.edu.vn','IjEyMzQ1NiI=','Student 4',NULL,'student','google'),
-          ('student5@hcmut.edu.vn','IjEyMzQ1NiI=','Student 5',NULL,'student','google'),
-          ('student6@hcmut.edu.vn','IjEyMzQ1NiI=','Student 6',NULL,'student','google'),
-          ('student7@hcmut.edu.vn','IjEyMzQ1NiI=','Student 7',NULL,'student','google'),
-          ('student8@hcmut.edu.vn','IjEyMzQ1NiI=','Student 8',NULL,'student','google'),
-          ('student9@hcmut.edu.vn','IjEyMzQ1NiI=','Student 9',NULL,'student','google'),
-          ('student10@hcmut.edu.vn','IjEyMzQ1NiI=','Student 10',NULL,'student','google');
+        ('thanhhung2705@gmail.com','$2b$10$be0COiCACuYZsGrpunvzeekwL75b7TW9YSBgvcIXqktmecbaxvkua','Thanh Hùng','https://kenh14cdn.com/203336854389633024/2023/8/9/photo-6-1691581011481133485486.jpg','admin','manual'),
+        ('daclocbd123@gmail.com','$2b$10$be0COiCACuYZsGrpunvzeekwL75b7TW9YSBgvcIXqktmecbaxvkua','Đắc Lộc',NULL,'admin','manual'),
+        ('nguyentruong@gmail.com','$2b$10$be0COiCACuYZsGrpunvzeekwL75b7TW9YSBgvcIXqktmecbaxvkua','Nguyên Trương',NULL,'admin','manual'),
+        ('teacher1@hcmut.edu.vn','$2b$10$be0COiCACuYZsGrpunvzeekwL75b7TW9YSBgvcIXqktmecbaxvkua','Teacher 1',NULL,'teacher','manual'),
+        ('teacher2@hcmut.edu.vn','$2b$10$be0COiCACuYZsGrpunvzeekwL75b7TW9YSBgvcIXqktmecbaxvkua','Teacher 2',NULL,'teacher','manual'),
+        ('teacher3@hcmut.edu.vn','$2b$10$be0COiCACuYZsGrpunvzeekwL75b7TW9YSBgvcIXqktmecbaxvkua','Teacher 3',NULL,'teacher','manual');
     INSERT INTO public.users (email,"password","name",avatar,"role",provider) VALUES
-          ('student11@hcmut.edu.vn','IjEyMzQ1NiI=','Student 11',NULL,'student','google'),
-          ('student12@hcmut.edu.vn','IjEyMzQ1NiI=','Student 12',NULL,'student','google'),
-          ('student13@hcmut.edu.vn','IjEyMzQ1NiI=','Student 13',NULL,'student','google'),
-          ('student14@hcmut.edu.vn','IjEyMzQ1NiI=','Student 14',NULL,'student','google'),
-          ('student15@hcmut.edu.vn','IjEyMzQ1NiI=','Student 15',NULL,'student','google'),
-          ('student16@hcmut.edu.vn','IjEyMzQ1NiI=','Student 16',NULL,'student','google'),
-          ('student17@hcmut.edu.vn','IjEyMzQ1NiI=','Student 17',NULL,'student','google'),
-          ('student18@hcmut.edu.vn','IjEyMzQ1NiI=','Student 18',NULL,'student','google'),
-          ('student19@hcmut.edu.vn','IjEyMzQ1NiI=','Student 19',NULL,'student','google'),
-          ('student20@hcmut.edu.vn','IjEyMzQ1NiI=','Student 20',NULL,'student','google');
+        ('student1@hcmut.edu.vn','$2b$10$be0COiCACuYZsGrpunvzeekwL75b7TW9YSBgvcIXqktmecbaxvkua','Student 1',NULL,'student','manual'),
+        ('student2@hcmut.edu.vn','$2b$10$be0COiCACuYZsGrpunvzeekwL75b7TW9YSBgvcIXqktmecbaxvkua','Student 2',NULL,'student','manual'),
+        ('student3@hcmut.edu.vn','$2b$10$be0COiCACuYZsGrpunvzeekwL75b7TW9YSBgvcIXqktmecbaxvkua','Student 3',NULL,'student','manual'),
+        ('student4@hcmut.edu.vn','$2b$10$be0COiCACuYZsGrpunvzeekwL75b7TW9YSBgvcIXqktmecbaxvkua','Student 4',NULL,'student','manual'),
+        ('student5@hcmut.edu.vn','$2b$10$be0COiCACuYZsGrpunvzeekwL75b7TW9YSBgvcIXqktmecbaxvkua','Student 5',NULL,'student','manual'),
+        ('student6@hcmut.edu.vn','$2b$10$be0COiCACuYZsGrpunvzeekwL75b7TW9YSBgvcIXqktmecbaxvkua','Student 6',NULL,'student','manual'),
+        ('student7@hcmut.edu.vn','$2b$10$be0COiCACuYZsGrpunvzeekwL75b7TW9YSBgvcIXqktmecbaxvkua','Student 7',NULL,'student','manual'),
+        ('student8@hcmut.edu.vn','$2b$10$be0COiCACuYZsGrpunvzeekwL75b7TW9YSBgvcIXqktmecbaxvkua','Student 8',NULL,'student','manual'),
+        ('student9@hcmut.edu.vn','$2b$10$be0COiCACuYZsGrpunvzeekwL75b7TW9YSBgvcIXqktmecbaxvkua','Student 9',NULL,'student','manual'),
+        ('student10@hcmut.edu.vn','$2b$10$be0COiCACuYZsGrpunvzeekwL75b7TW9YSBgvcIXqktmecbaxvkua','Student 10',NULL,'student','manual');
     INSERT INTO public.users (email,"password","name",avatar,"role",provider) VALUES
-          ('student21@hcmut.edu.vn','IjEyMzQ1NiI=','Student 21',NULL,'student','google'),
-          ('student22@hcmut.edu.vn','IjEyMzQ1NiI=','Student 22',NULL,'student','google'),
-          ('student23@hcmut.edu.vn','IjEyMzQ1NiI=','Student 23',NULL,'student','google'),
-          ('student24@hcmut.edu.vn','IjEyMzQ1NiI=','Student 24',NULL,'student','google'),
-          ('student25@hcmut.edu.vn','IjEyMzQ1NiI=','Student 25',NULL,'student','google'),
-          ('student26@hcmut.edu.vn','IjEyMzQ1NiI=','Student 26',NULL,'student','google'),
-          ('student27@hcmut.edu.vn','IjEyMzQ1NiI=','Student 27',NULL,'student','google'),
-          ('student28@hcmut.edu.vn','IjEyMzQ1NiI=','Student 28',NULL,'student','google'),
-          ('student29@hcmut.edu.vn','IjEyMzQ1NiI=','Student 29',NULL,'student','google'),
-          ('student30@hcmut.edu.vn','IjEyMzQ1NiI=','Student 30',NULL,'student','google');
+        ('student11@hcmut.edu.vn','$2b$10$be0COiCACuYZsGrpunvzeekwL75b7TW9YSBgvcIXqktmecbaxvkua','Student 11',NULL,'student','manual'),
+        ('student12@hcmut.edu.vn','$2b$10$be0COiCACuYZsGrpunvzeekwL75b7TW9YSBgvcIXqktmecbaxvkua','Student 12',NULL,'student','manual'),
+        ('student13@hcmut.edu.vn','$2b$10$be0COiCACuYZsGrpunvzeekwL75b7TW9YSBgvcIXqktmecbaxvkua','Student 13',NULL,'student','manual'),
+        ('student14@hcmut.edu.vn','$2b$10$be0COiCACuYZsGrpunvzeekwL75b7TW9YSBgvcIXqktmecbaxvkua','Student 14',NULL,'student','manual'),
+        ('student15@hcmut.edu.vn','$2b$10$be0COiCACuYZsGrpunvzeekwL75b7TW9YSBgvcIXqktmecbaxvkua','Student 15',NULL,'student','manual'),
+        ('student16@hcmut.edu.vn','$2b$10$be0COiCACuYZsGrpunvzeekwL75b7TW9YSBgvcIXqktmecbaxvkua','Student 16',NULL,'student','manual'),
+        ('student17@hcmut.edu.vn','$2b$10$be0COiCACuYZsGrpunvzeekwL75b7TW9YSBgvcIXqktmecbaxvkua','Student 17',NULL,'student','manual'),
+        ('student18@hcmut.edu.vn','$2b$10$be0COiCACuYZsGrpunvzeekwL75b7TW9YSBgvcIXqktmecbaxvkua','Student 18',NULL,'student','manual'),
+        ('student19@hcmut.edu.vn','$2b$10$be0COiCACuYZsGrpunvzeekwL75b7TW9YSBgvcIXqktmecbaxvkua','Student 19',NULL,'student','manual'),
+        ('student20@hcmut.edu.vn','$2b$10$be0COiCACuYZsGrpunvzeekwL75b7TW9YSBgvcIXqktmecbaxvkua','Student 20',NULL,'student','manual');
     INSERT INTO public.users (email,"password","name",avatar,"role",provider) VALUES
-          ('student31@hcmut.edu.vn','IjEyMzQ1NiI=','Student 31',NULL,'student','google'),
-          ('student32@hcmut.edu.vn','IjEyMzQ1NiI=','Student 32',NULL,'student','google'),
-          ('student33@hcmut.edu.vn','IjEyMzQ1NiI=','Student 33',NULL,'student','google'),
-          ('student34@hcmut.edu.vn','IjEyMzQ1NiI=','Student 34',NULL,'student','google'),
-          ('student35@hcmut.edu.vn','IjEyMzQ1NiI=','Student 35',NULL,'student','google'),
-          ('student36@hcmut.edu.vn','IjEyMzQ1NiI=','Student 36',NULL,'student','google'),
-          ('student37@hcmut.edu.vn','IjEyMzQ1NiI=','Student 37',NULL,'student','google'),
-          ('student38@hcmut.edu.vn','IjEyMzQ1NiI=','Student 38',NULL,'student','google'),
-          ('student39@hcmut.edu.vn','IjEyMzQ1NiI=','Student 39',NULL,'student','google'),
-          ('student40@hcmut.edu.vn','IjEyMzQ1NiI=','Student 40',NULL,'student','google');
+        ('student21@hcmut.edu.vn','$2b$10$be0COiCACuYZsGrpunvzeekwL75b7TW9YSBgvcIXqktmecbaxvkua','Student 21',NULL,'student','manual'),
+        ('student22@hcmut.edu.vn','$2b$10$be0COiCACuYZsGrpunvzeekwL75b7TW9YSBgvcIXqktmecbaxvkua','Student 22',NULL,'student','manual'),
+        ('student23@hcmut.edu.vn','$2b$10$be0COiCACuYZsGrpunvzeekwL75b7TW9YSBgvcIXqktmecbaxvkua','Student 23',NULL,'student','manual'),
+        ('student24@hcmut.edu.vn','$2b$10$be0COiCACuYZsGrpunvzeekwL75b7TW9YSBgvcIXqktmecbaxvkua','Student 24',NULL,'student','manual'),
+        ('student25@hcmut.edu.vn','$2b$10$be0COiCACuYZsGrpunvzeekwL75b7TW9YSBgvcIXqktmecbaxvkua','Student 25',NULL,'student','manual'),
+        ('student26@hcmut.edu.vn','$2b$10$be0COiCACuYZsGrpunvzeekwL75b7TW9YSBgvcIXqktmecbaxvkua','Student 26',NULL,'student','manual'),
+        ('student27@hcmut.edu.vn','$2b$10$be0COiCACuYZsGrpunvzeekwL75b7TW9YSBgvcIXqktmecbaxvkua','Student 27',NULL,'student','manual'),
+        ('student28@hcmut.edu.vn','$2b$10$be0COiCACuYZsGrpunvzeekwL75b7TW9YSBgvcIXqktmecbaxvkua','Student 28',NULL,'student','manual'),
+        ('student29@hcmut.edu.vn','$2b$10$be0COiCACuYZsGrpunvzeekwL75b7TW9YSBgvcIXqktmecbaxvkua','Student 29',NULL,'student','manual'),
+        ('student30@hcmut.edu.vn','$2b$10$be0COiCACuYZsGrpunvzeekwL75b7TW9YSBgvcIXqktmecbaxvkua','Student 30',NULL,'student','manual');
     INSERT INTO public.users (email,"password","name",avatar,"role",provider) VALUES
-          ('student41@hcmut.edu.vn','IjEyMzQ1NiI=','Student 41',NULL,'student','google'),
-          ('student42@hcmut.edu.vn','IjEyMzQ1NiI=','Student 42',NULL,'student','google'),
-          ('student43@hcmut.edu.vn','IjEyMzQ1NiI=','Student 43',NULL,'student','google'),
-          ('student44@hcmut.edu.vn','IjEyMzQ1NiI=','Student 44',NULL,'student','google'),
-          ('student45@hcmut.edu.vn','IjEyMzQ1NiI=','Student 45',NULL,'student','google'),
-          ('student46@hcmut.edu.vn','IjEyMzQ1NiI=','Student 46',NULL,'student','google'),
-          ('student47@hcmut.edu.vn','IjEyMzQ1NiI=','Student 47',NULL,'student','google'),
-          ('student48@hcmut.edu.vn','IjEyMzQ1NiI=','Student 48',NULL,'student','google'),
-          ('student49@hcmut.edu.vn','IjEyMzQ1NiI=','Student 49',NULL,'student','google'),
-          ('student50@hcmut.edu.vn','IjEyMzQ1NiI=','Student 50',NULL,'student','google');
+        ('student31@hcmut.edu.vn','$2b$10$be0COiCACuYZsGrpunvzeekwL75b7TW9YSBgvcIXqktmecbaxvkua','Student 31',NULL,'student','manual'),
+        ('student32@hcmut.edu.vn','$2b$10$be0COiCACuYZsGrpunvzeekwL75b7TW9YSBgvcIXqktmecbaxvkua','Student 32',NULL,'student','manual'),
+        ('student33@hcmut.edu.vn','$2b$10$be0COiCACuYZsGrpunvzeekwL75b7TW9YSBgvcIXqktmecbaxvkua','Student 33',NULL,'student','manual'),
+        ('student34@hcmut.edu.vn','$2b$10$be0COiCACuYZsGrpunvzeekwL75b7TW9YSBgvcIXqktmecbaxvkua','Student 34',NULL,'student','manual'),
+        ('student35@hcmut.edu.vn','$2b$10$be0COiCACuYZsGrpunvzeekwL75b7TW9YSBgvcIXqktmecbaxvkua','Student 35',NULL,'student','manual'),
+        ('student36@hcmut.edu.vn','$2b$10$be0COiCACuYZsGrpunvzeekwL75b7TW9YSBgvcIXqktmecbaxvkua','Student 36',NULL,'student','manual'),
+        ('student37@hcmut.edu.vn','$2b$10$be0COiCACuYZsGrpunvzeekwL75b7TW9YSBgvcIXqktmecbaxvkua','Student 37',NULL,'student','manual'),
+        ('student38@hcmut.edu.vn','$2b$10$be0COiCACuYZsGrpunvzeekwL75b7TW9YSBgvcIXqktmecbaxvkua','Student 38',NULL,'student','manual'),
+        ('student39@hcmut.edu.vn','$2b$10$be0COiCACuYZsGrpunvzeekwL75b7TW9YSBgvcIXqktmecbaxvkua','Student 39',NULL,'student','manual'),
+        ('student40@hcmut.edu.vn','$2b$10$be0COiCACuYZsGrpunvzeekwL75b7TW9YSBgvcIXqktmecbaxvkua','Student 40',NULL,'student','manual');
     INSERT INTO public.users (email,"password","name",avatar,"role",provider) VALUES
-          ('student51@hcmut.edu.vn','IjEyMzQ1NiI=','Student 51',NULL,'student','google'),
-          ('student52@hcmut.edu.vn','IjEyMzQ1NiI=','Student 52',NULL,'student','google'),
-          ('student53@hcmut.edu.vn','IjEyMzQ1NiI=','Student 53',NULL,'student','google'),
-          ('student54@hcmut.edu.vn','IjEyMzQ1NiI=','Student 54',NULL,'student','google'),
-          ('student55@hcmut.edu.vn','IjEyMzQ1NiI=','Student 55',NULL,'student','google'),
-          ('student56@hcmut.edu.vn','IjEyMzQ1NiI=','Student 56',NULL,'student','google'),
-          ('student57@hcmut.edu.vn','IjEyMzQ1NiI=','Student 57',NULL,'student','google'),
-          ('student58@hcmut.edu.vn','IjEyMzQ1NiI=','Student 58',NULL,'student','google'),
-          ('student59@hcmut.edu.vn','IjEyMzQ1NiI=','Student 59',NULL,'student','google'),
-          ('student60@hcmut.edu.vn','IjEyMzQ1NiI=','Student 60',NULL,'student','google');    
-          `);
-     } catch (err) {
-          console.log(err);
-          process.exit(1);
-     }
+        ('student41@hcmut.edu.vn','$2b$10$be0COiCACuYZsGrpunvzeekwL75b7TW9YSBgvcIXqktmecbaxvkua','Student 41',NULL,'student','manual'),
+        ('student42@hcmut.edu.vn','$2b$10$be0COiCACuYZsGrpunvzeekwL75b7TW9YSBgvcIXqktmecbaxvkua','Student 42',NULL,'student','manual'),
+        ('student43@hcmut.edu.vn','$2b$10$be0COiCACuYZsGrpunvzeekwL75b7TW9YSBgvcIXqktmecbaxvkua','Student 43',NULL,'student','manual'),
+        ('student44@hcmut.edu.vn','$2b$10$be0COiCACuYZsGrpunvzeekwL75b7TW9YSBgvcIXqktmecbaxvkua','Student 44',NULL,'student','manual'),
+        ('student45@hcmut.edu.vn','$2b$10$be0COiCACuYZsGrpunvzeekwL75b7TW9YSBgvcIXqktmecbaxvkua','Student 45',NULL,'student','manual'),
+        ('student46@hcmut.edu.vn','$2b$10$be0COiCACuYZsGrpunvzeekwL75b7TW9YSBgvcIXqktmecbaxvkua','Student 46',NULL,'student','manual'),
+        ('student47@hcmut.edu.vn','$2b$10$be0COiCACuYZsGrpunvzeekwL75b7TW9YSBgvcIXqktmecbaxvkua','Student 47',NULL,'student','manual'),
+        ('student48@hcmut.edu.vn','$2b$10$be0COiCACuYZsGrpunvzeekwL75b7TW9YSBgvcIXqktmecbaxvkua','Student 48',NULL,'student','manual'),
+        ('student49@hcmut.edu.vn','$2b$10$be0COiCACuYZsGrpunvzeekwL75b7TW9YSBgvcIXqktmecbaxvkua','Student 49',NULL,'student','manual'),
+        ('student50@hcmut.edu.vn','$2b$10$be0COiCACuYZsGrpunvzeekwL75b7TW9YSBgvcIXqktmecbaxvkua','Student 50',NULL,'student','manual');
+    INSERT INTO public.users (email,"password","name",avatar,"role",provider) VALUES
+        ('student51@hcmut.edu.vn','$2b$10$be0COiCACuYZsGrpunvzeekwL75b7TW9YSBgvcIXqktmecbaxvkua','Student 51',NULL,'student','manual'),
+        ('student52@hcmut.edu.vn','$2b$10$be0COiCACuYZsGrpunvzeekwL75b7TW9YSBgvcIXqktmecbaxvkua','Student 52',NULL,'student','manual'),
+        ('student53@hcmut.edu.vn','$2b$10$be0COiCACuYZsGrpunvzeekwL75b7TW9YSBgvcIXqktmecbaxvkua','Student 53',NULL,'student','manual'),
+        ('student54@hcmut.edu.vn','$2b$10$be0COiCACuYZsGrpunvzeekwL75b7TW9YSBgvcIXqktmecbaxvkua','Student 54',NULL,'student','manual'),
+        ('student55@hcmut.edu.vn','$2b$10$be0COiCACuYZsGrpunvzeekwL75b7TW9YSBgvcIXqktmecbaxvkua','Student 55',NULL,'student','manual'),
+        ('student56@hcmut.edu.vn','$2b$10$be0COiCACuYZsGrpunvzeekwL75b7TW9YSBgvcIXqktmecbaxvkua','Student 56',NULL,'student','manual'),
+        ('student57@hcmut.edu.vn','$2b$10$be0COiCACuYZsGrpunvzeekwL75b7TW9YSBgvcIXqktmecbaxvkua','Student 57',NULL,'student','manual'),
+        ('student58@hcmut.edu.vn','$2b$10$be0COiCACuYZsGrpunvzeekwL75b7TW9YSBgvcIXqktmecbaxvkua','Student 58',NULL,'student','manual'),
+        ('student59@hcmut.edu.vn','$2b$10$be0COiCACuYZsGrpunvzeekwL75b7TW9YSBgvcIXqktmecbaxvkua','Student 59',NULL,'student','manual'),
+        ('student60@hcmut.edu.vn','$2b$10$be0COiCACuYZsGrpunvzeekwL75b7TW9YSBgvcIXqktmecbaxvkua','Student 60',NULL,'student','manual');    
+        `);
+    } catch (err) {
+        console.log(err);
+        process.exit(1);
+    }
 };
 
 const insertStudents = async () => {
-     try {
-          await pool.query(`
-          INSERT INTO public.students (user_id,student_code) VALUES
-	 (7,'2000001'),
-	 (8,'2000002'),
-	 (9,'2000003'),
-	 (10,'2000004'),
-	 (11,'2000005'),
-	 (12,'2000006'),
-	 (13,'2000007'),
-	 (14,'2000008'),
-	 (15,'2000009'),
-	 (16,'2000010');
-INSERT INTO public.students (user_id,student_code) VALUES
-	 (17,'2000011'),
-	 (18,'2000012'),
-	 (19,'2000013'),
-	 (20,'2000014'),
-	 (21,'2000015'),
-	 (22,'2000016'),
-	 (23,'2000017'),
-	 (24,'2000018'),
-	 (25,'2000019'),
-	 (26,'2000020');
-INSERT INTO public.students (user_id,student_code) VALUES
-	 (27,'2000021'),
-	 (28,'2000022'),
-	 (29,'2000023'),
-	 (30,'2000024'),
-	 (31,'2000025'),
-	 (32,'2000026'),
-	 (33,'2000027'),
-	 (34,'2000028'),
-	 (35,'2000029'),
-	 (36,'2000030');
-INSERT INTO public.students (user_id,student_code) VALUES
-	 (37,'2000031'),
-	 (38,'2000032'),
-	 (39,'2000033'),
-	 (40,'2000034'),
-	 (41,'2000035'),
-	 (42,'2000036'),
-	 (43,'2000037'),
-	 (44,'2000038'),
-	 (45,'2000039'),
-	 (46,'2000040');
-INSERT INTO public.students (user_id,student_code) VALUES
-	 (47,'2000041'),
-	 (48,'2000042'),
-	 (49,'2000043'),
-	 (50,'2000044'),
-	 (51,'2000045'),
-	 (52,'2000046'),
-	 (53,'2000047'),
-	 (54,'2000048'),
-	 (55,'2000049'),
-	 (56,'2000050');
-INSERT INTO public.students (user_id,student_code) VALUES
-	 (57,'2000051'),
-	 (58,'2000052'),
-	 (59,'2000053'),
-	 (60,'2000054'),
-	 (61,'2000055'),
-	 (62,'2000056'),
-	 (63,'2000057'),
-	 (64,'2000058'),
-	 (65,'2000059'),
-	 (66,'2000060');  
-          `);
-     } catch (err) {
-          console.log(err);
-          process.exit(1);
-     }
+    try {
+        await pool.query(`
+    INSERT INTO public.students (user_id,student_code) VALUES
+        (7,'2000001'),
+        (8,'2000002'),
+        (9,'2000003'),
+        (10,'2000004'),
+        (11,'2000005'),
+        (12,'2000006'),
+        (13,'2000007'),
+        (14,'2000008'),
+        (15,'2000009'),
+        (16,'2000010');
+    INSERT INTO public.students (user_id,student_code) VALUES
+        (17,'2000011'),
+        (18,'2000012'),
+        (19,'2000013'),
+        (20,'2000014'),
+        (21,'2000015'),
+        (22,'2000016'),
+        (23,'2000017'),
+        (24,'2000018'),
+        (25,'2000019'),
+        (26,'2000020');
+    INSERT INTO public.students (user_id,student_code) VALUES
+        (27,'2000021'),
+        (28,'2000022'),
+        (29,'2000023'),
+        (30,'2000024'),
+        (31,'2000025'),
+        (32,'2000026'),
+        (33,'2000027'),
+        (34,'2000028'),
+        (35,'2000029'),
+        (36,'2000030');
+    INSERT INTO public.students (user_id,student_code) VALUES
+        (37,'2000031'),
+        (38,'2000032'),
+        (39,'2000033'),
+        (40,'2000034'),
+        (41,'2000035'),
+        (42,'2000036'),
+        (43,'2000037'),
+        (44,'2000038'),
+        (45,'2000039'),
+        (46,'2000040');
+    INSERT INTO public.students (user_id,student_code) VALUES
+        (47,'2000041'),
+        (48,'2000042'),
+        (49,'2000043'),
+        (50,'2000044'),
+        (51,'2000045'),
+        (52,'2000046'),
+        (53,'2000047'),
+        (54,'2000048'),
+        (55,'2000049'),
+        (56,'2000050');
+    INSERT INTO public.students (user_id,student_code) VALUES
+        (57,'2000051'),
+        (58,'2000052'),
+        (59,'2000053'),
+        (60,'2000054'),
+        (61,'2000055'),
+        (62,'2000056'),
+        (63,'2000057'),
+        (64,'2000058'),
+        (65,'2000059'),
+        (66,'2000060');  
+    `);
+    } catch (err) {
+        console.log(err);
+        process.exit(1);
+    }
 };
 
 const insertTestCases = async () => {
-     try {
-          await pool.query(`
-          INSERT INTO public.testcases (problem_id,"input","output",memory,runtime) VALUES
-          (1,'"babad"','bab',0.0,0.0),
-          (1,'"cbbd"','bb',0.0,0.0),
-          (1,'"a"','a',0.0,0.0),
-          (1,'"xU"','x',0.0,0.0),
-          (1,'"d4dv"','d4d',0.0,0.0),
-          (1,'"y5TT"','TT',0.0,0.0),
-          (1,'"sDsBi"','sDs',0.0,0.0),
-          (1,'"KT03k"','K',0.0,0.0),
-          (1,'"pGEui"','p',0.0,0.0),
-          (1,'"mB"','m',0.0,0.0);
+    try {
+        await pool.query(`
     INSERT INTO public.testcases (problem_id,"input","output",memory,runtime) VALUES
-          (1,'"I4P0MASLCKi4WE5OqDokoyRAnxOoucDqKwBV3iOmYgHgTHYKESDyi0kYTAiS5Bker9rhy6BnB9kJM468h1PD0Hgbbx0OgZKlfKdefxvBocmVzzkB1s7L2OCf7UxwzITh0oZALc9jVLU8JUuC6JNsxA8I9hxQW0rT1MHH77pHJQcfYPYX4K0rMiGFg0QTuXkOIFpAc3Ayi70iJeb1p3J3AVJrIHmuiDitch1TAVCn5NuuleOKNEYcIkZBYm9UGDkVIVFBhI7HBhrSG63afZKsQgkiyDpPmUkfkl6FjuwVQ9AUvwr13W5RSDzm5fT1PER8yOWSKxnSeKx51pJ7LAedGttywfs018xBCnEnoSXB862uzftVD11zObOfJlphoKGPOlfhlETqTxdOSSOzq4Bth4"','OSSO',0.0,0.0),
-          (1,'"PuUyMbqxJvDtTNYUZC0NuYpDdwCJMyhuMRJLtAfmsvtxDeex2E1lPgwSyogRzhszXHfXiRyJcl9d6OQFsSE7vOGQanUlPPoD4zC8OzIp2W3TGROFCd4ZQK2st5tr7iZiGqrmBUAujakdveCwyH8JUd8vV8Y5OKqdJiyfqbXzVURQjn8DSkChm7pQnq97zTGhM5M4lUuvcu87pK1l5xCrwxXPrq2XmLLkmeO4LLRo6Qes5NFL5PxLUzBP3qjUbblmNKh6hoyiw26xD9DFuCdoc4lToch5mVlOW4IGiLgKh8Rmy2AlhgZEDrT3JlT2OqaXXkgtzuIZR3tYlwqgKGvdLebhcbFe4BgaZQ1SCHo519T2Sjgo"','t5t',0.0,0.0),
-          (1,'"mnEOulyvDm3IMZfvGPK4J1psFkXmHBaSa9sTwFPxhJmMHWslj0b1RayftQgP1e1R9Z2WBKLAQIUxXGmxpJsG8vsDFnYEOtwR948T1Hv5KsyK93ubw4TSEbycm9qWyAhZGX1fZ6PBA9Gwze3M9Ca5GVawhBXdatKgDOQJcvZ0GmvXFyFHVHMvnK7Mcl5gvcmRnF5o3BkGNZAyZVDLebZT2MmgkNwpQWIOLVSQkvPtaoTxizdubSLUuJMy2E8f0kACn0U0DxKRXnJqVtDifWfmZDaW3h63MPX5xVdIGhcLJTpVHffP3IGasHhUV4ZyPYiF9Wv5XWgCFk0ngaiCA5Ws24Es2Oc63vr0UJ5j7Qy2ZjlwEBZWnq28oXJ0zLau1UELmZZRBeltIffucCSUKN2HG64e3kWIgQbRnamLmoZEQnDgBNPGxTzMatwC7CprkIqkRbnX0YO4yREn0SUAW4t3xbxzqrnBEqpSJeJgIHY7FFEh7jD7HVVGuNactjsTSNvQJx1iVomTAPfpr5c8aX0Fuu872RzwzLDHZzmFj30Z2bRnnysD8AEGxyIKNRwDBDiepZvHwhPdk9wS1hSC4vbrz2ze9FMVEzWn8Dfnpd07swOfesBDmDlHiplSJkCfJ0CH6rMV2q9a20b6eUonA33wYvyzZaEvtAOrIk92HtVeME4bNeWwJFMWPEX9MLvwb22MAqxDvToxxm5QyDkoYnqJRo2RQ1Wc25xteoC769PAKuvwdZ0Ahcg80Pu6ybEDYYQPStSFbA8w7jhtdarBQ1WLnZTy7nlsUfdY8ZkqQhxPurDO1oZjEp4JwsDe7bK0wUxmHEatSCsREs3gGrQqNLO3Xj1pEU51eeCWfJxq14L9Xh8yy99zmCJC1hxrGE3bt2s7ZZpIEhuMncOHMiMbBLxje7a0EnScV9ppoz0b9ynLTKGPkHqeA5XIqBy6hLAtuAFj0aTqQBDkJwTZS8oaXqx7vc05jy"','aSa',0.0,0.0),
-          (1,'"WT4O5Wf4aUkLUiiA9Bfp9zV62aHddtFLWMWs2l5jxKJwjPWjsWWd8hmlfqlLNoyuoMF2u1zfoBNS5krY7PNNrc2o6jp2HD6DV0n1Gw8H54VAf7PHj50qF4Q9M07rK7G2OJJphgQsew45Kb6ZB6so3oQk0cyhL8m3g7rFgIRzzukJrEjjwSVJtLf6v5DtRkRzqxQ2gWQLJFzEjP9LtbBJuxuwdSMJCRnvYUwm0xIesGxxBXE9XJBJtCiYUXCAVFILnjEKJPQDdHglCR2XZ2IqpBrCZD0oD2gXqhGfgiVEtmACXuqfpPoEvxAK0nRuLsFYUHIRCXE4c9cZRP58iHY0f1MS6Y0nor4ZlXXtxmg8yhZzuOSxjgJKjwnOMjIQA9A2uCAVx6P5mgyHZqbqVU5e7az5qEdjI4pcuDGxKw6xQFpRPWSqC3DEGIsSLrbVT4hhEmAXF3MPhM3VaRsPnAx3cnNGtO1xpdB5qeVPaf2TSbbGUJx6llnUaBRgIz4"','WMW',0.0,0.0),
-          (1,'"jymav50lZE6AMvNOEpT29RcyIAkowBqADFSf4fepWDp1WmxvDGefvZHOSgLOSG0K1PHJ0jTf0M9kox3ShDggKnkSttuZY4BXkpDURdAiCKiPAydciio97AWN91D3d8LOH2HUtnnpD9Ej2eRdAtyrhTfEPAJ7BZtTcAsNT9FknlHXN37wZk075iBkpKDRErZGlXp9AbqO9Ac5d8GrgqR2RBlpGt5TSNmjEpCJFJSlgU3XOLgmeWEtR4PgHDDde5UJ8qXlwUpEG4fzzV91TNDfWNNZtTai1vFwELAHBDk1nKrpcM3BNiHThCpKTT61j8W7vCmIlAx73KkMar4IPIP8jQ7MO0HfuNlTcjwTXqaWpC394SqG72vMhOiFtibrC1zfQnpewpga6J1HsRAVASqhBQ8BBZJwH5Y3N1orxq1dduNKK2to3VfXBXN8zhI819jojetOBFMkXOTVyfzYeJD7ApKJ7Y76vHEwpqCngRMjjSB5TgD7drR8LNgTlSYms9NLAFaCfQPGa1Pd94ZLY0DTvRpArk9OOO1C7aibxzSEP9nrOTcTgTfE6tHZJnaUl1lYbPg3VO6ss0ZVZXJjVl7Gm1ZJ0c67XhG26gUIFxYvEN98xAsOsQ66j8jHfRu2RDKfEW6J1EUZNf7wZz8Gjgi5TAqEaB6rVhANvKujBj9Rhy7r0ZZ6WNrqNiuMWv7xlhJNNvXADsxLyAAU2zVEG7Os7DTKAd5qBEE98gVuv9uFWyyho8NXF0B9lIZczvM1uhAVQN5pGD382jaJQvltwngXt8AzkfY9Im6RrHAV79ATW5j0iWCxIuoqtedWABzd97WcIou4xGpCFY52Y30rrxtDZUfmAuMt7aZAMobXAfIb86dsZit7N1RtoMhBM6o7P3k1rHg0YCgnvPexhOC152Pfl9zVFCfBBPBRijfhNz2OJk"','f4f',0.0,0.0),
-          (1,'"U8Dlk8FOCWqjcPZK7GWrUvvl2nMAXgvrOAiuSUyxeERgF43eYuDL3ozONYZLxcweUD57axOnQzECaxtm7jEYv5prAOXPkYq7u4GbliasLp7Xjkmpuhz0DVu37iMUXhpvX04xG9epgGoUV1V9YU9y3dSkEoE7m3GSxKtG3Bestf31ZgVe4B9cwOoNphbj0OzQyIAjHWR2kuxIx4guHesnzs6LcAplkNmLiZAbBCPcW2VxlOmMQF7nOXlgYDXaQA8U5SICvRZmSSIZCSOh1P09mzYkIeJD579dIIiRLVJ6sV05vhJ9rUzMKiy3VLRffhCaWisHv1qHCGhwDQ3RJJD5JitqmMzuCgqUYnOnLDy040z52XHMMAJgAS0pnKsc6GrINVYJp6LelLxIty09yNeHGJ6XTaryaHyOmgc7yXQRtwr9Jdyul6zckueAogwJbFEzWi4WNQIUpNGwIt5FNjTcNFgLWu20v1pozvbNjJAjL2IKqxP9pYf4BTCjDE6orjjDAFTJSKi2CmQGFsN8uhM9wbn2LeROP2CKovlQy87GwmMtNccnV4Q8DLCVBkZhx6fcJI8ES3Jb3JWp5Mk6bkVvjs7egkfIaYPBLNpYyZZ2FgMntUA7zGNkU7RHL8WZKUb3njCuVIcCYpfCtrBC0nlVjJBB0A3VtiHSlITcmrB7wZ9nvDkzNIDUEv7MIWDsS1c7e1fJwqIfPywRcS6el11qiZgJZZDheV4Lw1mJ6t6MXhRXVy0mfSa00tKsUkmmvPrxrJxJIVBSDWmUyL8NgVApNwFwW7vy6EgNLb7vmo1EE3UZwOw7zGVmxGyIuDk8beQkbJMw5eXu3Bj3o5dt11wcQZunMNZELzhq1AP2QHXlYAU6emupdjFJCsCu"','V1V',0.0,0.0),
-          (1,'"D89jx3UQ1IYYlNZMW5zcKeyWjuAF2yUk9h055A7XCuaJwOdqJOemzmjco4wQkeyDI31ehsOAYAldafdSYSM88HU1ISgZHyyeFJdYPWDNRQNfEnoVwgJOiGEbMOV4NJmk1qg9rExAVqusgTjJ5fPixs1tfF4YRdCNIpqfEzYIgK3DMsbntEh9soYKgJQPxwUPqRCxEjWkL0P04UHYZ3U6FaULxiDEmiJZ4YDXl8xAbsUquwWKThzF2KMKp9e0ByIHTDoXdSNT1LaTEIB8rljXvw2qUfvZbr9AsXAn8CYIx71grqmf85wTTK9FhrfPu86A1ZUG7EgbmMJ4CbguKrAeLPoiaOP4TTRzJbDV7hH4lrFUZQRVbsHKMyedvrCFk0wL72HhXnLgfDSneMj91IOapFJiHe7"','mzm',0.0,0.0),
-          (1,'"QMDeThXXKKaiJy05WModGrqCX5D1c1XaBGzbTIf3qAjtPSDWBCoY0fHKoXgEus61iqi3wXvtoN8cxU0fZ1hHqlz2TRqtxtlGdlB3ompXvv14tCknGjlC88HMHodjUsYc4W8RuvRezfLZ4Bhjg87InIOvZlgw9tl426KM6EtUb2OSWTZRve45itNmFjGxcf6xrRyKw8Pm3iXrRQsCGcwBRGrho4gMfAbweTZSmEI3LPH6TuNjM1LiS5W9N8qM0jIy2QpREj4VdOATSjRRvnnyonLD3UHIWqVXmhd0GJ1Tbp5gIJoNJres40VCWnWmrDUbOKs9UJ9crH4o14WNzQcAbEqwnSGM1j30tzzcbc1TkzYsLT5tuzc8f26xB3lPV48BoHo6mjxiQ7mUibcJz7ael9w9py8kYB3Mw27s3unsujPy7JPcyQ8Z2dPNhS4MzcR07AiNvIuu6KG0HlK8h4rbHdxaVDtUzcZxzfZJ6iwzu02Hg0OmtZvSnxP75qcgKNKZbixu6p7hAUyE0ErgaLIACNoe1d7oeBjHg9ajPWQBgYzJas24te3yV6Iu1qpifDd96ipq8PCQGxlcpmOeTQ7Fyms5NCdvL1UvL3XZQRhqbT7lec7s6bA3KuoNzlWMwjzvrPg"','1c1',0.0,0.0),
-          (1,'"79hJh7hfuVwEqTXvrbVeRPpSsGj8qV3aumYQrlJJ3NuntnBox91y956K1Z4NEzeMHx5Nm2ibMeUj76y4R22hYhH0PJ8SGafQEGTqK9nqKGTrUzUciRRSqEDrlccyY9VNebqnlQjEbihyEognXc2wfYOilk4Sgz5Y0qdVX9exUZ76JEvaLGXLqZcEhwwOIJaJgPnKJQkVk7o0EwYxmddmcYyliZ4QbWMftZez7LWecczCuMr8nCnqgm0v8lT6rWWBYxZniQ1JYHge8wu5SGZRdYVhRjYk0pQkh0bbuCotbIUS4fkQSgkzxnJiF0bsWuDtTq2C3cfg3TyucYqelwoHeDBZKqMQJTczRAEUbIgfgnz6dDsd1q18Piy4IOMIFk4gTod8kNkmAvREXfiZYTXnPjnAntpuP3waJUsp3LU69XD8drRcj0gWJ27eDbPViZgpjg5qX7eXIRrQkMcPFXqM16UZrrdew3JZ7tnK4N5qazUlB6vIjO3RGkuk7GNbTVWjI8sIVhyCxs2fNNJNKnBLqN5ecULNIMjDzdPkiemBYnC9rpfNOIGY0DdwHaOjJqrinL5rdtqeaaRb5mKWkgOOVkB5Q9Xs4GUMOhMekIRawKOsCHjq4avUhFwvLhQ0CbinLhER3JZAcCCcTBWTcYWsQQdE3dZrkFU4q3CJVArVKfd69jTdkX0YXdfnvgcLzBGttGtUZThv3dw3hJGUJJgslSI1LrtInKincQ0BzBpeDB9D0Ph9LjvVxb1NXHCTw0HAn0XwHLOeDXpyLknXlJ6l3Js9GDZO2YRy9PuVUxUEylijz5sv1OWbnQgGTZciQLQrSjCoSDzs0h4Vsc5EnbjWnrKGYun65ykJWT"','mddm',0.0,0.0),
-          (4,'"OwBI"
-       5','OwBI',0.0,0.0);
+        (1,'"babad"','bab',0.0,0.0),
+        (1,'"cbbd"','bb',0.0,0.0),
+        (1,'"a"','a',0.0,0.0),
+        (1,'"xU"','x',0.0,0.0),
+        (1,'"d4dv"','d4d',0.0,0.0),
+        (1,'"y5TT"','TT',0.0,0.0),
+        (1,'"sDsBi"','sDs',0.0,0.0),
+        (1,'"KT03k"','K',0.0,0.0),
+        (1,'"pGEui"','p',0.0,0.0),
+        (1,'"mB"','m',0.0,0.0);
+    INSERT INTO public.testcases (problem_id,"input","output",memory,runtime) VALUES
+        (1,'"I4P0MASLCKi4WE5OqDokoyRAnxOoucDqKwBV3iOmYgHgTHYKESDyi0kYTAiS5Bker9rhy6BnB9kJM468h1PD0Hgbbx0OgZKlfKdefxvBocmVzzkB1s7L2OCf7UxwzITh0oZALc9jVLU8JUuC6JNsxA8I9hxQW0rT1MHH77pHJQcfYPYX4K0rMiGFg0QTuXkOIFpAc3Ayi70iJeb1p3J3AVJrIHmuiDitch1TAVCn5NuuleOKNEYcIkZBYm9UGDkVIVFBhI7HBhrSG63afZKsQgkiyDpPmUkfkl6FjuwVQ9AUvwr13W5RSDzm5fT1PER8yOWSKxnSeKx51pJ7LAedGttywfs018xBCnEnoSXB862uzftVD11zObOfJlphoKGPOlfhlETqTxdOSSOzq4Bth4"','OSSO',0.0,0.0),
+        (1,'"PuUyMbqxJvDtTNYUZC0NuYpDdwCJMyhuMRJLtAfmsvtxDeex2E1lPgwSyogRzhszXHfXiRyJcl9d6OQFsSE7vOGQanUlPPoD4zC8OzIp2W3TGROFCd4ZQK2st5tr7iZiGqrmBUAujakdveCwyH8JUd8vV8Y5OKqdJiyfqbXzVURQjn8DSkChm7pQnq97zTGhM5M4lUuvcu87pK1l5xCrwxXPrq2XmLLkmeO4LLRo6Qes5NFL5PxLUzBP3qjUbblmNKh6hoyiw26xD9DFuCdoc4lToch5mVlOW4IGiLgKh8Rmy2AlhgZEDrT3JlT2OqaXXkgtzuIZR3tYlwqgKGvdLebhcbFe4BgaZQ1SCHo519T2Sjgo"','t5t',0.0,0.0),
+        (1,'"mnEOulyvDm3IMZfvGPK4J1psFkXmHBaSa9sTwFPxhJmMHWslj0b1RayftQgP1e1R9Z2WBKLAQIUxXGmxpJsG8vsDFnYEOtwR948T1Hv5KsyK93ubw4TSEbycm9qWyAhZGX1fZ6PBA9Gwze3M9Ca5GVawhBXdatKgDOQJcvZ0GmvXFyFHVHMvnK7Mcl5gvcmRnF5o3BkGNZAyZVDLebZT2MmgkNwpQWIOLVSQkvPtaoTxizdubSLUuJMy2E8f0kACn0U0DxKRXnJqVtDifWfmZDaW3h63MPX5xVdIGhcLJTpVHffP3IGasHhUV4ZyPYiF9Wv5XWgCFk0ngaiCA5Ws24Es2Oc63vr0UJ5j7Qy2ZjlwEBZWnq28oXJ0zLau1UELmZZRBeltIffucCSUKN2HG64e3kWIgQbRnamLmoZEQnDgBNPGxTzMatwC7CprkIqkRbnX0YO4yREn0SUAW4t3xbxzqrnBEqpSJeJgIHY7FFEh7jD7HVVGuNactjsTSNvQJx1iVomTAPfpr5c8aX0Fuu872RzwzLDHZzmFj30Z2bRnnysD8AEGxyIKNRwDBDiepZvHwhPdk9wS1hSC4vbrz2ze9FMVEzWn8Dfnpd07swOfesBDmDlHiplSJkCfJ0CH6rMV2q9a20b6eUonA33wYvyzZaEvtAOrIk92HtVeME4bNeWwJFMWPEX9MLvwb22MAqxDvToxxm5QyDkoYnqJRo2RQ1Wc25xteoC769PAKuvwdZ0Ahcg80Pu6ybEDYYQPStSFbA8w7jhtdarBQ1WLnZTy7nlsUfdY8ZkqQhxPurDO1oZjEp4JwsDe7bK0wUxmHEatSCsREs3gGrQqNLO3Xj1pEU51eeCWfJxq14L9Xh8yy99zmCJC1hxrGE3bt2s7ZZpIEhuMncOHMiMbBLxje7a0EnScV9ppoz0b9ynLTKGPkHqeA5XIqBy6hLAtuAFj0aTqQBDkJwTZS8oaXqx7vc05jy"','aSa',0.0,0.0),
+        (1,'"WT4O5Wf4aUkLUiiA9Bfp9zV62aHddtFLWMWs2l5jxKJwjPWjsWWd8hmlfqlLNoyuoMF2u1zfoBNS5krY7PNNrc2o6jp2HD6DV0n1Gw8H54VAf7PHj50qF4Q9M07rK7G2OJJphgQsew45Kb6ZB6so3oQk0cyhL8m3g7rFgIRzzukJrEjjwSVJtLf6v5DtRkRzqxQ2gWQLJFzEjP9LtbBJuxuwdSMJCRnvYUwm0xIesGxxBXE9XJBJtCiYUXCAVFILnjEKJPQDdHglCR2XZ2IqpBrCZD0oD2gXqhGfgiVEtmACXuqfpPoEvxAK0nRuLsFYUHIRCXE4c9cZRP58iHY0f1MS6Y0nor4ZlXXtxmg8yhZzuOSxjgJKjwnOMjIQA9A2uCAVx6P5mgyHZqbqVU5e7az5qEdjI4pcuDGxKw6xQFpRPWSqC3DEGIsSLrbVT4hhEmAXF3MPhM3VaRsPnAx3cnNGtO1xpdB5qeVPaf2TSbbGUJx6llnUaBRgIz4"','WMW',0.0,0.0),
+        (1,'"jymav50lZE6AMvNOEpT29RcyIAkowBqADFSf4fepWDp1WmxvDGefvZHOSgLOSG0K1PHJ0jTf0M9kox3ShDggKnkSttuZY4BXkpDURdAiCKiPAydciio97AWN91D3d8LOH2HUtnnpD9Ej2eRdAtyrhTfEPAJ7BZtTcAsNT9FknlHXN37wZk075iBkpKDRErZGlXp9AbqO9Ac5d8GrgqR2RBlpGt5TSNmjEpCJFJSlgU3XOLgmeWEtR4PgHDDde5UJ8qXlwUpEG4fzzV91TNDfWNNZtTai1vFwELAHBDk1nKrpcM3BNiHThCpKTT61j8W7vCmIlAx73KkMar4IPIP8jQ7MO0HfuNlTcjwTXqaWpC394SqG72vMhOiFtibrC1zfQnpewpga6J1HsRAVASqhBQ8BBZJwH5Y3N1orxq1dduNKK2to3VfXBXN8zhI819jojetOBFMkXOTVyfzYeJD7ApKJ7Y76vHEwpqCngRMjjSB5TgD7drR8LNgTlSYms9NLAFaCfQPGa1Pd94ZLY0DTvRpArk9OOO1C7aibxzSEP9nrOTcTgTfE6tHZJnaUl1lYbPg3VO6ss0ZVZXJjVl7Gm1ZJ0c67XhG26gUIFxYvEN98xAsOsQ66j8jHfRu2RDKfEW6J1EUZNf7wZz8Gjgi5TAqEaB6rVhANvKujBj9Rhy7r0ZZ6WNrqNiuMWv7xlhJNNvXADsxLyAAU2zVEG7Os7DTKAd5qBEE98gVuv9uFWyyho8NXF0B9lIZczvM1uhAVQN5pGD382jaJQvltwngXt8AzkfY9Im6RrHAV79ATW5j0iWCxIuoqtedWABzd97WcIou4xGpCFY52Y30rrxtDZUfmAuMt7aZAMobXAfIb86dsZit7N1RtoMhBM6o7P3k1rHg0YCgnvPexhOC152Pfl9zVFCfBBPBRijfhNz2OJk"','f4f',0.0,0.0),
+        (1,'"U8Dlk8FOCWqjcPZK7GWrUvvl2nMAXgvrOAiuSUyxeERgF43eYuDL3ozONYZLxcweUD57axOnQzECaxtm7jEYv5prAOXPkYq7u4GbliasLp7Xjkmpuhz0DVu37iMUXhpvX04xG9epgGoUV1V9YU9y3dSkEoE7m3GSxKtG3Bestf31ZgVe4B9cwOoNphbj0OzQyIAjHWR2kuxIx4guHesnzs6LcAplkNmLiZAbBCPcW2VxlOmMQF7nOXlgYDXaQA8U5SICvRZmSSIZCSOh1P09mzYkIeJD579dIIiRLVJ6sV05vhJ9rUzMKiy3VLRffhCaWisHv1qHCGhwDQ3RJJD5JitqmMzuCgqUYnOnLDy040z52XHMMAJgAS0pnKsc6GrINVYJp6LelLxIty09yNeHGJ6XTaryaHyOmgc7yXQRtwr9Jdyul6zckueAogwJbFEzWi4WNQIUpNGwIt5FNjTcNFgLWu20v1pozvbNjJAjL2IKqxP9pYf4BTCjDE6orjjDAFTJSKi2CmQGFsN8uhM9wbn2LeROP2CKovlQy87GwmMtNccnV4Q8DLCVBkZhx6fcJI8ES3Jb3JWp5Mk6bkVvjs7egkfIaYPBLNpYyZZ2FgMntUA7zGNkU7RHL8WZKUb3njCuVIcCYpfCtrBC0nlVjJBB0A3VtiHSlITcmrB7wZ9nvDkzNIDUEv7MIWDsS1c7e1fJwqIfPywRcS6el11qiZgJZZDheV4Lw1mJ6t6MXhRXVy0mfSa00tKsUkmmvPrxrJxJIVBSDWmUyL8NgVApNwFwW7vy6EgNLb7vmo1EE3UZwOw7zGVmxGyIuDk8beQkbJMw5eXu3Bj3o5dt11wcQZunMNZELzhq1AP2QHXlYAU6emupdjFJCsCu"','V1V',0.0,0.0),
+        (1,'"D89jx3UQ1IYYlNZMW5zcKeyWjuAF2yUk9h055A7XCuaJwOdqJOemzmjco4wQkeyDI31ehsOAYAldafdSYSM88HU1ISgZHyyeFJdYPWDNRQNfEnoVwgJOiGEbMOV4NJmk1qg9rExAVqusgTjJ5fPixs1tfF4YRdCNIpqfEzYIgK3DMsbntEh9soYKgJQPxwUPqRCxEjWkL0P04UHYZ3U6FaULxiDEmiJZ4YDXl8xAbsUquwWKThzF2KMKp9e0ByIHTDoXdSNT1LaTEIB8rljXvw2qUfvZbr9AsXAn8CYIx71grqmf85wTTK9FhrfPu86A1ZUG7EgbmMJ4CbguKrAeLPoiaOP4TTRzJbDV7hH4lrFUZQRVbsHKMyedvrCFk0wL72HhXnLgfDSneMj91IOapFJiHe7"','mzm',0.0,0.0),
+        (1,'"QMDeThXXKKaiJy05WModGrqCX5D1c1XaBGzbTIf3qAjtPSDWBCoY0fHKoXgEus61iqi3wXvtoN8cxU0fZ1hHqlz2TRqtxtlGdlB3ompXvv14tCknGjlC88HMHodjUsYc4W8RuvRezfLZ4Bhjg87InIOvZlgw9tl426KM6EtUb2OSWTZRve45itNmFjGxcf6xrRyKw8Pm3iXrRQsCGcwBRGrho4gMfAbweTZSmEI3LPH6TuNjM1LiS5W9N8qM0jIy2QpREj4VdOATSjRRvnnyonLD3UHIWqVXmhd0GJ1Tbp5gIJoNJres40VCWnWmrDUbOKs9UJ9crH4o14WNzQcAbEqwnSGM1j30tzzcbc1TkzYsLT5tuzc8f26xB3lPV48BoHo6mjxiQ7mUibcJz7ael9w9py8kYB3Mw27s3unsujPy7JPcyQ8Z2dPNhS4MzcR07AiNvIuu6KG0HlK8h4rbHdxaVDtUzcZxzfZJ6iwzu02Hg0OmtZvSnxP75qcgKNKZbixu6p7hAUyE0ErgaLIACNoe1d7oeBjHg9ajPWQBgYzJas24te3yV6Iu1qpifDd96ipq8PCQGxlcpmOeTQ7Fyms5NCdvL1UvL3XZQRhqbT7lec7s6bA3KuoNzlWMwjzvrPg"','1c1',0.0,0.0),
+        (1,'"79hJh7hfuVwEqTXvrbVeRPpSsGj8qV3aumYQrlJJ3NuntnBox91y956K1Z4NEzeMHx5Nm2ibMeUj76y4R22hYhH0PJ8SGafQEGTqK9nqKGTrUzUciRRSqEDrlccyY9VNebqnlQjEbihyEognXc2wfYOilk4Sgz5Y0qdVX9exUZ76JEvaLGXLqZcEhwwOIJaJgPnKJQkVk7o0EwYxmddmcYyliZ4QbWMftZez7LWecczCuMr8nCnqgm0v8lT6rWWBYxZniQ1JYHge8wu5SGZRdYVhRjYk0pQkh0bbuCotbIUS4fkQSgkzxnJiF0bsWuDtTq2C3cfg3TyucYqelwoHeDBZKqMQJTczRAEUbIgfgnz6dDsd1q18Piy4IOMIFk4gTod8kNkmAvREXfiZYTXnPjnAntpuP3waJUsp3LU69XD8drRcj0gWJ27eDbPViZgpjg5qX7eXIRrQkMcPFXqM16UZrrdew3JZ7tnK4N5qazUlB6vIjO3RGkuk7GNbTVWjI8sIVhyCxs2fNNJNKnBLqN5ecULNIMjDzdPkiemBYnC9rpfNOIGY0DdwHaOjJqrinL5rdtqeaaRb5mKWkgOOVkB5Q9Xs4GUMOhMekIRawKOsCHjq4avUhFwvLhQ0CbinLhER3JZAcCCcTBWTcYWsQQdE3dZrkFU4q3CJVArVKfd69jTdkX0YXdfnvgcLzBGttGtUZThv3dw3hJGUJJgslSI1LrtInKincQ0BzBpeDB9D0Ph9LjvVxb1NXHCTw0HAn0XwHLOeDXpyLknXlJ6l3Js9GDZO2YRy9PuVUxUEylijz5sv1OWbnQgGTZciQLQrSjCoSDzs0h4Vsc5EnbjWnrKGYun65ykJWT"','mddm',0.0,0.0),
+        (4,'"OwBI"
+    5','OwBI',0.0,0.0);
     INSERT INTO public.testcases (problem_id,"input","output",memory,runtime) VALUES
           (4,'"D,nlyCu"
        5','D,nulCy',0.0,0.0),
@@ -422,28 +422,28 @@ const insertTestCases = async () => {
           (10,'3819','MMMDCCCXIX',0.0,0.0),
           (10,'3986','MMMCMLXXXVI',0.0,0.0);    
           `);
-     } catch (err) {
-          console.log(err);
-          process.exit(1);
-     }
+    } catch (err) {
+        console.log(err);
+        process.exit(1);
+    }
 };
 
 const insertLanguages = async () => {
-     try {
-          await pool.query(`
+    try {
+        await pool.query(`
           INSERT INTO public.languages ("name") VALUES
 	 ('python'),
 	 ('cpp');
             `);
-     } catch (err) {
-          console.log(err);
-          process.exit(1);
-     }
+    } catch (err) {
+        console.log(err);
+        process.exit(1);
+    }
 };
 
 const insertProblemLanguages = async () => {
-     try {
-          await pool.query(`
+    try {
+        await pool.query(`
           INSERT INTO public.problem_languages (problem_id,language_id,initial_code,solution_code,full_code) VALUES
           (1,1,'class Solution:
         def longestPalindrome(self, s: str) -> str:
@@ -1311,29 +1311,29 @@ const insertProblemLanguages = async () => {
         return 0;
     }');    
           `);
-     } catch (err) {
-          console.log(err);
-          process.exit(1);
-     }
+    } catch (err) {
+        console.log(err);
+        process.exit(1);
+    }
 };
 
 const insertLevels = async () => {
-     try {
-          await pool.query(`
+    try {
+        await pool.query(`
           INSERT INTO public.levels ("name") VALUES
 	 ('Easy'),
 	 ('Medium'),
 	 ('Hard');
             `);
-     } catch (err) {
-          console.log(err);
-          process.exit(1);
-     }
+    } catch (err) {
+        console.log(err);
+        process.exit(1);
+    }
 };
 
 const insertProblems = async () => {
-     try {
-          await pool.query(`
+    try {
+        await pool.query(`
           INSERT INTO public.problems (title,level_id,description,instruction,likes,dislikes,categories,is_public) VALUES
           ('Longest Substring Without Repeating Characters',2,'Can you solve this real interview question? Longest Substring Without Repeating Characters - Given a string s, find the length of the longest substring without repeating characters.
        
@@ -1760,43 +1760,43 @@ const insertProblems = async () => {
        * 1 <= num <= 3999','',6476,5353,'{"Hash Table",Math,String}',true);
     
           `);
-     } catch (err) {
-          console.log(err);
-          process.exit(1);
-     }
+    } catch (err) {
+        console.log(err);
+        process.exit(1);
+    }
 };
 
 const insertSemesters = async () => {
-     try {
-          await pool.query(`
+    try {
+        await pool.query(`
           INSERT INTO public.semesters ("name",start_date,end_date) VALUES
 	 ('231','2023-08-28 00:00:00',NULL),
 	 ('232','2024-02-19 00:00:00',NULL),
 	 ('233','2024-06-10 00:00:00',NULL);
           `);
-     } catch (err) {
-          console.log(err);
-          process.exit(1);
-     }
+    } catch (err) {
+        console.log(err);
+        process.exit(1);
+    }
 };
 
 const insertSubjects = async () => {
-     try {
-          await pool.query(`
+    try {
+        await pool.query(`
           INSERT INTO public.subjects ("name",short_name) VALUES
 	 ('Programming Fundamentals','PF'),
 	 ('Data Structures and Algorithms','DSA'),
 	 ('Principles of Programming Languages','PPL');
           `);
-     } catch (err) {
-          console.log(err);
-          process.exit(1);
-     }
+    } catch (err) {
+        console.log(err);
+        process.exit(1);
+    }
 };
 
 const insertClasses = async () => {
-     try {
-          await pool.query(`
+    try {
+        await pool.query(`
           INSERT INTO public.classes (subject_id,semester_id,"name") VALUES
           (1,1,'L01'),
           (1,1,'L02'),
@@ -1818,15 +1818,15 @@ const insertClasses = async () => {
           (3,2,'L02'),
           (3,2,'L03');    
           `);
-     } catch (err) {
-          console.log(err);
-          process.exit(1);
-     }
+    } catch (err) {
+        console.log(err);
+        process.exit(1);
+    }
 };
 
 const insertProblemClasses = async () => {
-     try {
-          await pool.query(`
+    try {
+        await pool.query(`
           INSERT INTO public.problem_classes (problem_id,class_id,time_limit,start_time,end_time,retries) VALUES
           (1,1,15.0,'2024-01-01 14:00:00','2024-01-01 16:00:00',3),
           (2,1,15.0,'2024-01-01 14:00:00','2024-01-01 16:00:00',3),
@@ -1868,15 +1868,15 @@ const insertProblemClasses = async () => {
           (1,18,15.0,'2024-01-01 14:00:00','2024-01-01 16:00:00',3),
           (2,18,15.0,'2024-01-01 14:00:00','2024-01-01 16:00:00',3);              
           `);
-     } catch (err) {
-          console.log(err);
-          process.exit(1);
-     }
+    } catch (err) {
+        console.log(err);
+        process.exit(1);
+    }
 };
 
 const insertStudentClasses = async () => {
-     try {
-          await pool.query(`
+    try {
+        await pool.query(`
           INSERT INTO public.student_classes (student_id,class_id) VALUES
           (7,2),
           (7,8),
@@ -2077,15 +2077,15 @@ const insertStudentClasses = async () => {
           (66,13);
     
           `);
-     } catch (err) {
-          console.log(err);
-          process.exit(1);
-     }
+    } catch (err) {
+        console.log(err);
+        process.exit(1);
+    }
 };
 
 const insertTeacherClasses = async () => {
-     try {
-          await pool.query(`
+    try {
+        await pool.query(`
           INSERT INTO public.teacher_classes (teacher_id,class_id) VALUES
 	 (4,1),
 	 (4,2),
@@ -2108,33 +2108,33 @@ INSERT INTO public.teacher_classes (teacher_id,class_id) VALUES
 	 (6,18);
 
           `);
-     } catch (err) {
-          console.log(err);
-          process.exit(1);
-     }
+    } catch (err) {
+        console.log(err);
+        process.exit(1);
+    }
 };
 
 (async () => {
-     try {
-          console.log('Waiting...');
-          console.log('If program does not show anything, program run sucessfully');
+    try {
+        console.log('Waiting...');
+        console.log('If program does not show anything, program run sucessfully');
 
-          await insertUsers();
-          await insertStudents();
-          await insertLanguages();
-          await insertLevels();
-          await insertProblems();
-          await insertSemesters();
-          await insertSubjects();
-          await insertTestCases();
-          await insertClasses();
+        await insertUsers();
+        await insertStudents();
+        await insertLanguages();
+        await insertLevels();
+        await insertProblems();
+        await insertSemesters();
+        await insertSubjects();
+        await insertTestCases();
+        await insertClasses();
 
-          await insertProblemLanguages();
-          await insertProblemClasses();
-          await insertStudentClasses();
-          await insertTeacherClasses();
-     } catch (err) {
-          console.log(err);
-          process.exit(1);
-     }
+        await insertProblemLanguages();
+        await insertProblemClasses();
+        await insertStudentClasses();
+        await insertTeacherClasses();
+    } catch (err) {
+        console.log(err);
+        process.exit(1);
+    }
 })();

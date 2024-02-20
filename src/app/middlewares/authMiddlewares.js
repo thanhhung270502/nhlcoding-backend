@@ -13,7 +13,7 @@ const generateToken = (userId, userRole) => {
 const verifyToken = async (req, res, next) => {
     const token = req.headers['access-token'];
     if (!token) {
-        return res.status(200).json({
+        return res.status(400).json({
             message: 'We need token please provide it for next time',
             login: false,
         });
@@ -36,7 +36,7 @@ const verifyToken = async (req, res, next) => {
 const isTeacher = async (req, res, next) => {
     const token = req.headers['access-token'];
     if (!token) {
-        return res.status(200).json({
+        return res.status(400).json({
             message: 'We need token please provide it for next time',
             login: false,
         });
@@ -63,7 +63,7 @@ const isTeacher = async (req, res, next) => {
 const isAdmin = async (req, res, next) => {
     const token = req.headers['access-token'];
     if (!token) {
-        return res.status(200).json({
+        return res.status(400).json({
             message: 'We need token please provide it for next time',
             login: false,
         });
@@ -90,7 +90,7 @@ const isAdmin = async (req, res, next) => {
 const isStudent = async (req, res, next) => {
     const token = req.headers['access-token'];
     if (!token) {
-        return res.status(200).json({
+        return res.status(400).json({
             message: 'We need token please provide it for next time',
             login: false,
         });

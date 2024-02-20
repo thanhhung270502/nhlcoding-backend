@@ -11,8 +11,10 @@ const levelRouter = require('./levels');
 const userProblemsRouter = require('./user_problems');
 const semestersRouter = require('./semesters');
 const subjectsRouter = require('./subjects');
+const classesRouter = require('./classes');
 
 function route(app) {
+    app.use('/classes', classesRouter);
     app.use('/subjects', subjectsRouter);
     app.use('/semesters', semestersRouter);
     app.use('/levels', levelRouter);
