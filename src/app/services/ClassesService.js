@@ -1,5 +1,5 @@
 const pool = require('../../config/db');
-const { sortBySemester } = require('../../utils');
+const { sortBySemester, sortByProblemsByTopics } = require('../../utils');
 
 class ClassesService {
     // [GET]
@@ -41,6 +41,55 @@ class ClassesService {
                 message: 'successfully',
                 body: {
                     courses: sortBySemester(response.rows),
+                },
+            });
+        } catch (err) {
+            return res.status(500).json('Internal Server Error');
+        }
+    }
+
+    // [GET]
+    async getAllProblemsByTopics(req, res) {
+        try {
+            const class_id = req.params.slug;
+            const userID = req.userID;
+            const userRole = req.userRole;
+
+            if (userRole === 'normal') {
+                return res.status(403).json({
+                    code: 403,
+                    message: 'You must have permission to access this class.',
+                });
+            }
+
+            let query = `
+                select * from student_classes sc 
+                where sc.class_id = $1 and sc.student_id = $2
+            `;
+            const checkBelongsToClass = await pool.query(query, [class_id, userID]);
+
+            if (checkBelongsToClass.rows.length === 0) {
+                return res.status(400).json({
+                    code: 400,
+                    message: 'You do not belong to this class.',
+                });
+            }
+
+            query = `
+                select ct.topic_name, tp.problem_id, tp.time_limit , tp.start_time , tp.end_time, p.title 
+                from class_topics ct 
+                join topic_problems tp on tp.class_topics_id = ct.id 
+                join problems p on p.id = tp.problem_id 
+                where ct.class_id = $1
+            `;
+
+            const response = await pool.query(query, [class_id]);
+
+            return res.status(200).json({
+                code: 200,
+                message: 'successfully',
+                body: {
+                    topic_problems: sortByProblemsByTopics(response.rows),
                 },
             });
         } catch (err) {

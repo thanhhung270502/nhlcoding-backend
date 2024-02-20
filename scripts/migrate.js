@@ -190,7 +190,7 @@ const createTableClasses = async () => {
         console.log(err);
         process.exit(1);
     }
-}
+};
 
 const createTableTestCases = async () => {
     try {
@@ -215,15 +215,33 @@ const createTableTestCases = async () => {
     }
 };
 
-const createTableProblemClasses = async () => {
+const createTableClassTopics = async () => {
     try {
-        await pool.query('drop table if exists problem_classes cascade');
+        await pool.query('drop table if exists class_topics cascade');
+        const query = `
+        CREATE TABLE class_topics (
+            id serial,
+            class_id integer,
+            topic_name varchar NULL,
+            CONSTRAINT class_topics_pk PRIMARY KEY (id),
+            CONSTRAINT class_topics_fk FOREIGN KEY (class_id) REFERENCES public.classes(id)
+        )`;
+        await pool.query(query);
+    } catch (err) {
+        console.log(err);
+        process.exit(1);
+    }
+};
+
+const createTableTopicProblems = async () => {
+    try {
+        await pool.query('drop table if exists topic_problems cascade');
 
         const query = `
-        create table problem_classes (
+        create table topic_problems (
             id SERIAL primary key,
             problem_id integer,
-            class_id integer,
+            class_topics_id integer,
             time_limit float,
             start_time timestamp,
             end_time timestamp,
@@ -231,9 +249,9 @@ const createTableProblemClasses = async () => {
             constraint fk_pc_problem_id
                 foreign key (problem_id)
                     references problems(id),
-            constraint fk_pc_class_id
-                foreign key (class_id)
-                    references classes(id)
+            constraint fk_pc_class_topics_id
+                foreign key (class_topics_id)
+                    references class_topics(id)
         )`;
         await pool.query(query);
     } catch (err) {
@@ -472,7 +490,7 @@ $$ LANGUAGE plpgsql
         `);
         await pool.query(`
         CREATE TRIGGER check_public_problem_trigger
-        BEFORE INSERT OR UPDATE ON problem_classes
+        BEFORE INSERT OR UPDATE ON topic_problems
         FOR EACH ROW
         EXECUTE FUNCTION check_public_problem()
         `);
@@ -480,7 +498,7 @@ $$ LANGUAGE plpgsql
         console.log(err);
         process.exit(1);
     }
-}
+};
 
 const createCheckStudentClassesTrigger = async () => {
     try {
@@ -575,7 +593,9 @@ const createCheckUserRoleTrigger = async () => {
         await createTableSubmissions();
         await createTableClasses();
 
-        await createTableProblemClasses();
+        await createTableClassTopics();
+
+        await createTableTopicProblems();
         await createTableProblemLanguages();
         await createTableStudentClasses();
         await createTableTeacherClasses();

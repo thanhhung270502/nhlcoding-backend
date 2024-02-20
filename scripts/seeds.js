@@ -1824,10 +1824,41 @@ const insertClasses = async () => {
     }
 };
 
-const insertProblemClasses = async () => {
+const insertClassTopics = async () => {
     try {
         await pool.query(`
-          INSERT INTO public.problem_classes (problem_id,class_id,time_limit,start_time,end_time,retries) VALUES
+    INSERT INTO class_topics (class_id, topic_name) VALUES
+    (2, 'W1: Introduction to Programming languages and Compilers'),
+    (2, 'W2: Lexer'),
+    (2, 'W3: Syntax Analysis');
+    `);
+    } catch (err) {
+        console.log(err);
+        process.exit(1);
+    }
+};
+
+const insertTopicProblems = async () => {
+    try {
+        await pool.query(`
+    INSERT INTO topic_problems (problem_id, class_topics_id, time_limit,start_time,end_time,retries) VALUES
+    (1, 1, 15.0, '2024-01-01 14:00:00', '2024-01-01 16:00:00', 3),
+    (2, 1, 15.0, '2024-01-01 14:00:00', '2024-01-01 16:00:00', 3),
+    (1, 2, 15.0, '2024-01-01 14:00:00', '2024-01-01 16:00:00', 3),
+    (2, 2, 15.0, '2024-01-01 14:00:00', '2024-01-01 16:00:00', 3),
+    (1, 3, 15.0, '2024-01-01 14:00:00', '2024-01-01 16:00:00', 3),
+    (2, 3, 15.0, '2024-01-01 14:00:00', '2024-01-01 16:00:00', 3);
+        `);
+    } catch (err) {
+        console.log(err);
+        process.exit(1);
+    }
+};
+
+const insertProblemClasses2 = async () => {
+    try {
+        await pool.query(`
+          INSERT INTO public.topic_problems (problem_id,class_id,time_limit,start_time,end_time,retries) VALUES
           (1,1,15.0,'2024-01-01 14:00:00','2024-01-01 16:00:00',3),
           (2,1,15.0,'2024-01-01 14:00:00','2024-01-01 16:00:00',3),
           (1,2,15.0,'2024-01-01 14:00:00','2024-01-01 16:00:00',3),
@@ -1838,7 +1869,7 @@ const insertProblemClasses = async () => {
           (2,4,15.0,'2024-01-01 14:00:00','2024-01-01 16:00:00',3),
           (1,5,15.0,'2024-01-01 14:00:00','2024-01-01 16:00:00',3),
           (2,5,15.0,'2024-01-01 14:00:00','2024-01-01 16:00:00',3);
-    INSERT INTO public.problem_classes (problem_id,class_id,time_limit,start_time,end_time,retries) VALUES
+    INSERT INTO public.topic_problems (problem_id,class_id,time_limit,start_time,end_time,retries) VALUES
           (1,6,15.0,'2024-01-01 14:00:00','2024-01-01 16:00:00',3),
           (2,6,15.0,'2024-01-01 14:00:00','2024-01-01 16:00:00',3),
           (1,7,15.0,'2024-01-01 14:00:00','2024-01-01 16:00:00',3),
@@ -1849,7 +1880,7 @@ const insertProblemClasses = async () => {
           (2,9,15.0,'2024-01-01 14:00:00','2024-01-01 16:00:00',3),
           (1,10,15.0,'2024-01-01 14:00:00','2024-01-01 16:00:00',3),
           (2,10,15.0,'2024-01-01 14:00:00','2024-01-01 16:00:00',3);
-    INSERT INTO public.problem_classes (problem_id,class_id,time_limit,start_time,end_time,retries) VALUES
+    INSERT INTO public.topic_problems (problem_id,class_id,time_limit,start_time,end_time,retries) VALUES
           (1,11,15.0,'2024-01-01 14:00:00','2024-01-01 16:00:00',3),
           (2,11,15.0,'2024-01-01 14:00:00','2024-01-01 16:00:00',3),
           (1,12,15.0,'2024-01-01 14:00:00','2024-01-01 16:00:00',3),
@@ -1860,7 +1891,7 @@ const insertProblemClasses = async () => {
           (2,14,15.0,'2024-01-01 14:00:00','2024-01-01 16:00:00',3),
           (1,15,15.0,'2024-01-01 14:00:00','2024-01-01 16:00:00',3),
           (2,15,15.0,'2024-01-01 14:00:00','2024-01-01 16:00:00',3);
-    INSERT INTO public.problem_classes (problem_id,class_id,time_limit,start_time,end_time,retries) VALUES
+    INSERT INTO public.topic_problems (problem_id,class_id,time_limit,start_time,end_time,retries) VALUES
           (1,16,15.0,'2024-01-01 14:00:00','2024-01-01 16:00:00',3),
           (2,16,15.0,'2024-01-01 14:00:00','2024-01-01 16:00:00',3),
           (1,17,15.0,'2024-01-01 14:00:00','2024-01-01 16:00:00',3),
@@ -2130,7 +2161,9 @@ INSERT INTO public.teacher_classes (teacher_id,class_id) VALUES
         await insertClasses();
 
         await insertProblemLanguages();
-        await insertProblemClasses();
+        await insertClassTopics();
+        await insertTopicProblems();
+        // await insertProblemClasses();
         await insertStudentClasses();
         await insertTeacherClasses();
     } catch (err) {
