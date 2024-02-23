@@ -1827,10 +1827,13 @@ const insertClasses = async () => {
 const insertClassTopics = async () => {
     try {
         await pool.query(`
-    INSERT INTO class_topics (class_id, topic_name) VALUES
-    (2, 'W1: Introduction to Programming languages and Compilers'),
-    (2, 'W2: Lexer'),
-    (2, 'W3: Syntax Analysis');
+    INSERT INTO class_topics (class_id, topic_name, idx) VALUES
+    (2, 'W1: Introduction to Programming languages and Compilers', 0),
+    (2, 'W2: Lexer', 1),
+    (2, 'W3: Syntax Analysis', 3),
+    (1, 'W2: Lexer', 0),
+    (3, 'W1: Introduction to Programming languages and Compilers', 0),
+    (2, 'W4: OOP - Scala', 2);
     `);
     } catch (err) {
         console.log(err);
@@ -2124,19 +2127,19 @@ const insertTeacherClasses = async () => {
 	 (4,4),
 	 (4,5),
 	 (4,6),
-	 (5,7),
-	 (5,8),
-	 (5,9),
-	 (5,10);
+	 (4,7),
+	 (4,8),
+	 (4,9),
+	 (4,10);
 INSERT INTO public.teacher_classes (teacher_id,class_id) VALUES
-	 (5,11),
-	 (5,12),
-	 (6,13),
-	 (6,14),
-	 (6,15),
-	 (6,16),
-	 (6,17),
-	 (6,18);
+	 (4,11),
+	 (4,12),
+	 (5,13),
+	 (5,14),
+	 (5,15),
+	 (5,16),
+	 (5,17),
+	 (5,18);
 
           `);
     } catch (err) {

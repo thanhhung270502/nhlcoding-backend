@@ -223,6 +223,7 @@ const createTableClassTopics = async () => {
             id serial,
             class_id integer,
             topic_name varchar NULL,
+            idx integer,
             CONSTRAINT class_topics_pk PRIMARY KEY (id),
             CONSTRAINT class_topics_fk FOREIGN KEY (class_id) REFERENCES public.classes(id)
         )`;

@@ -1,5 +1,5 @@
 const pool = require('../../config/db');
-const { sortBySemester, sortByProblemsByTopics } = require('../../utils');
+const { sortBySemester, sortByProblemsByTopics, sortBySemesterByTeacher } = require('../../utils');
 
 class ClassesService {
     // [GET]
@@ -32,15 +32,40 @@ class ClassesService {
                     join users u on u.id = tc.teacher_id 
                     where sc.student_id = $1
                 `;
+                const response = await pool.query(query, [userID]);
+
+                return res.status(200).json({
+                    code: 200,
+                    message: 'successfully',
+                    body: {
+                        courses: sortBySemester(response.rows),
+                    },
+                });
+            } else if (userRole === 'teacher') {
+                query = `
+                    select s2."name" as semester_name, s.id as subject_id, s."name" as subject_name, u.name as teacher_name, c.id as class_id
+                    from teacher_classes tc 
+                    join classes c on c.id = tc.class_id 
+                    join subjects s ON s.id = c.subject_id 
+                    join semesters s2 on s2.id = c.semester_id 
+                    join users u on u.id = tc.teacher_id 
+                    where tc.teacher_id = $1
+                `;
+                const response = await pool.query(query, [userID]);
+
+                return res.status(200).json({
+                    code: 200,
+                    message: 'successfully',
+                    body: {
+                        courses: sortBySemesterByTeacher(response.rows),
+                    },
+                });
             }
-
-            const response = await pool.query(query, [userID]);
-
             return res.status(200).json({
                 code: 200,
                 message: 'successfully',
                 body: {
-                    courses: sortBySemester(response.rows),
+                    courses: [],
                 },
             });
         } catch (err) {
@@ -50,6 +75,115 @@ class ClassesService {
 
     // [GET]
     async getAllProblemsByTopics(req, res) {
+        try {
+            const class_id = req.params.slug;
+            const userID = req.userID;
+            const userRole = req.userRole;
+
+            if (userRole === 'normal') {
+                return res.status(403).json({
+                    code: 403,
+                    message: 'You must have permission to access this class.',
+                });
+            } else if (userRole === 'student') {
+                let query = `
+                    select * from student_classes sc 
+                    where sc.class_id = $1 and sc.student_id = $2
+                `;
+                const checkBelongsToClass = await pool.query(query, [class_id, userID]);
+
+                if (checkBelongsToClass.rows.length === 0) {
+                    return res.status(400).json({
+                        code: 400,
+                        message: 'You do not belong to this class.',
+                    });
+                }
+
+                query = `
+                    select ct.topic_name, tp.problem_id, tp.time_limit , tp.start_time , tp.end_time, p.title, ct.class_id, c."name" as class_name
+                    from class_topics ct 
+                    left join topic_problems tp on tp.class_topics_id = ct.id 
+                    left join problems p on p.id = tp.problem_id 
+                    left join classes c on c.id = ct.class_id 
+                    where ct.class_id = $1
+                    order by ct.class_id , ct.idx
+                `;
+
+                const response = await pool.query(query, [class_id]);
+
+                return res.status(200).json({
+                    code: 200,
+                    message: 'successfully',
+                    body: {
+                        topic_problems: sortByProblemsByTopics(response.rows),
+                    },
+                });
+            } else if (userRole === 'teacher') {
+                // Check belongs to class
+                let query = `
+                select * 
+                from teacher_classes tc 
+                join classes c on c.id  = tc.class_id 
+                where tc.class_id = $1 and tc.teacher_id = $2
+                `;
+                let values = [class_id, userID];
+
+                const checkBelongsToClass = await pool.query(query, values);
+
+                if (checkBelongsToClass.rows.length === 0) {
+                    return res.status(400).json({
+                        code: 400,
+                        message: 'You do not belong to this class.',
+                    });
+                }
+
+                // Get all classes in this subject
+                query = `
+                select * 
+                from teacher_classes tc 
+                join classes c on c.id  = tc.class_id 
+                where c.subject_id = $1 and tc.teacher_id = $2 and c.semester_id = $3
+                `;
+                values = [checkBelongsToClass.rows[0].subject_id, userID, checkBelongsToClass.rows[0].semester_id];
+
+                const getAllClassesInSubject = await pool.query(query, values);
+
+                //
+                let condition = '';
+                for (let i = 0; i < getAllClassesInSubject.rows.length; i++) {
+                    if (i === 0) {
+                        condition += 'ct.class_id = ' + getAllClassesInSubject.rows[i].class_id;
+                    } else {
+                        condition += ' or ct.class_id = ' + getAllClassesInSubject.rows[i].class_id;
+                    }
+                }
+
+                query = `
+                    select ct.topic_name, tp.problem_id, tp.time_limit , tp.start_time , tp.end_time, p.title, ct.class_id, c."name" as class_name
+                    from class_topics ct 
+                    left join topic_problems tp on tp.class_topics_id = ct.id 
+                    left join problems p on p.id = tp.problem_id 
+                    left join classes c on c.id = ct.class_id 
+                    where ${condition}
+                    order by ct.class_id, ct.idx
+                `;
+
+                const response = await pool.query(query);
+
+                return res.status(200).json({
+                    code: 200,
+                    message: 'successfully',
+                    body: {
+                        topic_problems: sortByProblemsByTopics(response.rows),
+                    },
+                });
+            }
+        } catch (err) {
+            return res.status(500).json('Internal Server Error');
+        }
+    }
+
+    async getAllParticipantsInClass(req, res) {
         try {
             const class_id = req.params.slug;
             const userID = req.userID;
@@ -74,22 +208,20 @@ class ClassesService {
                     message: 'You do not belong to this class.',
                 });
             }
-
             query = `
-                select ct.topic_name, tp.problem_id, tp.time_limit , tp.start_time , tp.end_time, p.title 
-                from class_topics ct 
-                join topic_problems tp on tp.class_topics_id = ct.id 
-                join problems p on p.id = tp.problem_id 
-                where ct.class_id = $1
+                select u."name", s.student_code, u."role" 
+                from student_classes sc 
+                join users u on u.id = sc.student_id
+                join students s on s.user_id = sc.student_id 
+                where sc.class_id = $1
             `;
 
             const response = await pool.query(query, [class_id]);
-
             return res.status(200).json({
                 code: 200,
                 message: 'successfully',
                 body: {
-                    topic_problems: sortByProblemsByTopics(response.rows),
+                    participants: response.rows,
                 },
             });
         } catch (err) {
