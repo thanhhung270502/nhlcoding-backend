@@ -4,7 +4,9 @@ const router = express.Router();
 const { verifyToken, isAdmin, isTeacher } = require('../app/middlewares/authMiddlewares');
 const classesSerivce = require('../app/services/ClassesService');
 
+router.post('/:slug/createTopic', verifyToken, classesSerivce.createTopicOfClass);
 router.get('/:slug/participants', verifyToken, classesSerivce.getAllParticipantsInClass);
+router.get('/:slug/subjectName', verifyToken, classesSerivce.getSubjectNameByClassID);
 router.get('/me', verifyToken, classesSerivce.getAllClasses);
 router.get('/:slug', verifyToken, classesSerivce.getAllProblemsByTopics);
 router.put('/:slug', isAdmin, classesSerivce.update);

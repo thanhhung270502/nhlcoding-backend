@@ -85,6 +85,43 @@ class AuthController {
             });
         }
     }
+
+    async checkRole(req, res) {
+        const userRole = req.userRole;
+        if (userRole === 'teacher') {
+            return res.status(202).json({
+                code: 202,
+                message: 'You are a teacher',
+                body: {
+                    role: userRole,
+                },
+            });
+        } else if (userRole === 'admin') {
+            return res.status(202).json({
+                code: 202,
+                message: 'You are a administrator',
+                body: {
+                    role: userRole,
+                },
+            });
+        } else if (userRole === 'student') {
+            return res.status(202).json({
+                code: 202,
+                message: 'You are a student',
+                body: {
+                    role: userRole,
+                },
+            });
+        } else {
+            return res.status(202).json({
+                code: 202,
+                message: 'You are a normal person',
+                body: {
+                    role: userRole,
+                },
+            });
+        }
+    }
 }
 
 module.exports = new AuthController();

@@ -1,5 +1,10 @@
 const pool = require('../../config/db');
-const { sortBySemester, sortByProblemsByTopics, sortBySemesterByTeacher } = require('../../utils');
+const {
+    sortBySemester,
+    sortByProblemsByTopics,
+    sortBySemesterByTeacher,
+    sortByProblemsByTopics2,
+} = require('../../utils');
 
 class ClassesService {
     // [GET]
@@ -23,7 +28,7 @@ class ClassesService {
             let query = '';
             if (userRole === 'student') {
                 query = `
-                    select s2."name" as semester_name, s.id as subject_id, s."name" as subject_name, u.name as teacher_name, c.id as class_id
+                    select s2."name" as semester_name, s.id as subject_id, s."name" as subject_name, u.name as teacher_name, c.id as class_id, c."name" as class_name
                     from student_classes sc 
                     join classes c on c.id = sc.class_id 
                     join subjects s ON s.id = c.subject_id 
@@ -31,6 +36,7 @@ class ClassesService {
                     join teacher_classes tc on tc.class_id = c.id 
                     join users u on u.id = tc.teacher_id 
                     where sc.student_id = $1
+                    order by s2."name" desc, s."name" asc, c.id asc
                 `;
                 const response = await pool.query(query, [userID]);
 
@@ -38,21 +44,21 @@ class ClassesService {
                     code: 200,
                     message: 'successfully',
                     body: {
-                        courses: sortBySemester(response.rows),
+                        courses: sortBySemesterByTeacher(response.rows),
                     },
                 });
             } else if (userRole === 'teacher') {
                 query = `
-                    select s2."name" as semester_name, s.id as subject_id, s."name" as subject_name, u.name as teacher_name, c.id as class_id
+                    select s2."name" as semester_name, s.id as subject_id, s."name" as subject_name, u.name as teacher_name, c.id as class_id, c."name" as class_name
                     from teacher_classes tc 
                     join classes c on c.id = tc.class_id 
                     join subjects s ON s.id = c.subject_id 
                     join semesters s2 on s2.id = c.semester_id 
                     join users u on u.id = tc.teacher_id 
                     where tc.teacher_id = $1
+                    order by s2."name" desc, s."name" asc, c.id asc
                 `;
                 const response = await pool.query(query, [userID]);
-
                 return res.status(200).json({
                     code: 200,
                     message: 'successfully',
@@ -100,7 +106,7 @@ class ClassesService {
                 }
 
                 query = `
-                    select ct.topic_name, tp.problem_id, tp.time_limit , tp.start_time , tp.end_time, p.title, ct.class_id, c."name" as class_name
+                    select ct.id as class_topics_id, ct.topic_name, tp.problem_id, tp.time_limit , tp.start_time , tp.end_time, p.title, ct.class_id, c."name" as class_name, ct.idx 
                     from class_topics ct 
                     left join topic_problems tp on tp.class_topics_id = ct.id 
                     left join problems p on p.id = tp.problem_id 
@@ -139,7 +145,7 @@ class ClassesService {
 
                 // Get all classes in this subject
                 query = `
-                select * 
+                select tc.teacher_id , tc.class_id, c.subject_id , c.semester_id , c."name"  as class_name
                 from teacher_classes tc 
                 join classes c on c.id  = tc.class_id 
                 where c.subject_id = $1 and tc.teacher_id = $2 and c.semester_id = $3
@@ -159,7 +165,7 @@ class ClassesService {
                 }
 
                 query = `
-                    select ct.topic_name, tp.problem_id, tp.time_limit , tp.start_time , tp.end_time, p.title, ct.class_id, c."name" as class_name
+                    select ct.id as class_topics_id, ct.topic_name, tp.problem_id, tp.time_limit , tp.start_time , tp.end_time, p.title, ct.class_id, c."name" as class_name, ct.idx 
                     from class_topics ct 
                     left join topic_problems tp on tp.class_topics_id = ct.id 
                     left join problems p on p.id = tp.problem_id 
@@ -170,19 +176,30 @@ class ClassesService {
 
                 const response = await pool.query(query);
 
-                return res.status(200).json({
-                    code: 200,
-                    message: 'successfully',
-                    body: {
-                        topic_problems: sortByProblemsByTopics(response.rows),
-                    },
-                });
+                if (response.rows.length > 0) {
+                    return res.status(200).json({
+                        code: 200,
+                        message: 'successfully',
+                        body: {
+                            topic_problems: sortByProblemsByTopics(response.rows),
+                        },
+                    });
+                } else {
+                    return res.status(200).json({
+                        code: 200,
+                        message: 'successfully',
+                        body: {
+                            topic_problems: sortByProblemsByTopics2(getAllClassesInSubject.rows),
+                        },
+                    });
+                }
             }
         } catch (err) {
             return res.status(500).json('Internal Server Error');
         }
     }
 
+    // [GET]
     async getAllParticipantsInClass(req, res) {
         try {
             const class_id = req.params.slug;
@@ -226,6 +243,55 @@ class ClassesService {
             });
         } catch (err) {
             return res.status(500).json('Internal Server Error');
+        }
+    }
+
+    // [GET]
+    async getSubjectNameByClassID(req, res) {
+        const userID = req.userID;
+        const userRole = req.userRole;
+
+        const id = parseInt(req.params.slug);
+
+        if (userRole === 'normal') {
+            return res.status(400).json({
+                code: 400,
+                message: "You don't hove permission to use this service",
+            });
+        }
+
+        let query = `
+            select s."name" as subject_name
+            from classes c 
+            join subjects s on s.id  = c.subject_id 
+            where c.id = $1
+        `;
+
+        try {
+            const response = await pool.query(query, [id]);
+
+            return res.status(201).json({
+                code: 201,
+                message: 'Get subject_name by class_id successfully',
+                body: {
+                    subject_name: response.rows[0].subject_name,
+                },
+            });
+        } catch (err) {
+            return res.status(500).json('Internal Server Error');
+        }
+    }
+
+    // [GET]
+    async getClassTopic(req, res) {
+        const userID = req.userID;
+        const userRole = req.userRole;
+
+        if (userRole !== 'teacher') {
+            return res.status(400).json({
+                code: 400,
+                message: "You don't hove permission to use this service",
+            });
         }
     }
 
@@ -274,6 +340,36 @@ class ClassesService {
         }
     }
 
+    // [POST]
+    async createTopicOfClass(req, res) {
+        const userID = req.userID;
+        const userRole = req.userRole;
+
+        if (userRole !== 'teacher') {
+            return res.status(400).json({
+                code: 400,
+                message: "You don't hove permission to use this service",
+            });
+        }
+        const class_id = parseInt(req.params.slug);
+        const { topic_name, idx } = req.body;
+
+        let query = `
+            INSERT INTO class_topics (class_id, topic_name, idx) VALUES ($1, $2, $3)
+        `;
+        let values = [class_id, topic_name, idx];
+        try {
+            const response = await pool.query(query, values);
+
+            return res.status(201).json({
+                code: 201,
+                message: 'Create new topic successfully',
+            });
+        } catch (err) {
+            return res.status(500).json('Internal Server Error');
+        }
+    }
+
     // [PUT]
     async update(req, res) {
         try {
@@ -298,6 +394,41 @@ class ClassesService {
                 WHERE id = $4
             `;
             const values = [name, subject_id, semester_id, getClass.rows[0].id];
+
+            const response = await pool.query(query, values);
+
+            return res.status(200).json({
+                code: 200,
+                message: 'Update class successfully',
+                body: { name, subject_id, semester_id },
+            });
+        } catch (err) {
+            return res.status(500).json('Internal Server Error');
+        }
+    }
+
+    // [PUT]
+    async updateTopicName(req, res) {
+        try {
+            let { topic_name } = req.body;
+            const id = parseInt(req.params.slug);
+
+            const getClassTopic = await pool.query(`SELECT * FROM class_topics WHERE id = $1`, [id]);
+
+            if (getClassTopic.rows.length === 0)
+                return res.status(400).json({
+                    code: 400,
+                    message: 'This topic is not found',
+                });
+
+            if (!topic_name) topic_name = getClassTopic.rows[0].topic_name;
+
+            const query = `
+                UPDATE class_topics 
+                SET topic_name = $1
+                WHERE id = $2
+            `;
+            const values = [topic_name, id];
 
             const response = await pool.query(query, values);
 

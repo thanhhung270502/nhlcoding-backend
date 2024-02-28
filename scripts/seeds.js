@@ -1828,12 +1828,12 @@ const insertClassTopics = async () => {
     try {
         await pool.query(`
     INSERT INTO class_topics (class_id, topic_name, idx) VALUES
-    (2, 'W1: Introduction to Programming languages and Compilers', 0),
-    (2, 'W2: Lexer', 1),
-    (2, 'W3: Syntax Analysis', 3),
-    (1, 'W2: Lexer', 0),
-    (3, 'W1: Introduction to Programming languages and Compilers', 0),
-    (2, 'W4: OOP - Scala', 2);
+    (2, 'W1: Introduction to Programming languages and Compilers', 1000),
+    (2, 'W2: Lexer', 2000),
+    (2, 'W3: Syntax Analysis', 4000),
+    (1, 'W2: Lexer', 1000),
+    (3, 'W1: Introduction to Programming languages and Compilers', 1000),
+    (2, 'W4: OOP - Scala', 3000);
     `);
     } catch (err) {
         console.log(err);

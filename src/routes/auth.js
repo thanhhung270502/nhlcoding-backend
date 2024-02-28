@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const passport = require('passport');
 const authService = require('../app/services/AuthService');
+const { verifyToken } = require('../app/middlewares/authMiddlewares');
 
 /**
  * @swagger
@@ -25,7 +26,7 @@ const authService = require('../app/services/AuthService');
  *         description: Not Authorized
  *         content:
  *           application/json:
- *             schema: 
+ *             schema:
  *               allOf:
  *                 - properties:
  *                     error:
@@ -34,8 +35,8 @@ const authService = require('../app/services/AuthService');
  *               example:
  *                  error: true
  *                  message: Not Authorized
- *                  code: 403  
- *       500:    
+ *                  code: 403
+ *       500:
  *          description: Internal Server Error
  */
 router.get('/login/success', authService.create_or_update);
@@ -51,7 +52,7 @@ router.get('/login/success', authService.create_or_update);
  *         description: Log in failed
  *         content:
  *           application/json:
- *             schema: 
+ *             schema:
  *               allOf:
  *                 - properties:
  *                     error:
@@ -60,13 +61,13 @@ router.get('/login/success', authService.create_or_update);
  *               example:
  *                  error: true
  *                  message: Log in failed
- *                  code: 401  
+ *                  code: 401
  */
 router.get('/login/failed', (req, res) => {
     res.status(401).json({
         error: true,
         message: 'Log in failed',
-        code: 401
+        code: 401,
     });
 });
 
@@ -153,7 +154,7 @@ router.get('/logout', (req, res, next) => {
  *                       type: boolean
  *               example:
  *                  message: Authenticated
- *                  code: 200 
+ *                  code: 200
  *                  login: true
  *       '401':
  *         description: User is not authenticated or token is invalid
@@ -192,6 +193,7 @@ router.get('/checkAuthentication', authService.verifyJwt, (req, res) => {
     });
 });
 
+//
+router.get('/checkRole', verifyToken, authService.checkRole);
+
 module.exports = router;
-
-

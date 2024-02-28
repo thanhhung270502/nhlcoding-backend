@@ -18,10 +18,11 @@ const sortBySemester = (classes) => {
             newArray[key] = [newE];
         }
     }
+    console.log(newArray);
     return newArray;
 };
 
-const sortBySemesterByTeacher = (classes) => {
+const sortBySemesterByTeacher2 = (classes) => {
     var newArray = {};
     for (let i = 0; i < classes.length; i++) {
         let key = classes[i].semester_name;
@@ -49,60 +50,154 @@ const sortBySemesterByTeacher = (classes) => {
     return newArray;
 };
 
-const sortByProblemsByTopics2 = (problems) => {
-    var newArray = {};
-    for (let i = 0; i < problems.length; i++) {
-        let key = problems[i].topic_name;
-        let newE = {
-            problem_id: problems[i].problem_id,
-            title: problems[i].title,
-            time_limit: problems[i].time_limit,
-            start_time: problems[i].start_time,
-            end_time: problems[i].end_time,
-            class_name: problems[i].name,
-        };
-        if (key in newArray) {
-            if (problems[i].problem_id !== null) {
-                newArray[key] = [...newArray[key], newE];
-            }
-        } else {
-            if (problems[i].problem_id === null) {
-                newArray[key] = [];
+const sortBySemesterByTeacher = (classes) => {
+    var results = [];
+
+    for (let i = 0; i < classes.length; i++) {
+        let semester_name = classes[i].semester_name;
+        let subjects = [];
+        console.log('i = ', i);
+        for (let j = i; j < classes.length; j++) {
+            console.log('j = ', j);
+            if (classes[j].semester_name === semester_name) {
+                let subject_id = classes[j].subject_id;
+                let subject_name = classes[j].subject_name;
+                let teacher_name = classes[j].teacher_name;
+                let thisClasses = [
+                    {
+                        class_name: classes[j].class_name,
+                        class_id: classes[j].class_id,
+                    },
+                ];
+
+                for (let k = j + 1; k < classes.length; k++) {
+                    if (subject_id === classes[k].subject_id) {
+                        var newClass = {
+                            class_name: classes[k].class_name,
+                            class_id: classes[k].class_id,
+                        };
+                        thisClasses.push(newClass);
+
+                        if (k === classes.length - 1) {
+                            j = k;
+                            break;
+                        }
+                    } else {
+                        j = k - 1;
+                        break;
+                    }
+                }
+
+                var subject = {
+                    subject_id,
+                    subject_name,
+                    teacher_name,
+                    classes: thisClasses,
+                };
+                subjects.push(subject);
+                if (j === classes.length - 1) {
+                    i = j;
+                    break;
+                }
             } else {
-                newArray[key] = [newE];
+                i = j - 1;
+                // console.log(j);
+                break;
             }
         }
+
+        results.push({
+            semester_name,
+            subjects,
+        });
     }
-    return newArray;
+    return results;
 };
 
 const sortByProblemsByTopics = (problems) => {
     var results = {};
+
     for (var i = 0; i < problems.length; i++) {
         let class_name = problems[i].class_name;
-        let newE = {
-            problem_id: problems[i].problem_id,
-            title: problems[i].title,
-            time_limit: problems[i].time_limit,
-            start_time: problems[i].start_time,
-            end_time: problems[i].end_time,
-        };
 
         if (!(class_name in results)) {
-            results[class_name] = {};
+            results[class_name] = {
+                class_id: problems[i].class_id,
+                class_name: problems[i].class_name,
+                topics: {},
+            };
+        }
+
+        let problem_id = problems[i].problem_id;
+        var problems_list = [];
+        if (problem_id !== null) {
+            problems_list = [
+                {
+                    problem_id: problems[i].problem_id,
+                    title: problems[i].title,
+                    time_limit: problems[i].time_limit,
+                    start_time: problems[i].start_time,
+                    end_time: problems[i].end_time,
+                },
+            ];
         }
 
         let topic_name = problems[i].topic_name;
-        if (topic_name in results[class_name]) {
-            results[class_name][topic_name] = [...results[class_name][topic_name], newE];
-        } else {
-            if (problems[i].problem_id === null) {
-                results[class_name][topic_name] = [];
+
+        let newElement = {
+            class_topics_id: problems[i].class_topics_id,
+            topic_name,
+            idx: problems[i].idx,
+            problems: problems_list,
+        };
+
+        for (var j = i + 1; j < problems.length; j++) {
+            if (problems[i].topic_name == problems[j].topic_name) {
+                var element = {
+                    problem_id: problems[j].problem_id,
+                    title: problems[j].title,
+                    time_limit: problems[j].time_limit,
+                    start_time: problems[j].start_time,
+                    end_time: problems[j].end_time,
+                };
+                problems_list.push(element);
             } else {
-                results[class_name][topic_name] = [newE];
+                i = j - 1;
+                break;
             }
         }
+
+        newElement['problems'] = problems_list;
+
+        results[class_name]['topics'][topic_name] = newElement;
+
+        // if (topic_name in results[class_name]['topics']) {
+        //     results[class_name]['topics'][topic_name] = [...results[class_name]['topics'][topic_name], newElement];
+        // } else {
+        //     if (problems[i].problem_id === null) {
+        //         results[class_name]['topics'][topic_name] = [];
+        //     } else {
+        //         results[class_name]['topics'][topic_name] = [newElement];
+        //     }
+        // }
     }
+    return results;
+};
+
+const sortByProblemsByTopics2 = (problems) => {
+    var results = {};
+
+    for (var i = 0; i < problems.length; i++) {
+        let class_name = problems[i].class_name;
+        if (!(class_name in results)) {
+            results[class_name] = {
+                class_id: problems[i].class_id,
+                class_name: problems[i].class_name,
+                topics: {},
+            };
+        }
+    }
+
     return results;
 };
 
@@ -111,4 +206,5 @@ module.exports = {
     sortBySemester,
     sortBySemesterByTeacher,
     sortByProblemsByTopics,
+    sortByProblemsByTopics2,
 };
