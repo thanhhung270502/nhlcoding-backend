@@ -1334,432 +1334,434 @@ const insertLevels = async () => {
 const insertProblems = async () => {
     try {
         await pool.query(`
-          INSERT INTO public.problems (title,level_id,description,instruction,likes,dislikes,categories,is_public) VALUES
-          ('Longest Substring Without Repeating Characters',2,'Can you solve this real interview question? Longest Substring Without Repeating Characters - Given a string s, find the length of the longest substring without repeating characters.
-       
-        
-       
-       Example 1:
-       
-       
-       Input: s = "abcabcbb"
-       Output: 3
-       Explanation: The answer is "abc", with the length of 3.
-       
-       
-       Example 2:
-       
-       
-       Input: s = "bbbbb"
-       Output: 1
-       Explanation: The answer is "b", with the length of 1.
-       
-       
-       Example 3:
-       
-       
-       Input: s = "pwwkew"
-       Output: 3
-       Explanation: The answer is "wke", with the length of 3.
-       Notice that the answer must be a substring, "pwke" is a subsequence and not a substring.
-       
-       
-        
-       
-       Constraints:
-       
-       * 0 <= s.length <= 5 * 104
-       * s consists of English letters, digits, symbols and spaces.','',37676,1704,'{String,"Hash Table","Sliding Window"}',false),
-          ('Two Sum',1,'Can you solve this real interview question? Two Sum - Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.
-       
-       You may assume that each input would have exactly one solution, and you may not use the same element twice.
-       
-       You can return the answer in any order.
-       
-        
-       
-       Example 1:
-       
-       
-       Input: nums = [2,7,11,15], target = 9
-       Output: [0,1]
-       Explanation: Because nums[0] + nums[1] == 9, we return [0, 1].
-       
-       
-       Example 2:
-       
-       
-       Input: nums = [3,2,4], target = 6
-       Output: [1,2]
-       
-       
-       Example 3:
-       
-       
-       Input: nums = [3,3], target = 6
-       Output: [0,1]
-       
-       
-        
-       
-       Constraints:
-       
-       * 2 <= nums.length <= 104
-       * -109 <= nums[i] <= 109
-       * -109 <= target <= 109
-       * Only one valid answer exists.
-       
-        
-       
-       Follow-up: Can you come up with an algorithm that is less than O(n2) time complexity?','',52736,1729,'{Array,"Hash Table"}',false),
-          ('Longest Palindromic Substring',2,'Can you solve this real interview question? Longest Palindromic Substring - Given a string s, return the longest palindromic substring in s.
-       
-        
-       
-       Example 1:
-       
-       
-       Input: s = "babad"
-       Output: "bab"
-       Explanation: "aba" is also a valid answer.
-       
-       
-       Example 2:
-       
-       
-       Input: s = "cbbd"
-       Output: "bb"
-       
-       
-        
-       
-       Constraints:
-       
-       * 1 <= s.length <= 1000
-       * s consist of only digits and English letters.','',27904,1650,'{String,"Dynamic Programming"}',true),
-          ('Zigzag Conversion',2,'Can you solve this real interview question? Zigzag Conversion - The string "PAYPALISHIRING" is written in a zigzag pattern on a given number of rows like this: (you may want to display this pattern in a fixed font for better legibility)
-       
-       
-       P A H N
-       A P L S I I G
-       Y I R
-       
-       
-       And then read line by line: "PAHNAPLSIIGYIR"
-       
-       Write the code that will take a string and make this conversion given a number of rows:
-       
-       
-       string convert(string s, int numRows);
-       
-       
-        
-       
-       Example 1:
-       
-       
-       Input: s = "PAYPALISHIRING", numRows = 3
-       Output: "PAHNAPLSIIGYIR"
-       
-       
-       Example 2:
-       
-       
-       Input: s = "PAYPALISHIRING", numRows = 4
-       Output: "PINALSIGYAHRPI"
-       Explanation:
-       P I N
-       A L S I G
-       Y A H R
-       P I
-       
-       
-       Example 3:
-       
-       
-       Input: s = "A", numRows = 1
-       Output: "A"
-       
-       
-        
-       
-       Constraints:
-       
-       * 1 <= s.length <= 1000
-       * s consists of English letters (lower-case and upper-case), '','' and ''.''.
-       * 1 <= numRows <= 1000','',6898,13571,'{String}',true),
-          ('Reverse Integer',2,'Can you solve this real interview question? Reverse Integer - Given a signed 32-bit integer x, return x with its digits reversed. If reversing x causes the value to go outside the signed 32-bit integer range [-231, 231 - 1], then return 0.
-       
-       Assume the environment does not allow you to store 64-bit integers (signed or unsigned).
-       
-        
-       
-       Example 1:
-       
-       
-       Input: x = 123
-       Output: 321
-       
-       
-       Example 2:
-       
-       
-       Input: x = -123
-       Output: -321
-       
-       
-       Example 3:
-       
-       
-       Input: x = 120
-       Output: 21
-       
-       
-        
-       
-       Constraints:
-       
-       * -231 <= x <= 231 - 1','',12045,13074,'{Math}',true),
-          ('String to Integer (atoi)',2,'Can you solve this real interview question? String to Integer (atoi) - Implement the myAtoi(string s) function, which converts a string to a 32-bit signed integer (similar to C/C++''s atoi function).
-       
-       The algorithm for myAtoi(string s) is as follows:
-       
-       1. Read in and ignore any leading whitespace.
-       2. Check if the next character (if not already at the end of the string) is ''-'' or ''+''. Read this character in if it is either. This determines if the final result is negative or positive respectively. Assume the result is positive if neither is present.
-       3. Read in next the characters until the next non-digit character or the end of the input is reached. The rest of the string is ignored.
-       4. Convert these digits into an integer (i.e. "123" -> 123, "0032" -> 32). If no digits were read, then the integer is 0. Change the sign as necessary (from step 2).
-       5. If the integer is out of the 32-bit signed integer range [-231, 231 - 1], then clamp the integer so that it remains in the range. Specifically, integers less than -231 should be clamped to -231, and integers greater than 231 - 1 should be clamped to 231 - 1.
-       6. Return the integer as the final result.
-       
-       Note:
-       
-       * Only the space character '' '' is considered a whitespace character.
-       * Do not ignore any characters other than the leading whitespace or the rest of the string after the digits.
-       
-        
-       
-       Example 1:
-       
-       
-       Input: s = "42"
-       Output: 42
-       Explanation: The underlined characters are what is read in, the caret is the current reader position.
-       Step 1: "42" (no characters read because there is no leading whitespace)
-       ^
-       Step 2: "42" (no characters read because there is neither a ''-'' nor ''+'')
-       ^
-       Step 3: "42" ("42" is read in)
-       ^
-       The parsed integer is 42.
-       Since 42 is in the range [-231, 231 - 1], the final result is 42.
-       
-       
-       Example 2:
-       
-       
-       Input: s = " -42"
-       Output: -42
-       Explanation:
-       Step 1: " -42" (leading whitespace is read and ignored)
-       ^
-       Step 2: " -42" (''-'' is read, so the result should be negative)
-       ^
-       Step 3: " -42" ("42" is read in)
-       ^
-       The parsed integer is -42.
-       Since -42 is in the range [-231, 231 - 1], the final result is -42.
-       
-       
-       Example 3:
-       
-       
-       Input: s = "4193 with words"
-       Output: 4193
-       Explanation:
-       Step 1: "4193 with words" (no characters read because there is no leading whitespace)
-       ^
-       Step 2: "4193 with words" (no characters read because there is neither a ''-'' nor ''+'')
-       ^
-       Step 3: "4193 with words" ("4193" is read in; reading stops because the next character is a non-digit)
-       ^
-       The parsed integer is 4193.
-       Since 4193 is in the range [-231, 231 - 1], the final result is 4193.
-       
-       
-        
-       
-       Constraints:
-       
-       * 0 <= s.length <= 200
-       * s consists of English letters (lower-case and upper-case), digits (0-9), '' '', ''+'', ''-'', and ''.''.','',3952,12263,'{String}',true),
-          ('Palindrome Number',1,'Can you solve this real interview question? Palindrome Number - Given an integer x, return true if x is a palindrome, and false otherwise.
-       
-        
-       
-       Example 1:
-       
-       
-       Input: x = 121
-       Output: true
-       Explanation: 121 reads as 121 from left to right and from right to left.
-       
-       
-       Example 2:
-       
-       
-       Input: x = -121
-       Output: false
-       Explanation: From left to right, it reads -121. From right to left, it becomes 121-. Therefore it is not a palindrome.
-       
-       
-       Example 3:
-       
-       
-       Input: x = 10
-       Output: false
-       Explanation: Reads 01 from right to left. Therefore it is not a palindrome.
-       
-       
-        
-       
-       Constraints:
-       
-       * -231 <= x <= 231 - 1
-       
-        
-       
-       Follow up: Could you solve it without converting the integer to a string?','',11404,2619,'{Math}',true),
-          ('Regular Expression Matching',3,'Can you solve this real interview question? Regular Expression Matching - Given an input string s and a pattern p, implement regular expression matching with support for ''.'' and ''*'' where:
-       
-       * ''.'' Matches any single character.
-       * ''*'' Matches zero or more of the preceding element.
-       
-       The matching should cover the entire input string (not partial).
-       
-        
-       
-       Example 1:
-       
-       
-       Input: s = "aa", p = "a"
-       Output: false
-       Explanation: "a" does not match the entire string "aa".
-       
-       
-       Example 2:
-       
-       
-       Input: s = "aa", p = "a*"
-       Output: true
-       Explanation: ''*'' means zero or more of the preceding element, ''a''. Therefore, by repeating ''a'' once, it becomes "aa".
-       
-       
-       Example 3:
-       
-       
-       Input: s = "ab", p = ".*"
-       Output: true
-       Explanation: ".*" means "zero or more (*) of any character (.)".
-       
-       
-        
-       
-       Constraints:
-       
-       * 1 <= s.length <= 20
-       * 1 <= p.length <= 20
-       * s contains only lowercase English letters.
-       * p contains only lowercase English letters, ''.'', and ''*''.
-       * It is guaranteed for each appearance of the character ''*'', there will be a previous valid character to match.','',11517,1941,'{String,"Dynamic Programming",Recursion}',true),
-          ('Container With Most Water',2,'Can you solve this real interview question? Container With Most Water - You are given an integer array height of length n. There are n vertical lines drawn such that the two endpoints of the ith line are (i, 0) and (i, height[i]).
-       
-       Find two lines that together with the x-axis form a container, such that the container contains the most water.
-       
-       Return the maximum amount of water a container can store.
-       
-       Notice that you may not slant the container.
-       
-        
-       
-       Example 1:
-       
-       [https://s3-lc-upload.s3.amazonaws.com/uploads/2018/07/17/question_11.jpg]
-       
-       
-       Input: height = [1,8,6,2,5,4,8,3,7]
-       Output: 49
-       Explanation: The above vertical lines are represented by array [1,8,6,2,5,4,8,3,7]. In this case, the max area of water (blue section) the container can contain is 49.
-       
-       
-       Example 2:
-       
-       
-       Input: height = [1,1]
-       Output: 1
-       
-       
-        
-       
-       Constraints:
-       
-       * n == height.length
-       * 2 <= n <= 105
-       * 0 <= height[i] <= 104','',27132,1493,'{Array,"Two Pointers",Greedy}',true),
-          ('Integer to Roman',2,'Can you solve this real interview question? Integer to Roman - Roman numerals are represented by seven different symbols: I, V, X, L, C, D and M.
-       
-       
-       Symbol Value
-       I 1
-       V 5
-       X 10
-       L 50
-       C 100
-       D 500
-       M 1000
-       
-       For example, 2 is written as II in Roman numeral, just two one''s added together. 12 is written as XII, which is simply X + II. The number 27 is written as XXVII, which is XX + V + II.
-       
-       Roman numerals are usually written largest to smallest from left to right. However, the numeral for four is not IIII. Instead, the number four is written as IV. Because the one is before the five we subtract it making four. The same principle applies to the number nine, which is written as IX. There are six instances where subtraction is used:
-       
-       * I can be placed before V (5) and X (10) to make 4 and 9. 
-       * X can be placed before L (50) and C (100) to make 40 and 90. 
-       * C can be placed before D (500) and M (1000) to make 400 and 900.
-       
-       Given an integer, convert it to a roman numeral.
-       
-        
-       
-       Example 1:
-       
-       
-       Input: num = 3
-       Output: "III"
-       Explanation: 3 is represented as 3 ones.
-       
-       
-       Example 2:
-       
-       
-       Input: num = 58
-       Output: "LVIII"
-       Explanation: L = 50, V = 5, III = 3.
-       
-       
-       Example 3:
-       
-       
-       Input: num = 1994
-       Output: "MCMXCIV"
-       Explanation: M = 1000, CM = 900, XC = 90 and IV = 4.
-       
-       
-        
-       
-       Constraints:
-       
-       * 1 <= num <= 3999','',6476,5353,'{"Hash Table",Math,String}',true);
-    
-          `);
+        INSERT INTO public.problems (title,level_id,description,instruction,likes,dislikes,categories,is_public) VALUES
+        ('Longest Substring Without Repeating Characters',2,'Can you solve this real interview question? Longest Substring Without Repeating Characters - Given a string s, find the length of the longest substring without repeating characters.
+        
+        
+        Example 1:
+        
+        
+        Input: s = "abcabcbb"
+        Output: 3
+        Explanation: The answer is "abc", with the length of 3.
+        
+        
+        Example 2:
+        
+        
+        Input: s = "bbbbb"
+        Output: 1
+        Explanation: The answer is "b", with the length of 1.
+        
+        
+        Example 3:
+        
+        
+        Input: s = "pwwkew"
+        Output: 3
+        Explanation: The answer is "wke", with the length of 3.
+        Notice that the answer must be a substring, "pwke" is a subsequence and not a substring.
+        
+        
+        
+        
+        Constraints:
+        
+        * 0 <= s.length <= 5 * 104
+        * s consists of English letters, digits, symbols and spaces.','',37676,1704,'{String,"Hash Table","Sliding Window"}',false),
+        
+        
+        ('Two Sum',1,'Can you solve this real interview question? Two Sum - Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.
+        
+        You may assume that each input would have exactly one solution, and you may not use the same element twice.
+        
+        You can return the answer in any order.
+        
+        
+        
+        Example 1:
+        
+        
+        Input: nums = [2,7,11,15], target = 9
+        Output: [0,1]
+        Explanation: Because nums[0] + nums[1] == 9, we return [0, 1].
+        
+        
+        Example 2:
+        
+        
+        Input: nums = [3,2,4], target = 6
+        Output: [1,2]
+        
+        
+        Example 3:
+        
+        
+        Input: nums = [3,3], target = 6
+        Output: [0,1]
+        
+        
+         
+        
+        Constraints:
+        
+        * 2 <= nums.length <= 104
+        * -109 <= nums[i] <= 109
+        * -109 <= target <= 109
+        * Only one valid answer exists.
+        
+         
+        
+        Follow-up: Can you come up with an algorithm that is less than O(n2) time complexity?','',52736,1729,'{Array,"Hash Table"}',false),
+        
+        ('Longest Palindromic Substring',2,'Can you solve this real interview question? Longest Palindromic Substring - Given a string s, return the longest palindromic substring in s.
+        
+         
+        
+        Example 1:
+        
+        
+        Input: s = "babad"
+        Output: "bab"
+        Explanation: "aba" is also a valid answer.
+        
+        
+        Example 2:
+        
+        
+        Input: s = "cbbd"
+        Output: "bb"
+        
+        
+         
+        
+        Constraints:
+        
+        * 1 <= s.length <= 1000
+        * s consist of only digits and English letters.','',27904,1650,'{String,"Dynamic Programming"}',true),
+            ('Zigzag Conversion',2,'Can you solve this real interview question? Zigzag Conversion - The string "PAYPALISHIRING" is written in a zigzag pattern on a given number of rows like this: (you may want to display this pattern in a fixed font for better legibility)
+        
+        
+        P A H N
+        A P L S I I G
+        Y I R
+        
+        
+        And then read line by line: "PAHNAPLSIIGYIR"
+        
+        Write the code that will take a string and make this conversion given a number of rows:
+        
+        
+        string convert(string s, int numRows);
+        
+        
+         
+        
+        Example 1:
+        
+        
+        Input: s = "PAYPALISHIRING", numRows = 3
+        Output: "PAHNAPLSIIGYIR"
+        
+        
+        Example 2:
+        
+        
+        Input: s = "PAYPALISHIRING", numRows = 4
+        Output: "PINALSIGYAHRPI"
+        Explanation:
+        P I N
+        A L S I G
+        Y A H R
+        P I
+        
+        
+        Example 3:
+        
+        
+        Input: s = "A", numRows = 1
+        Output: "A"
+        
+        
+         
+        
+        Constraints:
+        
+        * 1 <= s.length <= 1000
+        * s consists of English letters (lower-case and upper-case), '','' and ''.''.
+        * 1 <= numRows <= 1000','',6898,13571,'{String}',true),
+            ('Reverse Integer',2,'Can you solve this real interview question? Reverse Integer - Given a signed 32-bit integer x, return x with its digits reversed. If reversing x causes the value to go outside the signed 32-bit integer range [-231, 231 - 1], then return 0.
+        
+        Assume the environment does not allow you to store 64-bit integers (signed or unsigned).
+        
+         
+        
+        Example 1:
+        
+        
+        Input: x = 123
+        Output: 321
+        
+        
+        Example 2:
+        
+        
+        Input: x = -123
+        Output: -321
+        
+        
+        Example 3:
+        
+        
+        Input: x = 120
+        Output: 21
+        
+        
+         
+        
+        Constraints:
+        
+        * -231 <= x <= 231 - 1','',12045,13074,'{Math}',true),
+            ('String to Integer (atoi)',2,'Can you solve this real interview question? String to Integer (atoi) - Implement the myAtoi(string s) function, which converts a string to a 32-bit signed integer (similar to C/C++''s atoi function).
+        
+        The algorithm for myAtoi(string s) is as follows:
+        
+        1. Read in and ignore any leading whitespace.
+        2. Check if the next character (if not already at the end of the string) is ''-'' or ''+''. Read this character in if it is either. This determines if the final result is negative or positive respectively. Assume the result is positive if neither is present.
+        3. Read in next the characters until the next non-digit character or the end of the input is reached. The rest of the string is ignored.
+        4. Convert these digits into an integer (i.e. "123" -> 123, "0032" -> 32). If no digits were read, then the integer is 0. Change the sign as necessary (from step 2).
+        5. If the integer is out of the 32-bit signed integer range [-231, 231 - 1], then clamp the integer so that it remains in the range. Specifically, integers less than -231 should be clamped to -231, and integers greater than 231 - 1 should be clamped to 231 - 1.
+        6. Return the integer as the final result.
+        
+        Note:
+        
+        * Only the space character '' '' is considered a whitespace character.
+        * Do not ignore any characters other than the leading whitespace or the rest of the string after the digits.
+        
+         
+        
+        Example 1:
+        
+        
+        Input: s = "42"
+        Output: 42
+        Explanation: The underlined characters are what is read in, the caret is the current reader position.
+        Step 1: "42" (no characters read because there is no leading whitespace)
+        ^
+        Step 2: "42" (no characters read because there is neither a ''-'' nor ''+'')
+        ^
+        Step 3: "42" ("42" is read in)
+        ^
+        The parsed integer is 42.
+        Since 42 is in the range [-231, 231 - 1], the final result is 42.
+        
+        
+        Example 2:
+        
+        
+        Input: s = " -42"
+        Output: -42
+        Explanation:
+        Step 1: " -42" (leading whitespace is read and ignored)
+        ^
+        Step 2: " -42" (''-'' is read, so the result should be negative)
+        ^
+        Step 3: " -42" ("42" is read in)
+        ^
+        The parsed integer is -42.
+        Since -42 is in the range [-231, 231 - 1], the final result is -42.
+        
+        
+        Example 3:
+        
+        
+        Input: s = "4193 with words"
+        Output: 4193
+        Explanation:
+        Step 1: "4193 with words" (no characters read because there is no leading whitespace)
+        ^
+        Step 2: "4193 with words" (no characters read because there is neither a ''-'' nor ''+'')
+        ^
+        Step 3: "4193 with words" ("4193" is read in; reading stops because the next character is a non-digit)
+        ^
+        The parsed integer is 4193.
+        Since 4193 is in the range [-231, 231 - 1], the final result is 4193.
+        
+        
+         
+        
+        Constraints:
+        
+        * 0 <= s.length <= 200
+        * s consists of English letters (lower-case and upper-case), digits (0-9), '' '', ''+'', ''-'', and ''.''.','',3952,12263,'{String}',true),
+            ('Palindrome Number',1,'Can you solve this real interview question? Palindrome Number - Given an integer x, return true if x is a palindrome, and false otherwise.
+        
+         
+        
+        Example 1:
+        
+        
+        Input: x = 121
+        Output: true
+        Explanation: 121 reads as 121 from left to right and from right to left.
+        
+        
+        Example 2:
+        
+        
+        Input: x = -121
+        Output: false
+        Explanation: From left to right, it reads -121. From right to left, it becomes 121-. Therefore it is not a palindrome.
+        
+        
+        Example 3:
+        
+        
+        Input: x = 10
+        Output: false
+        Explanation: Reads 01 from right to left. Therefore it is not a palindrome.
+        
+        
+         
+        
+        Constraints:
+        
+        * -231 <= x <= 231 - 1
+        
+         
+        
+        Follow up: Could you solve it without converting the integer to a string?','',11404,2619,'{Math}',true),
+            ('Regular Expression Matching',3,'Can you solve this real interview question? Regular Expression Matching - Given an input string s and a pattern p, implement regular expression matching with support for ''.'' and ''*'' where:
+        
+        * ''.'' Matches any single character.
+        * ''*'' Matches zero or more of the preceding element.
+        
+        The matching should cover the entire input string (not partial).
+        
+         
+        
+        Example 1:
+        
+        
+        Input: s = "aa", p = "a"
+        Output: false
+        Explanation: "a" does not match the entire string "aa".
+        
+        
+        Example 2:
+        
+        
+        Input: s = "aa", p = "a*"
+        Output: true
+        Explanation: ''*'' means zero or more of the preceding element, ''a''. Therefore, by repeating ''a'' once, it becomes "aa".
+        
+        
+        Example 3:
+        
+        
+        Input: s = "ab", p = ".*"
+        Output: true
+        Explanation: ".*" means "zero or more (*) of any character (.)".
+        
+        
+         
+        
+        Constraints:
+        
+        * 1 <= s.length <= 20
+        * 1 <= p.length <= 20
+        * s contains only lowercase English letters.
+        * p contains only lowercase English letters, ''.'', and ''*''.
+        * It is guaranteed for each appearance of the character ''*'', there will be a previous valid character to match.','',11517,1941,'{String,"Dynamic Programming",Recursion}',true),
+            ('Container With Most Water',2,'Can you solve this real interview question? Container With Most Water - You are given an integer array height of length n. There are n vertical lines drawn such that the two endpoints of the ith line are (i, 0) and (i, height[i]).
+        
+        Find two lines that together with the x-axis form a container, such that the container contains the most water.
+        
+        Return the maximum amount of water a container can store.
+        
+        Notice that you may not slant the container.
+        
+         
+        
+        Example 1:
+        
+        [https://s3-lc-upload.s3.amazonaws.com/uploads/2018/07/17/question_11.jpg]
+        
+        
+        Input: height = [1,8,6,2,5,4,8,3,7]
+        Output: 49
+        Explanation: The above vertical lines are represented by array [1,8,6,2,5,4,8,3,7]. In this case, the max area of water (blue section) the container can contain is 49.
+        
+        
+        Example 2:
+        
+        
+        Input: height = [1,1]
+        Output: 1
+        
+        
+         
+        
+        Constraints:
+        
+        * n == height.length
+        * 2 <= n <= 105
+        * 0 <= height[i] <= 104','',27132,1493,'{Array,"Two Pointers",Greedy}',true),
+            ('Integer to Roman',2,'Can you solve this real interview question? Integer to Roman - Roman numerals are represented by seven different symbols: I, V, X, L, C, D and M.
+        
+        
+        Symbol Value
+        I 1
+        V 5
+        X 10
+        L 50
+        C 100
+        D 500
+        M 1000
+        
+        For example, 2 is written as II in Roman numeral, just two one''s added together. 12 is written as XII, which is simply X + II. The number 27 is written as XXVII, which is XX + V + II.
+        
+        Roman numerals are usually written largest to smallest from left to right. However, the numeral for four is not IIII. Instead, the number four is written as IV. Because the one is before the five we subtract it making four. The same principle applies to the number nine, which is written as IX. There are six instances where subtraction is used:
+        
+        * I can be placed before V (5) and X (10) to make 4 and 9. 
+        * X can be placed before L (50) and C (100) to make 40 and 90. 
+        * C can be placed before D (500) and M (1000) to make 400 and 900.
+        
+        Given an integer, convert it to a roman numeral.
+        
+         
+        
+        Example 1:
+        
+        
+        Input: num = 3
+        Output: "III"
+        Explanation: 3 is represented as 3 ones.
+        
+        
+        Example 2:
+        
+        
+        Input: num = 58
+        Output: "LVIII"
+        Explanation: L = 50, V = 5, III = 3.
+        
+        
+        Example 3:
+        
+        
+        Input: num = 1994
+        Output: "MCMXCIV"
+        Explanation: M = 1000, CM = 900, XC = 90 and IV = 4.
+        
+        
+         
+        
+        Constraints:
+        
+        * 1 <= num <= 3999','',6476,5353,'{"Hash Table",Math,String}',true);
+
+            `);
     } catch (err) {
         console.log(err);
         process.exit(1);
@@ -1845,12 +1847,12 @@ const insertTopicProblems = async () => {
     try {
         await pool.query(`
     INSERT INTO topic_problems (problem_id, class_topics_id, time_limit,start_time,end_time,retries) VALUES
-    (1, 1, 15.0, '2024-01-01 14:00:00', '2024-01-01 16:00:00', 3),
-    (2, 1, 15.0, '2024-01-01 14:00:00', '2024-01-01 16:00:00', 3),
-    (1, 2, 15.0, '2024-01-01 14:00:00', '2024-01-01 16:00:00', 3),
-    (2, 2, 15.0, '2024-01-01 14:00:00', '2024-01-01 16:00:00', 3),
-    (1, 3, 15.0, '2024-01-01 14:00:00', '2024-01-01 16:00:00', 3),
-    (2, 3, 15.0, '2024-01-01 14:00:00', '2024-01-01 16:00:00', 3);
+    (1, 1, 215.0, '2024-01-01 14:00:00', '2024-01-01 16:00:00', 3),
+    (2, 1, 1.0, '2024-01-01 14:00:00', '2024-01-01 16:00:00', 3),
+    (1, 2, 215.0, '2024-01-01 14:00:00', '2024-01-01 16:00:00', 3),
+    (2, 2, 215.0, '2024-01-01 14:00:00', '2024-01-01 16:00:00', 3),
+    (1, 3, 215.0, '2024-01-01 14:00:00', '2024-01-01 16:00:00', 3),
+    (2, 3, 215.0, '2024-01-01 14:00:00', '2024-01-01 16:00:00', 3);
         `);
     } catch (err) {
         console.log(err);

@@ -35,7 +35,7 @@ class SubmissionController {
                 return res.status(404).json({
                     message: 'Submissions not found',
                     code: 404,
-                })
+                });
             }
         } catch (error) {
             console.log(error);
@@ -43,8 +43,44 @@ class SubmissionController {
         }
     }
 
+    async showMe(req, res, next) {
+        const userID = req.userID;
+        const { problem_id } = req.params;
+
+        try {
+            const query = `
+                select  * 
+                from submissions s 
+                join languages l on l.id = s.language_id  
+                where  user_id = $1 and problem_id = $2`;
+            const response = await pool.query(query, [userID, problem_id]);
+            return res.status(200).json({
+                message: 'Found submissions successfully',
+                code: 200,
+                body: response.rows,
+            });
+
+            // if (response.rows.length > 0) {
+            //     return res.status(200).json({
+            //         message: 'Found submissions successfully',
+            //         code: 200,
+            //         body: response.rows,
+            //     });
+            // } else {
+            //     return res.status(404).json({
+            //         message: 'Submissions not found',
+            //         code: 404,
+            //     });
+            // }
+        } catch (error) {
+            console.log(error);
+            return res.status(500).json('Internal Server Error');
+        }
+    }
+
     async create(req, res, next) {
-        const { language_id, user_id, problem_id, runtime, memory, status, datetime, code, score, wrong_testcase_ids } = req.body;
+        const { language_id, user_id, problem_id, runtime, memory, status, datetime, code, score, wrong_testcase_ids } =
+            req.body;
 
         try {
             await insertUserProblemIfNotExisted(user_id, problem_id);
@@ -53,7 +89,17 @@ class SubmissionController {
                 VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
                 RETURNING id
             `;
-            const response = await pool.query(query, [language_id, user_id, problem_id, runtime, memory, status, datetime, code, score]);
+            const response = await pool.query(query, [
+                language_id,
+                user_id,
+                problem_id,
+                runtime,
+                memory,
+                status,
+                datetime,
+                code,
+                score,
+            ]);
 
             if (response.rows.length > 0) {
                 const submission_id = response.rows[0].id;
@@ -74,7 +120,7 @@ class SubmissionController {
                 });
             } else {
                 return res.status(422).json({
-                    message: "Submission created failed",
+                    message: 'Submission created failed',
                     code: 422,
                 });
             }

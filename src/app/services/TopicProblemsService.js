@@ -6,7 +6,7 @@ const {
     sortByProblemsByTopics2,
 } = require('../../utils');
 
-class ClassesService {
+class TopicProblemsService {
     // [GET]
     async index(req, res) {
         try {
@@ -616,4 +616,4 @@ class ClassesService {
     }
 }
 
-module.exports = new ClassesService();
+module.exports = new TopicProblemsService();

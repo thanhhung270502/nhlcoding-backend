@@ -168,6 +168,41 @@ const createTableSubmissions = async () => {
     }
 };
 
+const createTableSubmissionTrackings = async () => {
+    try {
+        await pool.query('drop table if exists submission_trackings cascade');
+
+        const query = `
+        create table submission_trackings (
+            id SERIAL primary key,
+            language_id integer,
+            user_id integer,
+            topic_problems_id integer,
+            start_time timestamp not null,
+            code text not null,
+            score float not null,
+            retries integer default 0,
+            runtime float default 0.0,
+            memory float default 0.0, 
+            status text not null default 'Accepted',
+            "datetime" timestamp not null,
+            constraint fk_submission_trackings_topic_problems_id
+                foreign key (topic_problems_id)
+                    references topic_problems(id),
+            constraint fk_submission_trackings_user_id
+                foreign key (user_id)
+                    references users(id),
+            constraint fk_submission_trackings_language_id
+                foreign key (language_id)
+                    references languages(id)
+        )`;
+        await pool.query(query);
+    } catch (err) {
+        console.log(err);
+        process.exit(1);
+    }
+};
+
 const createTableClasses = async () => {
     try {
         await pool.query('drop table if exists classes cascade');
@@ -247,6 +282,7 @@ const createTableTopicProblems = async () => {
             start_time timestamp,
             end_time timestamp,
             retries integer,
+            penalty bool default false,
             constraint fk_pc_problem_id
                 foreign key (problem_id)
                     references problems(id),
@@ -473,7 +509,7 @@ const createInsertUserProblemsTrigger = async () => {
 
 const createCheckProblemClassesTrigger = async () => {
     try {
-        await pool.query(`    
+        await pool.query(`
 CREATE OR REPLACE FUNCTION check_public_problem()
     RETURNS TRIGGER AS $$
 BEGIN
@@ -592,6 +628,7 @@ const createCheckUserRoleTrigger = async () => {
         await createTableSubjects();
         await createTableTestCases();
         await createTableSubmissions();
+        await createTableSubmissionTrackings();
         await createTableClasses();
 
         await createTableClassTopics();

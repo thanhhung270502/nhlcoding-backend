@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const submissionService = require('../app/services/SubmissionService');
+const { verifyToken, isAdmin, isTeacher } = require('../app/middlewares/authMiddlewares');
 
 // router.put("/:id", submissionController.update);
 // router.delete("/:id", submissionService.delete);
@@ -43,7 +44,7 @@ const submissionService = require('../app/services/SubmissionService');
  *       500:
  *         description: Internal Server Error
  */
-router.post("/create", submissionService.create);
+router.post('/create', submissionService.create);
 
 /**
  * @swagger
@@ -87,11 +88,12 @@ router.post("/create", submissionService.create);
  *               $ref: '#/components/schemas/Response'
  *             example:
  *               message: Submissions not found
- *               code: 404             
+ *               code: 404
  *       500:
  *         description: Internal Server Error
  */
-router.get("/:user_id/:problem_id", submissionService.show);
+router.get('/:problem_id/me', verifyToken, submissionService.showMe);
+router.get('/:user_id/:problem_id', submissionService.show);
 
 /**
  * @swagger
@@ -114,6 +116,6 @@ router.get("/:user_id/:problem_id", submissionService.show);
  *       500:
  *         description: Internal Server Error
  */
-router.get("/", submissionService.showAll);
+router.get('/', submissionService.showAll);
 
 module.exports = router;

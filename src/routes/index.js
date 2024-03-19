@@ -12,8 +12,10 @@ const userProblemsRouter = require('./user_problems');
 const semestersRouter = require('./semesters');
 const subjectsRouter = require('./subjects');
 const classesRouter = require('./classes');
+const submissionTrackingsRouter = require('./submission_trackings');
 
 function route(app) {
+    app.use('/submission_trackings', submissionTrackingsRouter);
     app.use('/classes', classesRouter);
     app.use('/subjects', subjectsRouter);
     app.use('/semesters', semestersRouter);

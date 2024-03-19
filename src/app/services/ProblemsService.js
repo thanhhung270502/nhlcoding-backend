@@ -108,13 +108,13 @@ class ProblemsController {
                 return res.status(404).json({
                     message: 'Problem not found',
                     code: 404,
-                })
+                });
             }
         } catch (error) {
             console.log(error);
             return res.status(500).json('Internal Server Error');
         }
-    };
+    }
 
     async getProblemsForFilter(req, res) {
         const userId = req.params.user_id || 'empty';
@@ -167,32 +167,33 @@ class ProblemsController {
 
     async create(req, res, next) {
         try {
-            const { title, level_id, description, instruction, categories, is_public, problem_languages, testcases } = req.body;
+            const { title, level_id, description, instruction, categories, is_public, problem_languages, testcases } =
+                req.body;
 
-            const result = await pool.query(`
+            const result = await pool.query(
+                `
                 INSERT INTO problems (title, level_id, description, instruction, categories, is_public) 
                 VALUES ($1, $2, $3, $4, $5, $6)
                 RETURNING *
-            `, [title, level_id, description, instruction || "", categories || [], is_public || true]);
+            `,
+                [title, level_id, description, instruction || '', categories || [], is_public || true],
+            );
 
             const problem_id = result.rows.length > 0 ? result.rows[0].id : -1;
             if (problem_id === -1) {
                 return res.json(422).json({
                     message: 'Problem created failed',
                     code: 422,
-                })
+                });
             }
 
             // testcases
             for (let i = 0; i < testcases.length; i++) {
-                await pool.query(
-                    'INSERT INTO testcases (problem_id, "input", "output") VALUES ($1, $2, $3)',
-                    [
-                        problem_id,
-                        testcases[i].input,
-                        testcases[i].output,
-                    ],
-                );
+                await pool.query('INSERT INTO testcases (problem_id, "input", "output") VALUES ($1, $2, $3)', [
+                    problem_id,
+                    testcases[i].input,
+                    testcases[i].output,
+                ]);
             }
 
             // problem_languages
@@ -285,9 +286,7 @@ class ProblemsController {
                 else {
                     // IMPORTANT: condition to compare stdout vs expected
                     // Using Array.trim() to remove leading and trailing whitespace (i.e. ' ', '\n', ...)
-                    const success =
-                        JSON.stringify(testcase.output.trim()) ===
-                        JSON.stringify(stdout.trim());
+                    const success = JSON.stringify(testcase.output.trim()) === JSON.stringify(stdout.trim());
                     const runtime = end_timestamp[0] * 1000 + end_timestamp[1] / 1000000; // convert to milliseconds
                     runtimes += runtime;
 
@@ -326,7 +325,7 @@ class ProblemsController {
                     compile_info: compile_info,
                     avg_runtime: Math.floor(runtimes / responseTestCase.length),
                     result: final_result,
-                    wrong_testcase: wrong_testcase
+                    wrong_testcase: wrong_testcase,
                 },
             });
         } catch (err) {

@@ -4,7 +4,7 @@ const getProblemByLevel = async (level) => {
     var response;
     if (level === 'empty') {
         const query = `
-            select p.id, p.title, p.description, l.name
+            select p.id, p.title, p.description, l.name, p.categories
             from problems p 
             left join levels l on p.level_id = l.id 
             order by p.id asc
@@ -12,7 +12,7 @@ const getProblemByLevel = async (level) => {
         response = await pool.query(query);
     } else {
         const query = `
-            select p.id, p.title, p.description, l.name
+            select p.id, p.title, p.description, l.name, p.categories
             from problems p 
             left join levels l on p.level_id = l.id 
             where l."name" = '${level}'
@@ -27,7 +27,7 @@ const getProblemByLevelByName = async (name, level) => {
     var response;
     if (level === 'empty') {
         const query = `
-            select p.id, p.title, p.description, l.name
+            select p.id, p.title, p.description, l.name, p.categories
             from problems p 
             left join levels l on p.level_id = l.id 
             where p.title ilike '%${name}%'
@@ -36,7 +36,7 @@ const getProblemByLevelByName = async (name, level) => {
         response = await pool.query(query);
     } else {
         const query = `
-            select p.id, p.title, p.description, l.name
+            select p.id, p.title, p.description, l.name, p.categories
             from problems p 
             left join levels l on p.level_id = l.id 
             where l."name" = '${level} '
@@ -52,7 +52,7 @@ const getProblemByLevelByStatus = async (user_id, level, status) => {
     var response;
     if (level === 'empty' && status === 'empty') {
         const query = `
-            select p.id, p.title, p.description, l.name, up.status as status, up.user_id 
+            select p.id, p.title, p.description, l.name, up.status as status, up.user_id, p.categories
             from problems p 
             left join levels l on p.level_id = l.id 
             left join (
@@ -66,7 +66,7 @@ const getProblemByLevelByStatus = async (user_id, level, status) => {
         response = await pool.query(query);
     } else if (level !== 'empty' && status === 'empty') {
         const query = `
-            select p.id, p.title, p.description, l.name, up.status as status, up.user_id 
+            select p.id, p.title, p.description, l.name, up.status as status, up.user_id, p.categories
             from problems p 
             left join levels l on p.level_id = l.id 
             left join (
@@ -83,7 +83,7 @@ const getProblemByLevelByStatus = async (user_id, level, status) => {
         response = await pool.query(query);
     } else if (level === 'empty' && status !== 'empty') {
         const query = `
-            select p.id, p.title, p.description, l.name, up.status as status, up.user_id 
+            select p.id, p.title, p.description, l.name, up.status as status, up.user_id, p.categories
             from problems p 
             left join levels l on p.level_id = l.id 
             left join (
@@ -97,7 +97,7 @@ const getProblemByLevelByStatus = async (user_id, level, status) => {
         response = await pool.query(query);
     } else {
         const query = `
-            select p.id, p.title, p.description, l.name, up.status as status, up.user_id 
+            select p.id, p.title, p.description, l.name, up.status as status, up.user_id, p.categories
             from problems p 
             left join levels l on p.level_id = l.id 
             left join (
@@ -119,7 +119,7 @@ const getProblemByLevelByStatusByName = async (user_id, level, status, name) => 
     var response;
     if (level === 'empty' && status === 'empty') {
         const query = `
-            select p.id, p.title, p.description, l.name, up.status as status, up.user_id 
+            select p.id, p.title, p.description, l.name, up.status as status, up.user_id, p.categories
             from problems p 
             left join levels l on p.level_id = l.id 
             left join (
@@ -134,7 +134,7 @@ const getProblemByLevelByStatusByName = async (user_id, level, status, name) => 
         response = await pool.query(query);
     } else if (level !== 'empty' && status === 'empty') {
         const query = `
-            select p.id, p.title, p.description, l.name, up.status as status, up.user_id 
+            select p.id, p.title, p.description, l.name, up.status as status, up.user_id, p.categories
             from problems p 
             left join levels l on p.level_id = l.id 
             left join (
@@ -151,7 +151,7 @@ const getProblemByLevelByStatusByName = async (user_id, level, status, name) => 
         response = await pool.query(query);
     } else if (level === 'empty' && status !== 'empty') {
         const query = `
-            select p.id, p.title, p.description, l.name, up.status as status, up.user_id 
+            select p.id, p.title, p.description, l.name, up.status as status, up.user_id, p.categories
             from problems p 
             left join levels l on p.level_id = l.id 
             left join (
@@ -167,7 +167,7 @@ const getProblemByLevelByStatusByName = async (user_id, level, status, name) => 
         response = await pool.query(query);
     } else {
         const query = `
-            select p.id, p.title, p.description, l.name, up.status as status, up.user_id 
+            select p.id, p.title, p.description, l.name, up.status as status, up.user_id, p.categories
             from problems p 
             left join levels l on p.level_id = l.id 
             left join (

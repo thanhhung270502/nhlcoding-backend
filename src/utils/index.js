@@ -18,7 +18,6 @@ const sortBySemester = (classes) => {
             newArray[key] = [newE];
         }
     }
-    console.log(newArray);
     return newArray;
 };
 
@@ -56,9 +55,7 @@ const sortBySemesterByTeacher = (classes) => {
     for (let i = 0; i < classes.length; i++) {
         let semester_name = classes[i].semester_name;
         let subjects = [];
-        console.log('i = ', i);
         for (let j = i; j < classes.length; j++) {
-            console.log('j = ', j);
             if (classes[j].semester_name === semester_name) {
                 let subject_id = classes[j].subject_id;
                 let subject_name = classes[j].subject_name;
@@ -133,6 +130,7 @@ const sortByProblemsByTopics = (problems) => {
         if (problem_id !== null) {
             problems_list = [
                 {
+                    topic_problems_id: problems[i].topic_problems_id,
                     problem_id: problems[i].problem_id,
                     title: problems[i].title,
                     time_limit: problems[i].time_limit,
@@ -154,6 +152,7 @@ const sortByProblemsByTopics = (problems) => {
         for (var j = i + 1; j < problems.length; j++) {
             if (problems[i].topic_name == problems[j].topic_name) {
                 var element = {
+                    topic_problems_id: problems[j].topic_problems_id,
                     problem_id: problems[j].problem_id,
                     title: problems[j].title,
                     time_limit: problems[j].time_limit,
@@ -201,10 +200,26 @@ const sortByProblemsByTopics2 = (problems) => {
     return results;
 };
 
+const getCurrentTimeFormatted = () => {
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+    const date = new Date();
+    const hour = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    const seconds = date.getSeconds().toString().padStart(2, '0');
+    const month = months[date.getMonth()];
+    const day = date.getDate();
+    const year = date.getFullYear();
+
+    const formattedTime = `${hour}:${minutes}:${seconds} ${month} ${day}, ${year}`;
+    return formattedTime;
+};
+
 module.exports = {
     sortById,
     sortBySemester,
     sortBySemesterByTeacher,
     sortByProblemsByTopics,
     sortByProblemsByTopics2,
+    getCurrentTimeFormatted,
 };
