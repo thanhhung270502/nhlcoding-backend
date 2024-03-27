@@ -82,6 +82,8 @@ class SubmissionController {
         const { language_id, user_id, problem_id, runtime, memory, status, datetime, code, score, wrong_testcase_ids } =
             req.body;
 
+        console.log(req.body);
+
         try {
             await insertUserProblemIfNotExisted(user_id, problem_id);
             const query = `

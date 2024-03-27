@@ -1,5 +1,9 @@
 const pool = require('../../config/db');
+const axios = require('axios');
+const process = require('process');
 const { getCurrentTimeFormatted } = require('../../utils');
+const { getProblemLanguageByProblemIdAndLanguageId } = require('../helper/problem_languages');
+const { getTestcaseByProblemID, supportConvertCode } = require('../helper/testcase');
 
 class SubmissionTrackingService {
     // [GET]
@@ -102,13 +106,18 @@ class SubmissionTrackingService {
                         message: 'success',
                         body: [],
                     });
+                } else {
+                    return res.status(200).json({
+                        code: 200,
+                        message: 'success',
+                        body: response.rows,
+                    });
                 }
             }
-
             return res.status(200).json({
                 code: 200,
                 message: 'success',
-                body: response.rows,
+                body: [],
             });
         } catch (err) {
             console.log(err);
@@ -174,6 +183,208 @@ class SubmissionTrackingService {
                 code: 201,
                 message: 'Successfully created',
                 body: response.rows,
+            });
+        } catch (err) {
+            console.log(err);
+            return res.status(500).json({
+                code: 500,
+                message: 'Internal Server Error',
+                error: err,
+            });
+        }
+    }
+
+    // [POST]
+    async runCode(req, res) {
+        const userID = req.userID;
+        const userRole = req.userRole;
+
+        if (userRole === 'normal') {
+            return res.status(403).json({
+                code: 403,
+                message: 'You must have permission to access this class.',
+            });
+        }
+
+        const { problem_id, language, submission_trackings_id } = req.params;
+        const { code, datetime } = req.body;
+
+        const headers = {
+            'Content-Type': 'application/json; charset=utf-8',
+        };
+
+        const responseTestCase = await getTestcaseByProblemID(problem_id);
+
+        const language_id = language === 'python' ? 1 : 2;
+        const problemLanguage = await getProblemLanguageByProblemIdAndLanguageId(problem_id, language_id);
+        const outcome_message = {
+            11: 'Compilation Error',
+            12: 'Runtime Error',
+            13: 'Time Limit Exceeded',
+            15: 'OK',
+            17: 'Memory Limit Exceeded',
+            19: 'Illegal system call',
+            20: 'Internal Error',
+            21: 'Server Overload',
+        };
+        var status = 'Accepted';
+        var compile_info = '';
+        var final_result = [];
+        var runtimes = 0;
+        var wrong_testcase = null;
+
+        for (var i = 0; i < responseTestCase.length; i++) {
+            const testcase = responseTestCase[i];
+            const input = testcase.input;
+            const newCode = await supportConvertCode(code, problemLanguage.full_code);
+
+            const payload = JSON.stringify({
+                run_spec: {
+                    input,
+                    language_id: language === 'python' ? 'python3' : 'cpp',
+                    sourcecode: JSON.parse(newCode),
+                },
+            });
+
+            // console.log(payload);
+
+            const start_timestamp = process.hrtime();
+
+            const { run_id, outcome, cmpinfo, stdout, stderr } = await axios
+                .post(`${process.env.LOCAL_JOBE_API}/runs`, payload, { headers })
+                .then((res) => res.data)
+                .catch((err) => console.log(err));
+
+            const end_timestamp = process.hrtime(start_timestamp);
+
+            console.log('Run test case', testcase.id, outcome_message[parseInt(outcome)]);
+
+            if (parseInt(outcome) !== 15) {
+                status = outcome_message[parseInt(outcome)];
+                if (parseInt(outcome) === 11) {
+                    compile_info = cmpinfo;
+                }
+                break;
+            }
+            // else: outcome = 15
+            else {
+                // IMPORTANT: condition to compare stdout vs expected
+                // Using Array.trim() to remove leading and trailing whitespace (i.e. ' ', '\n', ...)
+                const success = JSON.stringify(testcase.output.trim()) === JSON.stringify(stdout.trim());
+                const runtime = end_timestamp[0] * 1000 + end_timestamp[1] / 1000000; // convert to milliseconds
+                runtimes += runtime;
+
+                const result_obj = {
+                    testcase: i,
+                    success: success,
+                    output: stdout,
+                    error: stderr,
+                };
+
+                final_result.push(result_obj);
+
+                if (!success) {
+                    if (i < 3) {
+                        status = 'Wrong answer';
+                    } else if (i >= 3 && status === 'Wrong answer') {
+                        break;
+                    } else {
+                        // store first wrong hidden test case
+                        wrong_testcase = {
+                            ...testcase,
+                            actual_output: stdout,
+                        };
+                        status = 'Wrong answer';
+                        break;
+                    }
+                }
+            }
+        }
+
+        const avg_runtime = Math.floor(runtimes / responseTestCase.length);
+
+        let count = 0;
+        for (let i = 0; i < final_result.length; i++) {
+            if (final_result[i].success) count++;
+        }
+
+        let score = (count / responseTestCase.length) * 10;
+        score = score.toFixed(2);
+
+        const memory = 0;
+        const update = await pool.query(
+            `
+            UPDATE submission_trackings
+            SET language_id = $1, code = $2, status = $3, runtime = $4, memory = $5, "datetime" = $6, score = $7
+            WHERE id = $8
+        `,
+            [language_id, code, status, avg_runtime, memory, datetime, score, submission_trackings_id],
+        );
+
+        console.log(update);
+
+        return res.status(200).json({
+            message: 'Run code successfully',
+            code: 200,
+            body: {
+                status: status,
+                compile_info: compile_info,
+                avg_runtime,
+                result: final_result,
+                wrong_testcase: wrong_testcase,
+            },
+        });
+    }
+
+    // [POST]
+    async submitCode(req, res) {
+        const userID = req.userID;
+        const userRole = req.userRole;
+
+        if (userRole === 'normal') {
+            return res.status(403).json({
+                code: 403,
+                message: 'You must have permission to access this class.',
+            });
+        }
+
+        const { submission_trackings_id } = req.params;
+
+        try {
+            const getSubmissionTrackings = await pool.query(`
+                select * from submission_trackings where id = ${submission_trackings_id}
+            `);
+
+            console.log(getSubmissionTrackings.rows[0]);
+
+            // Need to optimize
+
+            const addSubmission = await pool.query(
+                `INSERT INTO submissions (language_id, user_id, problem_id, runtime, memory, status,
+                    "datetime", code, score)
+                VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+                `,
+                [
+                    getSubmissionTrackings.rows[0].language_id,
+                    userID,
+                    getSubmissionTrackings.rows[0].problem_id,
+                    getSubmissionTrackings.rows[0].runtime,
+                    getSubmissionTrackings.rows[0].memory,
+                    getSubmissionTrackings.rows[0].status.length === 0 ? 'Attempted' : 'Solved',
+                    getSubmissionTrackings.rows[0].datetime,
+                    getSubmissionTrackings.rows[0].code,
+                    getSubmissionTrackings.rows[0].score,
+                ],
+            );
+
+            const deleteSubmissionTracking = await pool.query(
+                `delete from submission_trackings where id = ${getSubmissionTrackings.rows[0].id}`,
+            );
+
+            return res.status(200).json({
+                code: 200,
+                message: 'success',
+                body: [],
             });
         } catch (err) {
             console.log(err);
